@@ -8,9 +8,11 @@
   },
   "scripts": {
     "build": "node tools/build.js",
+    "build:app": "node tools/build-app.js",
     "render": "node src/render.js",
     "audit": "node tools/audit.js",
-    "test": "node tools/test.js"
+    "test": "node tools/test.js",
+    "verify:app": "node tools/verify-app.js"
   },
   "license": "UNLICENSED",
   "devDependencies": {

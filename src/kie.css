@@ -1,0 +1,207 @@
+/* ==========================================================================
+   Kotak Institutional Equities report template (kie)
+   Adopted from the design supplied by the client. Scoped under .kie so it can
+   sit alongside krb.css without either leaking into the other.
+   ========================================================================== */
+
+:root{
+  --ink:#0B1F3A; --paper:#fff; --wash:#F5F7FA; --rule:#DDE3EA; --muted:#5B6875;
+  --accent:#C8102E; --pos:#0F7A4D; --neg:#C8102E;
+  --band:#E8EDF3;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --maxw:1160px;
+}
+*, *::before, *::after{box-sizing:border-box}
+.kie{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:88px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+.kie{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.kie img{max-width:100%;height:auto}
+.kie a{color:#0B4F9E;text-underline-offset:2px}
+.kie a:hover{color:var(--accent)}
+.kie :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.kie .skip{position:absolute;left:-9999px}
+.kie .skip:focus{left:8px;top:8px;z-index:99;background:var(--ink);color:#fff;padding:10px 14px;border-radius:4px}
+.kie .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+
+/* ---------- masthead ---------- */
+.kie .masthead{border-bottom:2px solid var(--ink);background:var(--paper)}
+.kie .masthead .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:14px 20px}
+.kie .brand{display:flex;align-items:center;text-decoration:none;color:var(--ink)}
+.kie .brand img{height:30px;width:auto;display:block}
+.kie .brand span{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin-left:10px;padding-left:10px;border-left:1px solid var(--rule)}
+@media(max-width:520px){.brand img{height:24px}.brand span{font-size:.62rem;letter-spacing:.1em}}
+.kie .masthead nav{font-size:.76rem;color:var(--muted)}
+.kie .masthead nav a{color:var(--muted);text-decoration:none;margin-left:16px}
+.kie .masthead nav a:hover{color:var(--accent)}
+
+
+/* ---------- header ---------- */
+.kie .eyebrow{display:flex;flex-wrap:wrap;align-items:center;font-size:.74rem;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+.kie .eyebrow>*+*::before{content:"·";margin:0 10px;color:var(--rule)}
+.kie .eyebrow .tag{color:var(--accent);font-weight:700}
+.kie h1{font-weight:700;font-size:clamp(1.25rem,.95rem + 1.1vw,1.8rem);color:var(--accent);
+  line-height:1.25;letter-spacing:-.005em;margin:24px 0 8px;max-width:none;text-wrap:balance}
+.kie .byline{font-size:.85rem;color:var(--muted);margin:0 0 22px}
+.kie .byline time{white-space:nowrap}
+
+/* ---------- identity band + fact strip (cover-block flow) ---------- */
+.kie .doctype{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.kie .idbar{background:var(--band);border-bottom:1px solid #D3DBE4}
+.kie .idbar-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-top:16px;padding-bottom:16px}
+.kie .ident{margin-right:16px;min-width:0}
+.kie .coname{font-size:clamp(1.25rem,1rem + 1vw,1.75rem);font-weight:700;color:var(--ink);margin:0;line-height:1.2}
+.kie .coname span{font-size:.7em;color:#3D556F;font-weight:600}
+.kie .cosec{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.kie .pill{flex:none;display:inline-block;font-weight:700;font-size:1.05rem;letter-spacing:.08em;color:#fff;background:var(--ink);
+  padding:9px 34px;border-radius:999px}
+.kie .pill[data-r="BUY"], .kie .pill[data-r="ADD"]{background:#12452F}
+.kie .pill[data-r="REDUCE"]{background:#7A5B00}
+.kie .pill[data-r="SELL"]{background:#7A1220}
+.kie .factbar{border-bottom:1px solid var(--rule);background:var(--paper)}
+.kie .facts{display:flex;flex-wrap:wrap;align-items:baseline;padding-top:11px;padding-bottom:11px;font-size:.87rem}
+.kie .facts .f{margin:3px 30px 3px 0;white-space:nowrap}
+.kie .facts i{font-style:normal;color:var(--muted)}
+.kie .facts b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.kie .facts b.up{color:var(--pos)} .facts b.down{color:var(--neg)}
+.kie .facts em{font-style:normal;font-size:.8em;color:var(--muted)}
+.kie .fdate{margin-left:auto;font-weight:700;color:var(--ink);white-space:nowrap}
+@media(max-width:640px){
+.kie .facts .f{margin-right:20px;font-size:.82rem}
+.kie .fdate{margin:6px 0 0;width:100%}
+.kie .pill{font-size:.95rem;padding:7px 24px;margin-top:10px}
+.kie .idbar-in{align-items:flex-start}
+}
+
+/* return-band scale — the rating is literally a return band, so plot it */
+.kie .scale{margin:6px 0 0;padding:0}
+.kie .scale-cap{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.kie .bands{position:relative;display:flex;height:38px;
+  border:1px solid var(--rule);border-radius:3px;overflow:hidden;font-size:.68rem;letter-spacing:.05em}
+.kie .bands div{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;
+  color:var(--muted);background:var(--wash);padding:0 4px;
+  border-right:1px solid var(--rule);text-transform:uppercase;font-weight:600}
+.kie .bands div:last-child{border-right:0}
+.kie .bands div[aria-current="true"]{background:var(--band);color:var(--ink)}
+.kie .marker{position:relative;height:22px;margin-top:-1px}
+.kie .marker i{position:absolute;top:0;transform:translateX(-50%);font-style:normal;font-size:.72rem;
+  font-weight:700;color:var(--accent);white-space:nowrap}
+.kie .marker i::before{content:"▲";display:block;text-align:center;font-size:.6rem;line-height:1}
+
+/* ---------- layout ---------- */
+.kie .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:40px;margin:34px 0 60px}
+@media(min-width:960px){.grid{grid-template-columns:minmax(0,1fr) 316px;gap:56px}}
+.kie aside{min-width:0}
+
+/* ---------- answer block (AEO) ---------- */
+.kie .answer{background:var(--wash);border-left:4px solid var(--accent);padding:20px 22px;margin:0 0 30px;border-radius:0 4px 4px 0}
+.kie .answer h2{margin:0 0 8px;font-family:var(--sans);font-size:.74rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.kie .answer p{margin:0;font-size:1.06rem;line-height:1.6}
+
+.kie .lead{font-size:1.02rem;font-weight:600;line-height:1.6;color:var(--ink);margin:0 0 30px}
+.kie .keypoints{margin:0 0 34px;padding:0;list-style:none}
+.kie .keypoints li{position:relative;padding-left:26px;margin-bottom:11px}
+.kie .keypoints li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:9px;background:var(--accent)}
+
+/* ---------- toc ---------- */
+.kie .toc{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:14px 0;margin:0 0 36px}
+.kie .toc p{margin:0 0 8px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.kie .toc ol{margin:0;padding-left:1.15em;columns:2;column-gap:32px;font-size:.92rem}
+@media(max-width:640px){.toc ol{columns:1}}
+.kie .toc li{margin-bottom:5px;break-inside:avoid}
+
+/* ---------- prose ---------- */
+.kie section{margin-bottom:46px;scroll-margin-top:88px}
+.kie h2{font-family:var(--serif);font-size:1.28rem;line-height:1.3;margin:0 0 6px;font-weight:600}
+.kie h2::before{content:"";display:block;width:34px;height:3px;background:var(--accent);margin-bottom:14px}
+.kie h3{font-size:1.02rem;margin:26px 0 6px;letter-spacing:-.005em}
+.kie p{margin:0 0 16px}
+.kie .bullets{margin:0 0 18px;padding-left:1.1em}
+.kie .bullets li{margin-bottom:9px}
+.kie .callout{border:1px solid var(--rule);border-left:3px solid var(--ink);background:var(--wash);
+  padding:14px 18px;margin:0 0 20px;font-size:.95rem}
+
+/* ---------- exhibits ---------- */
+.kie figure{margin:0 0 30px}
+.kie figcaption{font-size:.86rem;margin-bottom:10px;line-height:1.45}
+.kie figcaption .no{color:var(--accent);font-weight:700;letter-spacing:.04em}
+.kie figcaption .unit{color:var(--muted)}
+.kie .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule);border-radius:3px}
+.kie .tscroll:focus-visible{outline:3px solid var(--accent)}
+.kie table{border-collapse:collapse;width:100%;min-width:560px;font-size:.85rem;font-variant-numeric:tabular-nums}
+.kie caption{text-align:left;font-size:.8rem;color:var(--muted);padding:8px 12px;caption-side:bottom}
+.kie thead th{background:var(--ink);color:#fff;font-weight:600;font-size:.76rem;letter-spacing:.04em;
+  text-align:right;padding:9px 12px;white-space:nowrap;position:sticky;top:0}
+.kie thead th:first-child{text-align:left}
+.kie tbody th{text-align:left;font-weight:500;white-space:nowrap;position:sticky;left:0;background:var(--paper)}
+.kie tbody td{text-align:right;white-space:nowrap}
+.kie tbody th, .kie tbody td{padding:7px 12px;border-top:1px solid var(--rule)}
+.kie tbody tr:nth-child(even) th, .kie tbody tr:nth-child(even) td{background:#FAFBFD}
+.kie tbody tr.hl th, .kie tbody tr.hl td{font-weight:700;background:var(--band)}
+.kie .src{font-size:.75rem;color:var(--muted);margin:8px 0 0}
+.kie .hint{display:none;font-size:.75rem;color:var(--muted);margin:6px 0 0}
+@media(max-width:720px){.hint{display:block}}
+
+/* ---------- sidebar ---------- */
+.kie .card{border:1px solid var(--rule);border-top:3px solid var(--ink);padding:18px;margin-bottom:26px;border-radius:0 0 3px 3px}
+.kie .card h2{font-size:.76rem;font-family:var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.kie .card h2::before{display:none}
+.kie .dl{margin:0;font-size:.87rem;font-variant-numeric:tabular-nums}
+.kie .dl div{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--rule)}
+.kie .dl div:first-child{border-top:0}
+.kie .dl dt{color:var(--muted)}
+.kie .dl dd{margin:0;font-weight:600;text-align:right}
+.kie .bars{list-style:none;margin:0;padding:0;font-size:.83rem}
+.kie .bars li{margin-bottom:10px}
+.kie .bars .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+.kie .bars .track{display:block;height:6px;background:var(--wash);border-radius:3px;overflow:hidden}
+.kie .bars .track i{display:block;height:100%;background:var(--ink)}
+.kie .bars b{font-variant-numeric:tabular-nums;font-weight:600}
+.kie .cta{border-top-color:var(--accent)}
+.kie .btn:last-child{margin-bottom:0}
+.kie .btn{display:block;text-align:center;text-decoration:none;font-weight:600;font-size:.9rem;
+  padding:11px 14px;border-radius:4px;background:var(--ink);color:#fff;margin-bottom:8px}
+.kie .btn:hover{background:#16375C;color:#fff}
+.kie .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--rule)}
+.kie .btn.ghost:hover{background:var(--wash);color:var(--ink)}
+.kie .related{list-style:none;margin:0;padding:0;font-size:.9rem}
+.kie .related li{border-top:1px solid var(--rule);padding:9px 0}
+.kie .related li:first-child{border-top:0}
+.kie .related a{text-decoration:none}
+.kie .related a:hover{text-decoration:underline}
+
+/* ---------- faq ---------- */
+.kie .faq details{border-top:1px solid var(--rule);padding:2px 0}
+.kie .faq details:last-of-type{border-bottom:1px solid var(--rule)}
+.kie .faq summary{cursor:pointer;padding:14px 30px 14px 0;font-weight:600;list-style:none;position:relative}
+.kie .faq summary::-webkit-details-marker{display:none}
+.kie .faq summary::after{content:"+";position:absolute;right:4px;top:12px;font-size:1.3rem;color:var(--accent);font-weight:400}
+.kie .faq details[open] summary::after{content:"–"}
+.kie .faq p{margin:0 0 16px;color:#243449}
+
+/* ---------- compliance ---------- */
+.kie .compliance{border-top:2px solid var(--ink);padding-top:24px;margin-top:20px;font-size:.82rem;color:var(--muted)}
+.kie .compliance h2{font-size:.76rem;font-family:var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.kie .compliance h2::before{display:none}
+.kie .compliance details{margin-bottom:10px}
+.kie .compliance summary{cursor:pointer;font-weight:600;color:var(--ink);padding:6px 0}
+.kie .notice{border:1px solid var(--accent);background:#FDF4F5;color:#6B0F1D;padding:12px 16px;
+  font-size:.85rem;margin:0 0 20px;border-radius:3px}
+.kie .ratings-def{list-style:none;margin:10px 0;padding:0}
+.kie .ratings-def li{padding:5px 0;border-top:1px solid var(--rule)}
+.kie .ratings-def b{color:var(--ink)}
+.kie footer{border-top:1px solid var(--rule);margin-top:36px;padding:22px 0 44px;font-size:.78rem;color:var(--muted)}
+
+@media print{
+.kie .masthead nav, .kie .toc, .kie .hint, .kie .crumbs{display:none}
+.kie{font-size:10.5pt}
+.kie .grid{display:block}
+.kie .tscroll{overflow:visible;border:0}
+.kie table{min-width:0;font-size:8.5pt}
+.kie .faq details{display:block}
+.kie a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#666}
+}
+

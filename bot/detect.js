@@ -56,8 +56,17 @@ const FORMATS = [
   }
 ];
 
-/** Which formats currently have a renderer. Update as templates land. */
-const IMPLEMENTED = new Set(['one-pager']);
+/** Formats that have an HTML template. */
+const IMPLEMENTED = new Set(['one-pager', 'pick-of-the-week', 'stock-recommendations', 'kie-full-report']);
+
+/**
+ * Formats whose PDF can be parsed automatically end to end.
+ * The other templates exist and render correctly, but their extractors are not
+ * written yet -- their sample pages were built from hand-checked data. Keeping
+ * these two sets apart is deliberate: it lets the converter say precisely which
+ * half is missing instead of failing with a misleading parser error.
+ */
+const EXTRACTABLE = new Set(['one-pager']);
 
 /**
  * @param {string} page1Text  text of page 1 (detection never needs more)
@@ -109,12 +118,17 @@ function detectFormat(page1Text, meta) {
     confidence: Number((best.matched / best.possible).toFixed(2)),
     matched: best.matched,
     implemented: IMPLEMENTED.has(f.id),
+    extractable: EXTRACTABLE.has(f.id),
     singleStock: f.single
   };
   if (f.restricted) out.restricted = f.restricted;
   if (!out.implemented) {
-    out.reason = `Recognised as "${f.label}", but no renderer exists for it yet. ` +
-                 'Refusing rather than rendering it with the wrong template.';
+    out.reason = `Recognised as "${f.label}", but no template exists for it yet. ` +
+                 'Refusing rather than rendering it with the wrong one.';
+  } else if (!out.extractable) {
+    out.reason = `Recognised as "${f.label}". The HTML template for this format is built, ` +
+                 'but its automatic PDF parser is not written yet, so the fields cannot be read ' +
+                 'from this file. Refusing rather than guessing at them.';
   }
   if (info.pageCount && f.id === 'one-pager' && info.pageCount > 6) {
     out.warning = `Detected a one-pager but the PDF has ${info.pageCount} pages; confirm the template.`;
