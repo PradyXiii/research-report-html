@@ -28,15 +28,41 @@ const { chromium } = require('playwright');
         return 0.2126 * r + 0.7152 * g + 0.0722 * b;
       };
       const parse = (s) => (s.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
-      const bgOf = (el) => {
+      const over = (fg, a, bg) => fg.map((c, i) => c * a + bg[i] * (1 - a));
+      /**
+       * Every colour that can actually sit behind an element's text.
+       * Walks ancestors and STOPS at the first layer that paints opaquely --
+       * anything below that is hidden and must not be measured. A gradient
+       * contributes one candidate per colour stop (translucent stops are
+       * composited over each opaque stop on the same layer), so text over a
+       * gradient is judged against its WORST stop, never an average.
+       */
+      const bgsOf = (el) => {
+        const base = parse(getComputedStyle(document.body).backgroundColor);
         let n = el;
         while (n && n !== document.documentElement) {
-          const bg = getComputedStyle(n).backgroundColor;
-          const a = (bg.match(/[\d.]+/g) || [])[3];
-          if (bg !== 'rgba(0, 0, 0, 0)' && a !== '0') return parse(bg);
+          const cs = getComputedStyle(n);
+          const solid = cs.backgroundColor;
+          const solidA = solid === 'rgba(0, 0, 0, 0)' ? 0 : Number((solid.match(/[\d.]+/g) || [])[3] ?? 1);
+          const hasSolid = solidA > 0.05;
+          const img = cs.backgroundImage;
+
+          if (img && img !== 'none') {
+            const stops = (img.match(/rgba?\([^)]+\)/g) || []).map((st) => {
+              const nums = (st.match(/[\d.]+/g) || []).map(Number);
+              return { rgb: nums.slice(0, 3), a: nums.length > 3 ? nums[3] : 1 };
+            }).filter((x) => x.a > 0.05);
+            const opaque = stops.filter((x) => x.a >= 0.99).map((x) => x.rgb);
+            const translucent = stops.filter((x) => x.a < 0.99);
+            const layer = opaque.length ? opaque : (hasSolid ? [parse(solid)] : [base]);
+            const out = layer.slice();
+            translucent.forEach((t) => layer.forEach((b) => out.push(over(t.rgb, t.a, b))));
+            if (opaque.length || hasSolid) return out;   // opaque layer -- stop here
+          }
+          if (hasSolid) return [parse(solid)];
           n = n.parentElement;
         }
-        return parse(getComputedStyle(document.body).backgroundColor);
+        return [base];
       };
       const ratio = (a, b) => { const [x, y] = [lum(a) + .05, lum(b) + .05]; return x > y ? x / y : y / x; };
 
@@ -49,7 +75,8 @@ const { chromium } = require('playwright');
         const size = parseFloat(cs.fontSize);
         const weight = parseInt(cs.fontWeight, 10) || 400;
         const large = size >= 24 || (size >= 18.66 && weight >= 700);
-        const r = ratio(parse(cs.color), bgOf(el));
+        const fg = parse(cs.color);
+        const r = Math.min.apply(null, bgsOf(el).map((bg) => ratio(fg, bg)));
         const need = large ? 3 : 4.5;
         if (r < need) out.push({
           text: txt.slice(0, 46), cls: el.className || el.tagName,
@@ -87,6 +114,34 @@ const { chromium } = require('playwright');
     console.log('  small targets (<24px):', struct.smallTargets.length ? JSON.stringify(struct.smallTargets) : 'none');
     console.log('  lang:', struct.lang, '| JSON-LD:', struct.jsonLd);
     await ctx.close();
+
+    // Layout collisions + horizontal overflow, across the widths the block
+    // actually gets used at. The gauge marker floats out of flow, so it needs
+    // an explicit check rather than trusting the CSS.
+    for (const w of [390, 560, 820, 1024, 1280]) {
+      const c2 = await browser.newContext({ viewport: { width: w, height: 900 }, colorScheme: scheme });
+      const p2 = await c2.newPage();
+      await p2.goto(url, { waitUntil: 'load' });
+      const bad = await p2.evaluate(() => {
+        const rect = (s) => { const e = document.querySelector(s); return e ? e.getBoundingClientRect() : null; };
+        const hits = (a, b) => a && b && !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom);
+        const problems = [];
+        if (hits(rect('.krb__marker-pill'), rect('.krb__gauge-legend'))) problems.push('marker pill overlaps gauge legend');
+        if (hits(rect('.krb__marker-pill'), rect('.krb__gauge-title'))) problems.push('marker pill overlaps gauge title');
+        const doc = document.documentElement;
+        if (doc.scrollWidth > doc.clientWidth) problems.push(`horizontal overflow (${doc.scrollWidth} > ${doc.clientWidth})`);
+        const m = document.querySelector('.krb__marker');
+        const t = document.querySelector('.krb__track');
+        if (m && t) {
+          const mr = m.getBoundingClientRect(), tr = t.getBoundingClientRect();
+          if (mr.left < tr.left - 1 || mr.left > tr.right + 1) problems.push('marker sits outside the track');
+        }
+        return problems;
+      });
+      if (bad.length) { fails += bad.length; bad.forEach((x) => console.log(`  FAIL @${w}px  ${x}`)); }
+      await c2.close();
+    }
+    console.log('  layout @390/560/820/1024/1280: ' + (fails ? 'see failures above' : 'no collisions, no overflow'));
   }
   await browser.close();
   console.log('\n' + (fails ? `${fails} contrast failure(s)` : 'ALL CHECKS PASSED (light + dark)'));

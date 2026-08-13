@@ -41,6 +41,7 @@ node src/render.js data/lenskart-2026-05-21.json --standalone    # full HTML pag
 | `sample-lenskart.html` | Fully populated standalone page. Open it in a browser. |
 | `block-inline-css.html` | Fragment with CSS inlined — what Strapi would store as the HTML blob. |
 | `preview.html` | Reviewer tool with theme + viewport switches. |
+| `INTEGRATION.md` · `bot/` | The PDF → Strapi bot (see that doc). |
 | `tools/build.js` · `tools/test.js` · `tools/audit.js` | Build, test, a11y gate. |
 
 `render.js` is the single source of truth. `template.html` is **generated**, so it
@@ -128,33 +129,74 @@ external font requests.
 
 ## Design decisions
 
+### Layout
+
+```
+┌─────────────────────────────────────────────┐
+│  HERO   red → navy gradient, dark in BOTH   │  chips · company · ticker
+│         themes. Rating medallion, right.    │  rating + what it means
+├─────────────────────────────────────────────┤
+│  KPI    CMP  │  FAIR VALUE  │  UPSIDE       │  oversized figures
+├─────────────────────────────────────────────┤
+│  GAUGE  SELL │ REDUCE │ ADD │ BUY  ▲+15.0%  │  why it's an ADD
+├─────────────────────────────────────────────┤
+│  THESIS  Rationale (full width)             │
+│  ┌────────────────┬────────────────┐        │
+│  │  Positives     │  Negatives     │        │  bull / bear pair
+│  └────────────────┴────────────────┘        │
+├─────────────────────────────────────────────┤
+│  Abbreviations · PDF · attribution          │
+│  ▸ Rating scale  ▸ Team  ▸ Disclosures      │  native <details>
+└─────────────────────────────────────────────┘
+```
+
+**The gauge is the point.** It plots the computed upside on the PCG rating scale
+from page 2, so a reader sees *why* the call is an ADD rather than taking it on
+faith. It is omitted when there is no fair value (NR/RS) or the rating is
+non-directional (SUBSCRIBE/NA/NM), clamps an off-scale upside to the track end,
+and says so rather than hiding it.
+
 ### Brand colour, honestly applied
 
 | Token | Light | Dark | Used for |
 |---|---|---|---|
-| `--krb-red` | `#fa1432` | `#fa1432` | Top rule, section rules, large headings, bullets |
+| `--krb-red` | `#fa1432` | `#fa1432` | Hero, active gauge band, bullets, accents |
 | `--krb-red-ink` | `#e00f2b` | `#ff4d63` | Red **text below 18.66px** |
-| `--krb-red-deep` | `#e00f2b` | `#e00f2b` | Rating pill + PDF button (white text on red) |
-| `--krb-blue` | `#00005a` | `#93a4ff` | Links, report band, positive markers |
+| `--krb-red-deep` | `#e00f2b` | `#e00f2b` | White-on-red: rating value, PDF button |
+| `--krb-navy` | `#00005a` | `#00005a` | Hero ramp end, links, positive markers |
+| `--krb-text-faint` | `#6b7280` | `#949bab` | KPI labels, tick marks |
 
-**Why red has three shades.** `#fa1432` on white measures **4.03:1**. That passes
-WCAG AA for large text (needs 3:1) but fails for anything under 18.66px bold
-(needs 4.5:1). The exact brand red is therefore used everywhere it is legal —
-the top rule, the title, section headings, section rules, bullet markers — and a
-one-shade-deeper `#e00f2b` (**4.92:1**) carries the small red text and the white-on-red
-pills. In dark mode small red text lifts to `#ff4d63` (**5.59:1**). The difference is
-invisible next to each other; the compliance difference is not.
+**Why red has three shades.** `#fa1432` on white measures **4.03:1** — compliant
+for large text (needs 3:1), not for small (needs 4.5:1). Exact brand red carries
+the hero, the active band and the accents; a one-shade-deeper `#e00f2b`
+(**4.92:1**) carries small red text and white-on-red. Dark mode lifts small red
+text to `#ff4d63` (**5.59:1**). Indistinguishable side by side; the compliance
+difference is not.
 
-The audit in `tools/audit.js` measures every text node in both themes and exits
-non-zero on a regression, so this cannot silently rot.
+The hero is **dark in both themes** — it reads as brand, not as chrome, and it
+means the most striking part of the block looks identical to every user.
 
-### Responsive without breakpoints
+### Responsive without viewport breakpoints
 
 The block sits in a column whose width we do not control, so viewport media
-queries would be measuring the wrong thing. Layout is instead intrinsic —
-`clamp()` type, `auto-fit` grids — with two **container** queries for the
-genuinely narrow cases. It has been verified with no horizontal overflow at
-390 px and 1280 px.
+queries would measure the wrong thing. Layout is intrinsic — `clamp()` type,
+`auto-fit` grids — and the three refinements that *are* conditional use
+**container** queries, so the block measures itself. Verified with no horizontal
+overflow and no layout collisions at 390 / 560 / 820 / 1024 / 1280 px.
+
+### The audit is a real gate
+
+`tools/audit.js` runs headless Chromium in both themes with every accordion open
+and fails the build on:
+
+- any text node under WCAG AA — **including text over gradients**, which it
+  checks against every colour stop rather than an average, stopping the ancestor
+  walk at the first opaque layer so it never measures a hidden background;
+- the floating gauge marker colliding with the legend or title, at five widths;
+- horizontal overflow, skipped heading levels, or pointer targets under 24 px.
+
+It is verified against a negative control (a deliberately low-contrast build) so
+a passing run means something.
 
 ### Report CMP vs the live ticker
 

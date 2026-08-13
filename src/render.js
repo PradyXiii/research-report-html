@@ -133,10 +133,10 @@ function computeUpside(cmp, fairValue) {
 /* ------------------------------------------------------------------- icons */
 
 const ICONS = {
-  rationale: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/></svg>',
-  positive: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M2 21h4V9H2v12zM23 10a2 2 0 0 0-2-2h-6.31l.95-4.57.03-.32a1.5 1.5 0 0 0-.44-1.06L14.17 1 7.59 7.59A2 2 0 0 0 7 9v10a2 2 0 0 0 2 2h9a2 2 0 0 0 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>',
-  negative: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M22 3h-4v12h4V3zM1 14a2 2 0 0 0 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59A2 2 0 0 0 17 15V5a2 2 0 0 0-2-2H6a2 2 0 0 0-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2z"/></svg>',
-  download: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0 4-4m-4 4-4-4M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>'
+  rationale: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  positive: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 13.5 9 18.5 20 6.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  negative: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 8v5m0 3.5v.2M10.3 3.9 2.6 17.2A2 2 0 0 0 4.3 20.2h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  download: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 };
 
 function iconFor(section) {
@@ -149,53 +149,139 @@ function iconFor(section) {
 
 /* ------------------------------------------------------------- partials */
 
-function renderSection(section, index) {
+function renderCard(section, index) {
   const tone = String(section.tone || 'neutral').toLowerCase();
-  const id = esc(section.id || `section-${index + 1}`);
-  const items = (section.bullets || []).map((b) => `<li>${linkify(esc(b))}</li>`).join('\n            ');
-  const paras = (section.paragraphs || []).map((p) => `<p>${linkify(esc(p))}</p>`).join('\n            ');
+  const id = esc(section.id || ('section-' + (index + 1)));
+  const count = (section.bullets || []).length;
+  const items = (section.bullets || []).map((b) => `<li>${linkify(esc(b))}</li>`).join('\n              ');
+  const paras = (section.paragraphs || []).map((p) => `<p>${linkify(esc(p))}</p>`).join('\n              ');
+  const modifier = index === 0 ? ' krb__card--thesis' : '';
 
-  return `        <section class="krb__section" data-tone="${esc(tone)}" aria-labelledby="krb-${id}">
-          <div class="krb__section-head">
-            <span class="krb__icon" style="color: var(--krb-${tone === 'positive' ? 'blue' : 'red'})">${iconFor(section)}</span>
-            <h3 class="krb__section-title" id="krb-${id}">${esc(section.title)}</h3>
-          </div>
-${items ? `          <ul class="krb__list">\n            ${items}\n          </ul>` : ''}${paras ? `\n          <div class="krb__prose">\n            ${paras}\n          </div>` : ''}
-        </section>`;
+  return `          <section class="krb__card${modifier}" data-tone="${esc(tone)}" aria-labelledby="krb-${id}">
+            <div class="krb__card-head">
+              <span class="krb__icon">${iconFor(section)}</span>
+              <h3 class="krb__card-title" id="krb-${id}">${esc(section.title)}</h3>
+              ${count ? `<span class="krb__count">${count}</span>` : ''}
+            </div>
+${items ? `            <ul class="krb__list">\n              ${items}\n            </ul>` : ''}${paras ? `\n            <div class="krb__prose">\n              ${paras}\n            </div>` : ''}
+          </section>`;
 }
 
-function renderStats(data) {
+function renderHero(data) {
   const rec = data.recommendation;
-  const cur = esc(rec.currency === 'INR' || !rec.currency ? 'Rs.' : rec.currency + ' ');
-  const upside = computeUpside(rec.cmp, rec.fairValue);
-  const asOn = formatDate(data.publishedAt);
+  const rating = String(rec.rating).toUpperCase();
+  const band = boilerplate.ratingScale.find((r) => r.code === rating);
+  const chips = [
+    { text: data.report.type, lead: true },
+    { text: data.report.period },
+    { text: formatDate(data.publishedAt) }
+  ].filter((c) => c.text);
 
+  return `        <header class="krb__hero">
+          <div class="krb__hero-inner">
+            <div class="krb__chips">
+${chips.map((c) => `              <span class="krb__chip${c.lead ? ' krb__chip--lead' : ''}">${esc(c.text)}</span>`).join('\n')}
+            </div>
+            <div class="krb__headrow">
+              <div class="krb__identity">
+                <h2 class="krb__title" itemprop="headline">${esc(data.stock.name)}</h2>
+                <span class="krb__ticker">${esc(data.stock.ticker)}</span>
+              </div>
+              <div class="krb__verdict">
+                <span class="krb__verdict-label">Kotak PCG rating</span>
+                <span class="krb__verdict-value">${esc(rating)}</span>
+                <span class="krb__verdict-note">${esc(band && band.short ? band.short : (rec.holdingPeriod ? 'Holding period ' + rec.holdingPeriod : ''))}</span>
+              </div>
+            </div>
+          </div>
+        </header>`;
+}
+
+/** Split "Rs.487" so the currency mark can be set smaller than the figure. */
+function money(value, currency) {
+  const mark = currency === 'INR' || !currency ? 'Rs.' : String(currency) + ' ';
+  return `<sup>${esc(mark)}</sup>${esc(formatNumber(value))}`;
+}
+
+function renderKpis(data) {
+  const rec = data.recommendation;
+  const upside = computeUpside(rec.cmp, rec.fairValue);
   const tiles = [
-    `          <div class="krb__stat">
-            <span class="krb__stat-label">Current Market Price</span>
-            <span class="krb__stat-value">${cur}${esc(formatNumber(rec.cmp))}</span>
-            <span class="krb__stat-note">as on ${esc(asOn)}</span>
+    `          <div class="krb__kpi">
+            <span class="krb__kpi-label">Current market price</span>
+            <span class="krb__kpi-value">${money(rec.cmp, rec.currency)}</span>
+            <span class="krb__kpi-note">as on ${esc(formatDate(data.publishedAt))}</span>
           </div>`
   ];
-
   if (rec.fairValue !== null && rec.fairValue !== undefined) {
-    tiles.push(`          <div class="krb__stat krb__stat--accent">
-            <span class="krb__stat-label">Fair Value</span>
-            <span class="krb__stat-value">${cur}${esc(formatNumber(rec.fairValue))}</span>
-            <span class="krb__stat-note">DCF / target price</span>
+    tiles.push(`          <div class="krb__kpi krb__kpi--hero">
+            <span class="krb__kpi-label">Fair value</span>
+            <span class="krb__kpi-value">${money(rec.fairValue, rec.currency)}</span>
+            <span class="krb__kpi-note">DCF-based target${rec.holdingPeriod ? ', ' + esc(rec.holdingPeriod) : ''}</span>
           </div>`);
   }
-
   if (upside !== null) {
     const sign = upside >= 0 ? '+' : '';
-    tiles.push(`          <div class="krb__stat">
-            <span class="krb__stat-label">Potential Upside</span>
-            <span class="krb__stat-value">${esc(sign + upside.toFixed(1))}%</span>
-            <span class="krb__stat-note">Fair Value vs CMP</span>
+    tiles.push(`          <div class="krb__kpi">
+            <span class="krb__kpi-label">Potential ${upside >= 0 ? 'upside' : 'downside'}</span>
+            <span class="krb__kpi-value">${esc(sign + upside.toFixed(1))}%</span>
+            <span class="krb__kpi-note">Fair value vs CMP</span>
           </div>`);
   }
+  return `        <div class="krb__kpis">\n${tiles.join('\n')}\n        </div>`;
+}
 
-  return `        <div class="krb__stats">\n${tiles.join('\n')}\n        </div>`;
+/**
+ * Plots the computed upside on the PCG rating scale, so a reader can see WHY
+ * the call is what it is. Omitted when there is no fair value (NR / RS), or
+ * when the rating is non-directional and the scale would be meaningless.
+ */
+function renderGauge(data) {
+  const rec = data.recommendation;
+  const rating = String(rec.rating).toUpperCase();
+  const upside = computeUpside(rec.cmp, rec.fairValue);
+  const bands = boilerplate.gaugeBands;
+  if (upside === null || !bands.some((b) => b.code === rating)) return '';
+
+  const MIN = boilerplate.GAUGE_MIN;
+  const MAX = boilerplate.GAUGE_MAX;
+  const span = MAX - MIN;
+  const raw = ((upside - MIN) / span) * 100;
+  const pos = Math.max(0, Math.min(100, raw));
+  const clamped = raw < 0 || raw > 100;
+
+  const segments = bands.map((b) => {
+    const width = ((b.to - b.from) / span) * 100;
+    const active = b.code === rating;
+    return `            <div class="krb__band" data-active="${active}" style="flex: 0 0 ${width.toFixed(4)}%" ${active ? `aria-current="true"` : ''}>${esc(b.code)}</div>`;
+  }).join('\n');
+
+  const sign = upside >= 0 ? '+' : '';
+  const label = `${sign}${upside.toFixed(1)}%`;
+
+  // Tick marks are the band edges themselves, so labels always line up with
+  // the boundaries they describe.
+  const ticks = [MIN].concat(bands.map((b) => b.to)).map((t, i, all) => {
+    const pct = ((t - MIN) / span) * 100;
+    const edge = i === 0 ? 'left: 0' : (i === all.length - 1 ? 'left: 100%' : `left: ${pct.toFixed(4)}%`);
+    return `            <span style="${edge}">${t > 0 ? '+' : ''}${t}%</span>`;
+  }).join('\n');
+
+  return `        <section class="krb__gauge" aria-label="Expected return against the Kotak PCG rating scale">
+          <div class="krb__gauge-head">
+            <span class="krb__gauge-title">Where this call sits on the rating scale</span>
+            <span class="krb__gauge-legend">${esc(label)} expected return over 12 months${clamped ? ' (beyond the scale shown)' : ''}</span>
+          </div>
+          <div class="krb__track" role="img" aria-label="${esc(label)} expected return falls in the ${esc(rating)} band">
+${segments}
+            <div class="krb__marker" style="left: ${pos.toFixed(4)}%">
+              <span class="krb__marker-pill">${esc(label)}</span>
+            </div>
+          </div>
+          <div class="krb__gauge-scale" aria-hidden="true">
+${ticks}
+          </div>
+        </section>`;
 }
 
 function renderRatingScale() {
@@ -258,44 +344,39 @@ function renderBlock(data, options) {
   const rec = data.recommendation;
   const rating = String(rec.rating).toUpperCase();
   const themeAttr = opts.theme ? ` data-krb-theme="${esc(opts.theme)}"` : '';
-  const eyebrow = [data.report.type, data.report.period].filter(Boolean).join(' \u00b7 ');
 
   const css = opts.inlineCss
     ? `      <style>\n${fs.readFileSync(path.join(__dirname, 'krb.css'), 'utf8')}\n      </style>\n`
     : '';
 
-  const sections = data.sections.map(renderSection).join('\n\n');
+  // First section is the thesis and gets the full-width hero card; the rest
+  // pair up as a bull/bear split that collapses to one column when narrow.
+  const cards = data.sections.map(renderCard);
+  const thesis = cards.length ? cards[0] : '';
+  const rest = cards.slice(1);
+
   // escUrl() returns '' for anything that is not http(s)/mailto/tel/relative,
   // so a javascript: or data: URL suppresses the button entirely rather than
   // rendering a dead <a href="">.
   const pdfUrl = escUrl(data.sourcePdf);
 
   return `${css}      <article class="krb"${themeAttr} data-krb-rating="${esc(rating)}" itemscope itemtype="https://schema.org/Report">
-        <header class="krb__head">
-          <p class="krb__eyebrow">${esc(eyebrow)}</p>
-          <h2 class="krb__title" itemprop="headline">${esc(data.stock.name)} <span class="krb__ticker">(${esc(data.stock.ticker)})</span></h2>
-          <div class="krb__meta">
-            <span class="krb__rating" aria-label="Rating: ${esc(rating)}">${esc(rating)}</span>
-            <time datetime="${esc(data.publishedAt)}" itemprop="datePublished">${esc(formatDate(data.publishedAt))}</time>
-            ${rec.holdingPeriod ? `<span>Holding period: ${esc(rec.holdingPeriod)}</span>` : ''}
-          </div>
-        </header>
+${renderHero(data)}
 
-        <p class="krb__band">${esc(data.report.type)}</p>
+${renderKpis(data)}
 
-${renderStats(data)}
+${renderGauge(data)}
 
-      <div class="krb__body">
-${sections}
-
-${data.abbreviations ? `        <p class="krb__note">${esc(data.abbreviations)}</p>` : ''}
-      </div>
-
-${pdfUrl ? `        <div class="krb__actions">
-          <a class="krb__btn krb__btn--primary" href="${pdfUrl}" target="_blank" rel="noopener noreferrer">
-            ${ICONS.download}<span>Download full report (PDF)</span>
-          </a>
-        </div>` : ''}
+        <div class="krb__body">
+${thesis}
+${rest.length ? `          <div class="krb__split">\n${rest.join('\n')}\n          </div>` : ''}
+${data.abbreviations ? `          <p class="krb__note">${esc(data.abbreviations)}</p>` : ''}
+${pdfUrl ? `          <div class="krb__actions">
+            <a class="krb__btn krb__btn--primary" href="${pdfUrl}" target="_blank" rel="noopener noreferrer">
+              ${ICONS.download}<span>Download full report (PDF)</span>
+            </a>
+          </div>` : ''}
+        </div>
 
 ${data.attribution ? `        <p class="krb__attribution">${linkify(esc(data.attribution))}</p>` : ''}
 

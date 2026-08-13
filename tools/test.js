@@ -67,9 +67,10 @@ t('allows a null fairValue (NR / RS reports)', () => {
   d.recommendation.rating = 'NR';
   assert.ok(validate(d));
   const html = renderBlock(d);
-  assert.ok(!/krb__stat--accent/.test(html), 'Fair Value tile should be omitted');
-  assert.ok(!/Potential Upside/.test(html), 'Upside tile should be omitted');
-  assert.strictEqual((html.match(/class="krb__stat"/g) || []).length, 1, 'only the CMP tile should remain');
+  assert.ok(!/krb__kpi--hero/.test(html), 'Fair Value tile should be omitted');
+  assert.ok(!/Potential (upside|downside)/.test(html), 'Upside tile should be omitted');
+  assert.strictEqual((html.match(/class="krb__kpi"/g) || []).length, 1, 'only the CMP tile should remain');
+  assert.ok(!/krb__gauge/.test(html), 'gauge is meaningless without a fair value');
 });
 
 console.log('\ninjection safety (PDF text is untrusted input)');
@@ -89,7 +90,7 @@ t('no unexpected tag reaches the output', () => {
   // complete injection check -- an escaped payload cannot match this regex.
   const ALLOWED = new Set(['article', 'header', 'section', 'div', 'p', 'h2', 'h3', 'h4',
     'span', 'time', 'ul', 'li', 'dl', 'dt', 'dd', 'a', 'strong', 'details', 'summary',
-    'svg', 'circle', 'path', 'script', 'style']);
+    'sup', 'svg', 'circle', 'path', 'script', 'style']);
   const tags = new Set();
   evilHtml.replace(/<\/?([a-zA-Z][a-zA-Z0-9-]*)/g, (_, x) => tags.add(x.toLowerCase()));
   const bad = [...tags].filter((x) => !ALLOWED.has(x));
@@ -138,7 +139,34 @@ t('CMP always carries an as-on date qualifier', () => {
 });
 t('rating is normalised to upper case', () => {
   const d = clone(valid); d.recommendation.rating = 'add';
-  assert.ok(/krb__rating" aria-label="Rating: ADD">ADD</.test(renderBlock(d)));
+  const h = renderBlock(d);
+  assert.ok(/krb__verdict-value">ADD</.test(h), 'medallion shows ADD');
+  assert.ok(/data-krb-rating="ADD"/.test(h), 'root carries the normalised rating');
+});
+t('gauge marks the ADD band as active and positions the marker inside it', () => {
+  assert.ok(/data-active="true"[^>]*>ADD</.test(html), 'ADD band is the active one');
+  assert.strictEqual((html.match(/data-active="true"/g) || []).length, 1, 'exactly one active band');
+  // The ADD band spans +5%..+15% on a -15..+25 window, i.e. 50%..75% of the track.
+  // True upside is 14.9897% (it *displays* as +15.0%), so the marker must land
+  // just inside ADD -- not on the BUY side of the boundary.
+  const pos = Number(/krb__marker" style="left: ([\d.]+)%/.exec(html)[1]);
+  assert.ok(pos > 50 && pos <= 75, `marker at ${pos}% should be within the ADD band (50-75%)`);
+  const expected = ((computeUpside(valid.recommendation.cmp, valid.recommendation.fairValue) + 15) / 40) * 100;
+  assert.ok(Math.abs(pos - expected) < 0.001, 'marker position matches the computed upside');
+});
+t('gauge label rounds for display without moving the marker', () => {
+  // Guards against "displays +15.0%" being mistaken for "is exactly 15%".
+  assert.ok(/krb__marker-pill">\+15\.0%</.test(html), 'label rounds to one decimal');
+});
+t('gauge clamps an off-scale upside instead of overflowing', () => {
+  const d = clone(valid); d.recommendation.fairValue = 2000;   // ~+310%
+  const h = renderBlock(d);
+  assert.ok(/krb__marker" style="left: 100\.0000%/.test(h), 'marker clamps to the track end');
+  assert.ok(/beyond the scale shown/.test(h), 'clamping is disclosed, not hidden');
+});
+t('gauge is omitted for non-directional ratings', () => {
+  const d = clone(valid); d.recommendation.rating = 'SUBSCRIBE';
+  assert.ok(!/krb__gauge/.test(renderBlock(d)), 'SUBSCRIBE has no return band');
 });
 t('exposes the three disclosure accordions', () => {
   assert.strictEqual((html.match(/class="krb__acc"/g) || []).length, 3);

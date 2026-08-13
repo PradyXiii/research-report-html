@@ -15,10 +15,10 @@ const version = '2026-05-21';
 
 /** Rating scale -- page 2 */
 const ratingScale = [
-  { code: 'BUY',       lead: '',                          text: 'We expect the stock to deliver more than 15% returns over the next 12 months' },
-  { code: 'ADD',       lead: '',                          text: 'We expect the stock to deliver 5% - 15% returns over the next 12 months' },
-  { code: 'REDUCE',    lead: '',                          text: 'We expect the stock to deliver -5% - +5% returns over the next 12 months' },
-  { code: 'SELL',      lead: '',                          text: 'We expect the stock to deliver < -5% returns over the next 12 months' },
+  { code: 'BUY',       lead: '', range: [15, null],  short: 'Over 15% in 12 months',   text: 'We expect the stock to deliver more than 15% returns over the next 12 months' },
+  { code: 'ADD',       lead: '', range: [5, 15],     short: '5% to 15% in 12 months',  text: 'We expect the stock to deliver 5% - 15% returns over the next 12 months' },
+  { code: 'REDUCE',    lead: '', range: [-5, 5],     short: '-5% to +5% in 12 months', text: 'We expect the stock to deliver -5% - +5% returns over the next 12 months' },
+  { code: 'SELL',      lead: '', range: [null, -5],  short: 'Below -5% in 12 months',  text: 'We expect the stock to deliver < -5% returns over the next 12 months' },
   { code: 'NR',        lead: 'Not Rated.',                text: 'Kotak Securities is not assigning any rating or price target to the stock. The report has been prepared for information purposes only.' },
   { code: 'SUBSCRIBE', lead: '',                          text: 'We advise investor to subscribe to the IPO.' },
   { code: 'RS',        lead: 'Rating Suspended.',         text: 'Kotak Securities has suspended the investment rating and price target for this stock, either because there is not a sufficient fundamental basis for determining, or there are legal, regulatory or policy constraints around publishing, an investment rating or target. The previous investment rating and price target, if any, are no longer in effect for this stock and should not be relied upon.' },
@@ -106,4 +106,21 @@ const disclosures = [
   '“In case you require any clarification or have any query/concern, kindly write to us at Service.securities@kotak.com. For grievances write to KS.escalation@kotak.com and find Grievances Escalation matrix in the link below.” https://www.kotakneo.com/disclaimer/'
 ];
 
-module.exports = { version, ratingScale, researchTeams, riskWarnings, disclosures };
+/**
+ * The four directional ratings, ordered low -> high, with the return bands the
+ * gauge renders. Derived from ratingScale so the two can never disagree.
+ * Open ends are clamped to the display window, not to the real (infinite) band.
+ */
+const GAUGE_MIN = -15;
+const GAUGE_MAX = 25;
+const gaugeBands = ['SELL', 'REDUCE', 'ADD', 'BUY'].map((code) => {
+  const r = ratingScale.find((x) => x.code === code);
+  return {
+    code,
+    short: r.short,
+    from: r.range[0] === null ? GAUGE_MIN : r.range[0],
+    to: r.range[1] === null ? GAUGE_MAX : r.range[1]
+  };
+});
+
+module.exports = { version, ratingScale, researchTeams, riskWarnings, disclosures, gaugeBands, GAUGE_MIN, GAUGE_MAX };

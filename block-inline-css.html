@@ -1,585 +1,815 @@
       <style>
 /* ==========================================================================
-   Kotak Research Block (krb)
-   Embeddable research-report block for kotakneo.com recommendation pages.
+   Kotak Research Block (krb) — v2
+   Embeddable research-report block for kotakneo.com.
 
-   - Every selector is scoped under .krb so it cannot collide with site CSS.
-   - No JavaScript. Accordions use native <details>.
-   - Responsive by construction (fluid type + auto-fit grids), not by
-     viewport breakpoints -- the block sits in a column of unknown width,
-     so viewport media queries would lie about the space available.
-   - Light + dark. Dark resolves from, in order of precedence:
-       1. .krb[data-krb-theme="dark"|"light"]   (per-block override)
-       2. [data-theme="dark"] / .dark ancestor  (site-level toggle)
-       3. prefers-color-scheme                  (OS setting)
+   Design notes
+   ------------
+   Number-first hierarchy: the figures are the interface, labels support them.
+   A dramatic red->navy hero carries the brand; the body stays calm so the
+   content is readable. Depth comes from layered surfaces and one soft glow,
+   not from borders everywhere.
 
-   Brand
-   -----
-   #fa1432 red   -- bands, rules, borders, section headings
-   #00005a blue  -- links, the report-type band, positive markers
+   Rules that hold the whole thing together:
+   - Every selector is scoped under .krb. No global styles, no collisions.
+   - No JavaScript. Accordions are native <details>.
+   - Responsive by construction (fluid type, auto-fit grids). The block sits in
+     a column of unknown width, so it measures ITSELF with container queries.
+   - Light + dark, resolved as: .krb[data-krb-theme] > site [data-theme]/.dark
+     > prefers-color-scheme.
+   - The hero is deliberately dark in BOTH themes. It reads as brand, not chrome.
 
-   Contrast notes (measured, sRGB, WCAG 2.1):
-   #fa1432 on #fff = 4.03:1 -> OK for large/bold text (needs 3:1),
-                              FAILS normal body text (needs 4.5:1).
-                              So red is never used for running copy.
-   white on #fa1432 = 4.03:1 -> only used at >=18.66px bold (large text).
-   white on #e00f2b = 4.92:1 -> used for small pills/badges. Passes AA.
-   #00005a on #fff  = 18.3:1 -> excellent.
-   #fa1432 on #101216 = 4.65:1 -> passes AA even for normal text in dark.
+   Contrast (measured, sRGB, WCAG 2.1)
+   -----------------------------------
+   #fa1432 on #fff .......... 4.03:1  large/bold text and UI only
+   #e00f2b on #fff .......... 4.92:1  small red text, and white-on-red pills
+   #ff4d63 on #14161c ....... 5.59:1  small red text in dark
+   #00005a on #fff .......... 18.3:1
+   white on hero gradient ... 6.5:1+  (darkest point of the ramp is #fa1432
+                                       at 4.03:1, so hero body text sits on a
+                                       black-tinted scrim, never bare red)
    ========================================================================== */
 
 .krb {
   /* ---- brand ---------------------------------------------------------- */
-  --krb-red: #fa1432;        /* fills, bars, borders, large headings       */
-  --krb-red-deep: #e00f2b;   /* only where small WHITE text sits on red    */
-  --krb-red-ink: #e00f2b;    /* red TEXT below 18.66px -- 4.92:1 on white  */
-  --krb-blue: #00005a;       /* links, accents                             */
+  --krb-red: #fa1432;
+  --krb-red-deep: #e00f2b;      /* white text on red -> 4.92:1              */
+  --krb-red-ink: #e00f2b;       /* red TEXT under 18.66px                   */
+  --krb-navy: #00005a;
+  --krb-navy-deep: #05052e;
 
-  /* ---- light surface -------------------------------------------------- */
+  /* ---- light surfaces -------------------------------------------------- */
   --krb-bg: #ffffff;
-  --krb-surface: #f6f7fa;
+  --krb-surface: #f7f8fc;
   --krb-surface-2: #ffffff;
+  --krb-raised: #ffffff;
   --krb-tint-red: #fff2f4;
   --krb-tint-blue: #f1f3fb;
-  --krb-text: #1a1c22;
-  --krb-text-muted: #5a606d;
-  --krb-border: #e3e6ee;
-  --krb-border-strong: #cfd4e0;
-  --krb-band-bg: #00005a;
-  --krb-band-ink: #ffffff;
-  --krb-shadow: 0 1px 2px rgba(16, 18, 22, .04), 0 8px 24px rgba(16, 18, 22, .06);
+  --krb-text: #14161d;
+  --krb-text-muted: #596070;
+  --krb-text-faint: #6b7280;   /* 4.83:1 on white */
+  --krb-border: #e6e9f2;
+  --krb-border-soft: #eff1f7;
+  --krb-link: #00005a;
+  --krb-shadow-sm: 0 1px 2px rgba(10, 12, 20, .05);
+  --krb-shadow: 0 2px 4px rgba(10, 12, 20, .04), 0 12px 28px rgba(10, 12, 20, .07);
+  --krb-shadow-lg: 0 4px 8px rgba(10, 12, 20, .06), 0 24px 56px rgba(10, 12, 20, .12);
+  --krb-gauge-track: #eceef5;
 
-  /* ---- scale ---------------------------------------------------------- */
-  --krb-radius: 12px;
-  --krb-radius-sm: 8px;
-  --krb-gap: clamp(14px, 2.2vw, 22px);
-  --krb-pad: clamp(16px, 3vw, 30px);
+  /* ---- scale ----------------------------------------------------------- */
+  --krb-r: 20px;
+  --krb-r-md: 14px;
+  --krb-r-sm: 10px;
+  --krb-pad: clamp(18px, 3.4vw, 40px);
+  --krb-gap: clamp(12px, 1.8vw, 20px);
 
-  /* fluid type: min at ~360px viewport, max at ~1200px */
-  --krb-fs-title: clamp(21px, 1.05rem + 1.5vw, 32px);
-  --krb-fs-band: clamp(15px, .82rem + .55vw, 20px);
-  --krb-fs-h3: clamp(17px, .92rem + .5vw, 21px);
-  --krb-fs-body: clamp(15px, .9rem + .16vw, 17px);
-  --krb-fs-stat: clamp(24px, 1.1rem + 2vw, 36px);
-  --krb-fs-small: clamp(12.5px, .78rem + .1vw, 14px);
+  --krb-fs-display: clamp(28px, 1.2rem + 3.4vw, 52px);
+  --krb-fs-kpi: clamp(30px, 1.3rem + 3vw, 46px);
+  --krb-fs-h3: clamp(18px, .95rem + .7vw, 24px);
+  --krb-fs-body: clamp(15px, .9rem + .18vw, 17px);
+  --krb-fs-sm: clamp(13px, .8rem + .1vw, 14.5px);
+  --krb-fs-xs: clamp(11.5px, .72rem + .06vw, 12.5px);
 
-  --krb-font: inherit;       /* inherit the host page's brand font          */
-  --krb-font-num: inherit;
+  --krb-font: inherit;          /* picks up the host page's brand typeface */
 
   container-type: inline-size;
   container-name: krb;
-
+  position: relative;
+  isolation: isolate;
   font-family: var(--krb-font);
   font-size: var(--krb-fs-body);
-  line-height: 1.6;
+  line-height: 1.62;
   color: var(--krb-text);
   background: var(--krb-bg);
-  border: 1px solid var(--krb-border);
-  border-top: 4px solid var(--krb-red);
-  border-radius: var(--krb-radius);
-  box-shadow: var(--krb-shadow);
+  border-radius: var(--krb-r);
+  box-shadow: var(--krb-shadow-lg);
   overflow: hidden;
   margin: 0 auto;
-  max-width: 1100px;
+  max-width: 1160px;
   text-align: left;
   -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
 }
 
-/* ---- dark mode ------------------------------------------------------- */
+/* ---- dark ------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
   .krb:not([data-krb-theme="light"]) {
-    --krb-bg: #101216;
-    --krb-surface: #171a21;
+    --krb-bg: #0d0f14;
+    --krb-surface: #14171f;
     --krb-surface-2: #14161c;
-    --krb-tint-red: #261217;
-    --krb-tint-blue: #14172b;
-    --krb-text: #e7e9ef;
-    --krb-text-muted: #a2a8b6;
-    --krb-border: #272b35;
-    --krb-border-strong: #39404e;
-    --krb-blue: #93a4ff;
-    --krb-red-ink: #ff4d63;   /* 5.59:1 on the dark surface */
-    --krb-band-bg: #14166b;
-    --krb-band-ink: #ffffff;
-    --krb-shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 24px rgba(0, 0, 0, .35);
+    --krb-raised: #191d26;
+    --krb-tint-red: #24121a;
+    --krb-tint-blue: #131629;
+    --krb-text: #eceef4;
+    --krb-text-muted: #a3aab9;
+    --krb-text-faint: #949bab;   /* 6.43:1 on the dark surface */
+    --krb-border: #262b36;
+    --krb-border-soft: #1e222b;
+    --krb-link: #9db0ff;
+    --krb-red-ink: #ff4d63;
+    --krb-gauge-track: #232833;
+    --krb-shadow-sm: 0 1px 2px rgba(0, 0, 0, .5);
+    --krb-shadow: 0 2px 4px rgba(0, 0, 0, .45), 0 12px 28px rgba(0, 0, 0, .4);
+    --krb-shadow-lg: 0 4px 8px rgba(0, 0, 0, .5), 0 24px 56px rgba(0, 0, 0, .55);
   }
 }
 [data-theme="dark"] .krb:not([data-krb-theme="light"]),
 .dark .krb:not([data-krb-theme="light"]),
 .krb[data-krb-theme="dark"] {
-  --krb-bg: #101216;
-  --krb-surface: #171a21;
+  --krb-bg: #0d0f14;
+  --krb-surface: #14171f;
   --krb-surface-2: #14161c;
-  --krb-tint-red: #261217;
-  --krb-tint-blue: #14172b;
-  --krb-text: #e7e9ef;
-  --krb-text-muted: #a2a8b6;
-  --krb-border: #272b35;
-  --krb-border-strong: #39404e;
-  --krb-blue: #93a4ff;
-  --krb-red-ink: #ff4d63;   /* 5.59:1 on the dark surface */
-  --krb-band-bg: #14166b;
-  --krb-band-ink: #ffffff;
-  --krb-shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 24px rgba(0, 0, 0, .35);
+  --krb-raised: #191d26;
+  --krb-tint-red: #24121a;
+  --krb-tint-blue: #131629;
+  --krb-text: #eceef4;
+  --krb-text-muted: #a3aab9;
+  --krb-text-faint: #7d8494;
+  --krb-border: #262b36;
+  --krb-border-soft: #1e222b;
+  --krb-link: #9db0ff;
+  --krb-red-ink: #ff4d63;
+  --krb-gauge-track: #232833;
+  --krb-shadow-sm: 0 1px 2px rgba(0, 0, 0, .5);
+  --krb-shadow: 0 2px 4px rgba(0, 0, 0, .45), 0 12px 28px rgba(0, 0, 0, .4);
+  --krb-shadow-lg: 0 4px 8px rgba(0, 0, 0, .5), 0 24px 56px rgba(0, 0, 0, .55);
 }
 
-.krb *,
-.krb *::before,
-.krb *::after { box-sizing: border-box; }
-
-.krb :where(p, ul, ol, li, h2, h3, h4, figure, dl, dd, dt) { margin: 0; padding: 0; }
+.krb *, .krb *::before, .krb *::after { box-sizing: border-box; }
+.krb :where(p, ul, ol, li, h2, h3, h4, dl, dd, dt, figure) { margin: 0; padding: 0; }
 .krb :where(ul, ol) { list-style: none; }
 
-.krb a {
-  color: var(--krb-blue);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  text-decoration-thickness: 1px;
-}
+.krb a { color: var(--krb-link); text-decoration: underline; text-underline-offset: 2px; }
 .krb a:hover { text-decoration-thickness: 2px; }
-.krb a:focus-visible,
-.krb summary:focus-visible {
+.krb a:focus-visible, .krb summary:focus-visible {
   outline: 2px solid var(--krb-red);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
 /* ==========================================================================
-   Header
+   HERO — red -> navy ramp, dark in both themes
    ========================================================================== */
-.krb__head { padding: var(--krb-pad) var(--krb-pad) 0; }
+.krb__hero {
+  position: relative;
+  padding: clamp(26px, 4.4vw, 52px) var(--krb-pad) clamp(30px, 4.4vw, 50px);
+  background:
+    radial-gradient(90% 130% at 88% 6%, rgba(255, 92, 120, .55) 0%, rgba(255, 92, 120, 0) 58%),
+    linear-gradient(135deg, #ff2440 0%, #fa1432 26%, #a80d2b 56%, #2c0a45 82%, var(--krb-navy-deep) 100%);
+  color: #fff;
+  overflow: hidden;
+}
+/* fine grain keeps the large gradient from banding on wide screens */
+.krb__hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+.krb__hero-inner { position: relative; z-index: 1; }
 
-.krb__eyebrow {
+.krb__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(16px, 2.4vw, 26px); }
+.krb__chip {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: var(--krb-fs-small);
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: var(--krb-fs-xs);
   font-weight: 700;
-  letter-spacing: .09em;
+  letter-spacing: .085em;
   text-transform: uppercase;
-  color: var(--krb-red-ink);
+  /* black scrim, never bare red -> white text reaches 6.5:1 */
+  background: rgba(0, 0, 0, .3);
+  border: 1px solid rgba(255, 255, 255, .26);
+  color: #fff;
+  white-space: nowrap;
 }
-.krb__eyebrow::before {
-  content: "";
-  width: 22px;
-  height: 3px;
-  border-radius: 2px;
-  background: var(--krb-red);
+.krb__chip--lead { background: #fff; border-color: #fff; color: var(--krb-red-deep); }
+
+.krb__headrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(18px, 3vw, 40px);
 }
+.krb__identity { min-width: min(100%, 260px); flex: 1 1 340px; }
 
 .krb__title {
-  margin-top: 10px;
-  font-size: var(--krb-fs-title);
+  font-size: var(--krb-fs-display);
   font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -.015em;
-  color: var(--krb-red);           /* large text -> 4.03:1 is compliant */
+  line-height: 1.03;
+  letter-spacing: -.032em;
+  color: #fff;
   text-wrap: balance;
 }
 .krb__ticker {
-  display: inline-block;
-  font-size: .62em;
-  font-weight: 700;
-  letter-spacing: .04em;
-  color: var(--krb-text-muted);
-  vertical-align: middle;
-}
-
-.krb__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 14px;
-  margin-top: 14px;
-  font-size: var(--krb-fs-small);
-  color: var(--krb-text-muted);
-}
-.krb__meta > * { display: inline-flex; align-items: center; gap: 6px; }
-
-.krb__rating {
-  padding: 5px 13px;
-  border-radius: 999px;
-  background: var(--krb-red-deep);  /* 4.92:1 with white -> AA at small size */
-  color: #fff;
-  font-weight: 800;
-  font-size: var(--krb-fs-small);
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-/* ==========================================================================
-   Report-type band
-   ========================================================================== */
-.krb__band {
-  margin: var(--krb-gap) 0 0;
-  padding: 12px var(--krb-pad);
-  background: var(--krb-band-bg);
-  color: var(--krb-band-ink);
-  font-size: var(--krb-fs-band);
-  font-weight: 700;
-  letter-spacing: .03em;
-  text-align: center;
-}
-
-/* ==========================================================================
-   Stat tiles -- CMP / Fair Value / Upside
-   ========================================================================== */
-.krb__stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
-  gap: 1px;
-  background: var(--krb-border);
-  border-bottom: 1px solid var(--krb-border);
-}
-.krb__stat {
-  padding: clamp(14px, 2.4vw, 22px) var(--krb-pad);
-  background: var(--krb-surface);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.krb__stat-label {
-  font-size: var(--krb-fs-small);
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--krb-text-muted);
-}
-.krb__stat-value {
-  font-family: var(--krb-font-num);
-  font-size: var(--krb-fs-stat);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -.02em;
-  color: var(--krb-text);
-  font-variant-numeric: tabular-nums;
-}
-.krb__stat--accent .krb__stat-value { color: var(--krb-red); }
-.krb__stat-note {
-  font-size: var(--krb-fs-small);
-  color: var(--krb-text-muted);
-}
-
-/* ==========================================================================
-   Content sections
-   ========================================================================== */
-.krb__body { padding: var(--krb-pad); display: grid; gap: calc(var(--krb-gap) * 1.35); }
-
-.krb__section-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 14px;
-  border-bottom: 2px solid var(--krb-red);
-}
-.krb__section-title {
-  font-size: var(--krb-fs-h3);
-  font-weight: 800;
-  letter-spacing: -.01em;
-  color: var(--krb-red);           /* large text -> compliant */
-}
-.krb__icon {
-  flex: none;
-  width: 22px;
-  height: 22px;
-  display: grid;
-  place-items: center;
-}
-.krb__icon svg { width: 100%; height: 100%; display: block; }
-
-.krb__list { display: grid; gap: 11px; }
-.krb__list li {
-  position: relative;
-  padding-left: 26px;
-  line-height: 1.62;
-  color: var(--krb-text);
-}
-.krb__list li::before {
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: .62em;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--krb-red);
-}
-.krb__section[data-tone="positive"] .krb__list li::before { background: var(--krb-blue); }
-.krb__section[data-tone="positive"] .krb__section-head { border-bottom-color: var(--krb-blue); }
-
-.krb__note {
-  padding: 12px 14px;
-  border-left: 3px solid var(--krb-border-strong);
-  background: var(--krb-surface);
-  border-radius: 0 var(--krb-radius-sm) var(--krb-radius-sm) 0;
-  font-size: var(--krb-fs-small);
-  color: var(--krb-text-muted);
-}
-
-/* ==========================================================================
-   Actions
-   ========================================================================== */
-.krb__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 0 var(--krb-pad) var(--krb-pad);
-}
-/* Specificity note: `.krb a` is (0,1,1) and would otherwise beat a single
-   `.krb__btn--primary` class (0,1,0), repainting the button's white label in
-   link-blue on a red field. The `.krb a.krb__btn` form outranks it. */
-.krb a.krb__btn,
-.krb__btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 11px 20px;
-  border-radius: var(--krb-radius-sm);
-  font-size: var(--krb-fs-small);
+  margin-top: 14px;
+  padding: 5px 12px 5px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, .3);
+  border: 1px solid rgba(255, 255, 255, .2);
+  font-size: var(--krb-fs-sm);
   font-weight: 700;
+  letter-spacing: .06em;
+  color: #fff;
+}
+.krb__ticker::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* rating medallion */
+.krb__verdict {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 16px 22px 18px;
+  border-radius: var(--krb-r-md);
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+  min-width: 190px;
+}
+.krb__verdict-label {
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #6b7183;
+}
+.krb__verdict-value {
+  font-size: clamp(30px, 1.1rem + 2.4vw, 42px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--krb-red-deep);
+}
+.krb__verdict-note { font-size: var(--krb-fs-xs); color: #4d5364; font-weight: 600; }
+
+/* ==========================================================================
+   KPI STRIP — the numbers are the interface
+   ========================================================================== */
+.krb__kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: var(--krb-gap);
+  padding: var(--krb-gap) var(--krb-pad) 0;
+  margin-top: calc(clamp(20px, 3vw, 34px) * -1);
+  position: relative;
+  z-index: 2;
+}
+.krb__kpi {
+  position: relative;
+  padding: clamp(16px, 2.2vw, 24px);
+  border-radius: var(--krb-r-md);
+  background: var(--krb-raised);
+  border: 1px solid var(--krb-border);
+  box-shadow: var(--krb-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow: hidden;
+}
+.krb__kpi--hero { border-color: color-mix(in srgb, var(--krb-red) 40%, var(--krb-border)); }
+.krb__kpi--hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--krb-red), #ff6a4d);
+}
+.krb__kpi-label {
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--krb-text-faint);
+}
+.krb__kpi-value {
+  font-size: var(--krb-fs-kpi);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  color: var(--krb-text);
+}
+.krb__kpi-value sup { font-size: .5em; font-weight: 700; letter-spacing: 0; vertical-align: .55em; margin-right: 2px; }
+.krb__kpi--hero .krb__kpi-value { color: var(--krb-red-ink); }
+.krb__kpi-note { font-size: var(--krb-fs-xs); color: var(--krb-text-muted); }
+
+/* ==========================================================================
+   GAUGE — where the upside sits on the PCG rating scale
+   ========================================================================== */
+.krb__gauge {
+  margin: var(--krb-gap) var(--krb-pad) 0;
+  padding: clamp(18px, 2.4vw, 26px);
+  border-radius: var(--krb-r-md);
+  background: var(--krb-surface);
+  border: 1px solid var(--krb-border-soft);
+}
+.krb__gauge-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  margin-bottom: 10px;
+}
+.krb__gauge-title {
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--krb-text-muted);
+}
+.krb__gauge-legend { font-size: var(--krb-fs-xs); color: var(--krb-text-faint); }
+
+.krb__track {
+  position: relative;
+  display: flex;
+  height: 40px;
+  /* The marker pill floats above the track. Reserve pill height (29px) + its
+     12px offset + slack, so it can never collide with the legend no matter how
+     many lines the head wraps to. Verified by tools/audit.js. */
+  margin-top: 46px;
+  border-radius: 10px;
+  overflow: visible;
+  background: var(--krb-gauge-track);
+  border-radius: 10px;
+}
+.krb__band {
+  position: relative;
+  display: grid;
+  place-items: center;
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .09em;
+  color: var(--krb-text-muted);
+  background: var(--krb-gauge-track);
+  border-right: 2px solid var(--krb-bg);
+}
+.krb__band:first-child { border-radius: 10px 0 0 10px; }
+.krb__band:last-child { border-radius: 0 10px 10px 0; border-right: 0; }
+.krb__band[data-active="true"] {
+  background: linear-gradient(135deg, var(--krb-red) 0%, #c60d27 100%);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(250, 20, 50, .32);
+}
+
+/* marker: a pill above, a stem down to the track */
+.krb__marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+.krb__marker::before {
+  content: "";
+  position: absolute;
+  top: -6px; bottom: -6px; left: -1.5px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--krb-text);
+  box-shadow: 0 0 0 2px var(--krb-bg);
+}
+.krb__marker-pill {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--krb-text);
+  color: var(--krb-bg);
+  font-size: var(--krb-fs-xs);
+  font-weight: 800;
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+.krb__marker-pill::after {
+  content: "";
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--krb-text);
+}
+/* ticks are absolutely placed at their true value on the scale, so they line
+   up with the band edges exactly rather than approximately */
+.krb__gauge-scale {
+  position: relative;
+  height: 1.5em;
+  margin-top: 9px;
+  font-size: var(--krb-fs-xs);
+  color: var(--krb-text-muted);
+  font-weight: 600;
+}
+.krb__gauge-scale span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.krb__gauge-scale span:first-child { transform: none; }
+.krb__gauge-scale span:last-child { transform: translateX(-100%); }
+
+/* ==========================================================================
+   CONTENT CARDS
+   ========================================================================== */
+.krb__body { padding: var(--krb-gap) var(--krb-pad) var(--krb-pad); display: grid; gap: var(--krb-gap); }
+
+.krb__split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--krb-gap);
+  align-items: stretch;
+}
+
+.krb__card {
+  padding: clamp(20px, 2.6vw, 30px);
+  border-radius: var(--krb-r-md);
+  background: var(--krb-surface-2);
+  border: 1px solid var(--krb-border);
+  box-shadow: var(--krb-shadow-sm);
+  transition: box-shadow .22s ease, transform .22s ease;
+}
+.krb__card:hover { box-shadow: var(--krb-shadow); transform: translateY(-2px); }
+.krb__card--thesis {
+  background:
+    linear-gradient(180deg, var(--krb-tint-red) 0%, var(--krb-surface-2) 42%);
+  border-color: color-mix(in srgb, var(--krb-red) 22%, var(--krb-border));
+}
+
+.krb__card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.krb__icon {
+  flex: none;
+  width: 38px; height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--krb-tint-red);
+  color: var(--krb-red-ink);
+}
+.krb__icon svg { width: 20px; height: 20px; display: block; }
+.krb__card[data-tone="positive"] .krb__icon { background: var(--krb-tint-blue); color: var(--krb-link); }
+.krb__card-title {
+  font-size: var(--krb-fs-h3);
+  font-weight: 800;
+  letter-spacing: -.018em;
+  color: var(--krb-text);
+}
+.krb__count {
+  margin-left: auto;
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--krb-surface);
+  border: 1px solid var(--krb-border);
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  color: var(--krb-text-faint);
+}
+
+.krb__list { display: grid; gap: 14px; }
+.krb__list li { display: flex; gap: 12px; align-items: flex-start; line-height: 1.6; }
+.krb__list li::before {
+  content: "";
+  flex: none;
+  width: 7px; height: 7px;
+  margin-top: .62em;
+  border-radius: 50%;
+  background: var(--krb-red);
+}
+.krb__card[data-tone="positive"] .krb__list li::before { background: var(--krb-link); }
+.krb__prose { display: grid; gap: 12px; }
+
+.krb__note {
+  padding: 14px 16px;
+  border-radius: var(--krb-r-sm);
+  background: var(--krb-surface);
+  border: 1px dashed var(--krb-border);
+  font-size: var(--krb-fs-sm);
+  color: var(--krb-text-muted);
+}
+
+/* ==========================================================================
+   ACTIONS
+   ========================================================================== */
+.krb__actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+/* `.krb a` is (0,1,1) and would repaint the label in link-blue -- outrank it */
+.krb a.krb__btn, .krb__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 24px;
+  min-height: 48px;
+  border-radius: var(--krb-r-sm);
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  letter-spacing: .01em;
   text-decoration: none;
   border: 1px solid transparent;
-  min-height: 44px;             /* touch target */
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
 }
-.krb a.krb__btn { text-decoration: none; }
-.krb a.krb__btn--primary { background: var(--krb-red-deep); color: #fff; }
-.krb a.krb__btn--primary:hover { background: var(--krb-red); color: #fff; text-decoration: none; }
-.krb a.krb__btn--primary:hover span { text-decoration: underline; text-underline-offset: 3px; }
+.krb a.krb__btn--primary {
+  /* both stops must clear 4.5:1 with white: #e00f2b = 4.92:1, #b80d22 = 6.73:1.
+     Reaching up to #fa1432 would drop the light end to 4.03:1. */
+  background: linear-gradient(135deg, var(--krb-red-deep) 0%, #b80d22 100%);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(250, 20, 50, .3);
+}
+.krb a.krb__btn--primary:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(250, 20, 50, .42);
+}
 .krb__btn svg { width: 17px; height: 17px; flex: none; }
 
 /* ==========================================================================
-   Attribution + disclosures
+   ATTRIBUTION + DISCLOSURES
    ========================================================================== */
 .krb__attribution {
-  padding: 14px var(--krb-pad);
-  background: var(--krb-tint-red);
+  padding: 16px var(--krb-pad);
+  background: var(--krb-surface);
   border-top: 1px solid var(--krb-border);
-  font-size: var(--krb-fs-small);
+  font-size: var(--krb-fs-sm);
   color: var(--krb-text-muted);
 }
 
 .krb__disclosures { border-top: 1px solid var(--krb-border); }
-.krb__acc { border-bottom: 1px solid var(--krb-border); }
+.krb__acc { border-bottom: 1px solid var(--krb-border-soft); }
 .krb__acc:last-child { border-bottom: 0; }
 .krb__acc > summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 15px var(--krb-pad);
-  min-height: 52px;
+  gap: 14px;
+  padding: 17px var(--krb-pad);
+  min-height: 56px;
   cursor: pointer;
   list-style: none;
-  font-size: var(--krb-fs-small);
+  font-size: var(--krb-fs-sm);
   font-weight: 700;
-  letter-spacing: .05em;
+  letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--krb-red-ink);
   background: var(--krb-surface-2);
+  transition: background .18s ease;
 }
 .krb__acc > summary::-webkit-details-marker { display: none; }
 .krb__acc > summary:hover { background: var(--krb-surface); }
 .krb__acc > summary::after {
   content: "";
   flex: none;
-  width: 9px;
-  height: 9px;
+  width: 9px; height: 9px;
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
   transform: rotate(45deg) translate(-2px, -2px);
-  transition: transform .18s ease;
+  transition: transform .2s ease;
 }
 .krb__acc[open] > summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
 .krb__acc-body {
   padding: 4px var(--krb-pad) var(--krb-pad);
   background: var(--krb-surface-2);
-  font-size: var(--krb-fs-small);
+  font-size: var(--krb-fs-sm);
   color: var(--krb-text-muted);
   display: grid;
-  gap: 10px;
+  gap: 11px;
 }
 .krb__acc-body p { line-height: 1.65; }
 
-/* rating scale */
-.krb__scale { display: grid; gap: 8px; }
+.krb__scale { display: grid; gap: 10px; }
 .krb__scale div {
   display: grid;
-  grid-template-columns: minmax(72px, max-content) 1fr;
-  gap: 6px 14px;
+  grid-template-columns: minmax(78px, max-content) 1fr;
+  gap: 6px 16px;
   align-items: start;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--krb-border-soft);
 }
-.krb__scale dt { font-weight: 800; color: var(--krb-text); letter-spacing: .04em; }
+.krb__scale div:last-child { border-bottom: 0; padding-bottom: 0; }
+.krb__scale dt { font-weight: 800; color: var(--krb-text); letter-spacing: .05em; }
 .krb__scale dd { color: var(--krb-text-muted); }
 
-/* research team */
-.krb__team { display: grid; gap: 20px; }
+.krb__team { display: grid; gap: 22px; }
 .krb__team-group > h4 {
-  font-size: var(--krb-fs-small);
+  font-size: var(--krb-fs-xs);
   font-weight: 800;
-  letter-spacing: .06em;
+  letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--krb-red-ink);
-  padding-bottom: 6px;
-  margin-bottom: 12px;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
   border-bottom: 1px solid var(--krb-border);
 }
 .krb__team-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
-  gap: 14px;
+  gap: 16px;
 }
-.krb__person { display: grid; gap: 2px; }
+.krb__person {
+  display: grid;
+  gap: 2px;
+  padding: 13px 15px;
+  border-radius: var(--krb-r-sm);
+  background: var(--krb-surface);
+  border: 1px solid var(--krb-border-soft);
+}
 .krb__person strong { color: var(--krb-text); font-weight: 700; }
 .krb__person span { color: var(--krb-text-muted); }
 .krb__person a {
   word-break: break-word;
   display: inline-block;
-  padding-block: 3px;          /* lifts the hit area to >=24px (WCAG 2.2 SC 2.5.8) */
+  padding-block: 3px;         /* lifts the hit area to >=24px (WCAG 2.2 SC 2.5.8) */
 }
 
 .krb__risk {
-  margin-top: 4px;
-  padding: 12px 14px;
+  padding: 14px 16px;
+  border-radius: var(--krb-r-sm);
   border: 1px solid var(--krb-red);
-  border-radius: var(--krb-radius-sm);
   background: var(--krb-tint-red);
   color: var(--krb-text);
   font-weight: 600;
 }
 
 /* ==========================================================================
-   Container queries -- refine when the block itself gets narrow
+   Container queries — the block measures itself, not the viewport
    ========================================================================== */
+@container krb (max-width: 720px) {
+  .krb__headrow { align-items: flex-start; }
+  .krb__verdict { width: 100%; flex-direction: row; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .krb__verdict-label { order: 1; width: 100%; }
+  .krb__verdict-value { order: 2; }
+  .krb__verdict-note { order: 3; }
+}
 @container krb (max-width: 560px) {
-  .krb__band { text-align: left; }
-  .krb__stat { padding-block: 14px; }
+  .krb__kpis { margin-top: 0; padding-top: var(--krb-gap); }
   .krb__actions .krb__btn { width: 100%; justify-content: center; }
+  .krb__band { font-size: 10px; letter-spacing: .04em; }
+  .krb__track { height: 34px; }
 }
 @container krb (max-width: 400px) {
-  .krb__title { letter-spacing: -.01em; }
-  .krb__ticker { display: block; margin-top: 4px; }
   .krb__scale div { grid-template-columns: 1fr; gap: 2px; }
+  .krb__gauge-scale { font-size: 10px; }
 }
 
 /* ==========================================================================
    Motion + print
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .krb *, .krb *::before, .krb *::after { transition: none !important; }
+  .krb *, .krb *::before, .krb *::after { transition: none !important; animation: none !important; }
+  .krb__card:hover, .krb a.krb__btn--primary:hover { transform: none; }
 }
 
 @media print {
   .krb {
-    --krb-bg: #fff; --krb-surface: #fff; --krb-surface-2: #fff;
-    --krb-text: #000; --krb-text-muted: #333;
-    --krb-tint-red: #fff; --krb-band-bg: #00005a;
-    box-shadow: none;
-    border: 2px solid var(--krb-red);
-    max-width: none;
+    --krb-bg: #fff; --krb-surface: #fff; --krb-surface-2: #fff; --krb-raised: #fff;
+    --krb-text: #000; --krb-text-muted: #333; --krb-text-faint: #444;
+    --krb-tint-red: #fff; --krb-tint-blue: #fff; --krb-gauge-track: #eee;
+    box-shadow: none; border: 2px solid var(--krb-red); max-width: none;
   }
+  .krb__hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .krb__actions { display: none; }
-  .krb__acc[open] > summary::after, .krb__acc > summary::after { display: none; }
+  .krb__acc > summary::after { display: none; }
   .krb__acc-body { display: block !important; }
-  .krb__section, .krb__acc { break-inside: avoid; }
+  .krb__card, .krb__acc, .krb__gauge { break-inside: avoid; }
+  .krb__card:hover { transform: none; box-shadow: none; }
   .krb a { color: #000; text-decoration: none; }
 }
 
 /* ==========================================================================
-   Optional standalone-page wrapper (ignored when embedded)
+   Optional standalone-page wrapper (inert when embedded)
    ========================================================================== */
 .krb-page {
   margin: 0;
-  padding: clamp(16px, 4vw, 48px) clamp(12px, 4vw, 32px);
-  background: #eef0f5;
+  padding: clamp(16px, 4vw, 56px) clamp(12px, 4vw, 40px);
+  background: #eef0f6;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
-  .krb-page:not([data-krb-theme="light"]) { background: #0a0b0e; }
+  .krb-page:not([data-krb-theme="light"]) { background: #07080b; }
 }
-[data-theme="dark"] .krb-page, .krb-page[data-krb-theme="dark"] { background: #0a0b0e; }
+[data-theme="dark"] .krb-page, .krb-page[data-krb-theme="dark"] { background: #07080b; }
 
       </style>
       <article class="krb" data-krb-rating="ADD" itemscope itemtype="https://schema.org/Report">
-        <header class="krb__head">
-          <p class="krb__eyebrow">Result Update · Q4FY26</p>
-          <h2 class="krb__title" itemprop="headline">Lenskart Solutions <span class="krb__ticker">(LENSKART)</span></h2>
-          <div class="krb__meta">
-            <span class="krb__rating" aria-label="Rating: ADD">ADD</span>
-            <time datetime="2026-05-21" itemprop="datePublished">21 May 2026</time>
-            <span>Holding period: 12 months</span>
+        <header class="krb__hero">
+          <div class="krb__hero-inner">
+            <div class="krb__chips">
+              <span class="krb__chip krb__chip--lead">Result Update</span>
+              <span class="krb__chip">Q4FY26</span>
+              <span class="krb__chip">21 May 2026</span>
+            </div>
+            <div class="krb__headrow">
+              <div class="krb__identity">
+                <h2 class="krb__title" itemprop="headline">Lenskart Solutions</h2>
+                <span class="krb__ticker">LENSKART</span>
+              </div>
+              <div class="krb__verdict">
+                <span class="krb__verdict-label">Kotak PCG rating</span>
+                <span class="krb__verdict-value">ADD</span>
+                <span class="krb__verdict-note">5% to 15% in 12 months</span>
+              </div>
+            </div>
           </div>
         </header>
 
-        <p class="krb__band">Result Update</p>
-
-        <div class="krb__stats">
-          <div class="krb__stat">
-            <span class="krb__stat-label">Current Market Price</span>
-            <span class="krb__stat-value">Rs.487</span>
-            <span class="krb__stat-note">as on 21 May 2026</span>
+        <div class="krb__kpis">
+          <div class="krb__kpi">
+            <span class="krb__kpi-label">Current market price</span>
+            <span class="krb__kpi-value"><sup>Rs.</sup>487</span>
+            <span class="krb__kpi-note">as on 21 May 2026</span>
           </div>
-          <div class="krb__stat krb__stat--accent">
-            <span class="krb__stat-label">Fair Value</span>
-            <span class="krb__stat-value">Rs.560</span>
-            <span class="krb__stat-note">DCF / target price</span>
+          <div class="krb__kpi krb__kpi--hero">
+            <span class="krb__kpi-label">Fair value</span>
+            <span class="krb__kpi-value"><sup>Rs.</sup>560</span>
+            <span class="krb__kpi-note">DCF-based target, 12 months</span>
           </div>
-          <div class="krb__stat">
-            <span class="krb__stat-label">Potential Upside</span>
-            <span class="krb__stat-value">+15.0%</span>
-            <span class="krb__stat-note">Fair Value vs CMP</span>
+          <div class="krb__kpi">
+            <span class="krb__kpi-label">Potential upside</span>
+            <span class="krb__kpi-value">+15.0%</span>
+            <span class="krb__kpi-note">Fair value vs CMP</span>
           </div>
         </div>
 
-      <div class="krb__body">
-        <section class="krb__section" data-tone="neutral" aria-labelledby="krb-rationale">
-          <div class="krb__section-head">
-            <span class="krb__icon" style="color: var(--krb-red)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/></svg></span>
-            <h3 class="krb__section-title" id="krb-rationale">Rationale</h3>
+        <section class="krb__gauge" aria-label="Expected return against the Kotak PCG rating scale">
+          <div class="krb__gauge-head">
+            <span class="krb__gauge-title">Where this call sits on the rating scale</span>
+            <span class="krb__gauge-legend">+15.0% expected return over 12 months</span>
           </div>
-          <ul class="krb__list">
-            <li>Lenskart posted strong revenue growth of 41% yoy, driven by 44% yoy growth in the India business and 35% yoy growth in the international business.</li>
-            <li>India’s gross margin was flat yoy and EBITDA margin expanded 622 bps yoy, sharply ahead of estimates.</li>
-            <li>International gross margin/EBITDA margin increased 144/111 bps yoy and also beat estimates.</li>
-            <li>We upgrade FY27-28 EBITDA estimates by 5-6% as we bake in higher revenue growth and margin expansion.</li>
-            <li>This, coupled with the roll-forward, drives a revised DCF-based FV of Rs560 (Rs525 previously). Retain ADD.</li>
-          </ul>
+          <div class="krb__track" role="img" aria-label="+15.0% expected return falls in the ADD band">
+            <div class="krb__band" data-active="false" style="flex: 0 0 25.0000%" >SELL</div>
+            <div class="krb__band" data-active="false" style="flex: 0 0 25.0000%" >REDUCE</div>
+            <div class="krb__band" data-active="true" style="flex: 0 0 25.0000%" aria-current="true">ADD</div>
+            <div class="krb__band" data-active="false" style="flex: 0 0 25.0000%" >BUY</div>
+            <div class="krb__marker" style="left: 74.9743%">
+              <span class="krb__marker-pill">+15.0%</span>
+            </div>
+          </div>
+          <div class="krb__gauge-scale" aria-hidden="true">
+            <span style="left: 0">-15%</span>
+            <span style="left: 25.0000%">-5%</span>
+            <span style="left: 50.0000%">+5%</span>
+            <span style="left: 75.0000%">+15%</span>
+            <span style="left: 100%">+25%</span>
+          </div>
         </section>
 
-        <section class="krb__section" data-tone="positive" aria-labelledby="krb-positives">
-          <div class="krb__section-head">
-            <span class="krb__icon" style="color: var(--krb-blue)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M2 21h4V9H2v12zM23 10a2 2 0 0 0-2-2h-6.31l.95-4.57.03-.32a1.5 1.5 0 0 0-.44-1.06L14.17 1 7.59 7.59A2 2 0 0 0 7 9v10a2 2 0 0 0 2 2h9a2 2 0 0 0 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg></span>
-            <h3 class="krb__section-title" id="krb-positives">Positives</h3>
+        <div class="krb__body">
+          <section class="krb__card krb__card--thesis" data-tone="neutral" aria-labelledby="krb-rationale">
+            <div class="krb__card-head">
+              <span class="krb__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+              <h3 class="krb__card-title" id="krb-rationale">Rationale</h3>
+              <span class="krb__count">5</span>
+            </div>
+            <ul class="krb__list">
+              <li>Lenskart posted strong revenue growth of 41% yoy, driven by 44% yoy growth in the India business and 35% yoy growth in the international business.</li>
+              <li>India’s gross margin was flat yoy and EBITDA margin expanded 622 bps yoy, sharply ahead of estimates.</li>
+              <li>International gross margin/EBITDA margin increased 144/111 bps yoy and also beat estimates.</li>
+              <li>We upgrade FY27-28 EBITDA estimates by 5-6% as we bake in higher revenue growth and margin expansion.</li>
+              <li>This, coupled with the roll-forward, drives a revised DCF-based FV of Rs560 (Rs525 previously). Retain ADD.</li>
+            </ul>
+          </section>
+          <div class="krb__split">
+          <section class="krb__card" data-tone="positive" aria-labelledby="krb-positives">
+            <div class="krb__card-head">
+              <span class="krb__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 13.5 9 18.5 20 6.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <h3 class="krb__card-title" id="krb-positives">Positives</h3>
+              <span class="krb__count">6</span>
+            </div>
+            <ul class="krb__list">
+              <li>Strong growth driven primarily by higher volumes in both India &amp; international.</li>
+              <li>Healthy margin improvement in both India and International businesses.</li>
+              <li>Net addition of 604 stores in FY26; long-term margin ambition of ~25%.</li>
+              <li>Balance sheet healthy with FCF generation.</li>
+              <li>We model revenue growth of 22%/21% for India and international businesses, respectively, over FY26-29.</li>
+              <li>We model revenue CAGR of 23% and a PAT CAGR of 48% over FY26-29.</li>
+            </ul>
+          </section>
+          <section class="krb__card" data-tone="negative" aria-labelledby="krb-negatives">
+            <div class="krb__card-head">
+              <span class="krb__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 8v5m0 3.5v.2M10.3 3.9 2.6 17.2A2 2 0 0 0 4.3 20.2h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <h3 class="krb__card-title" id="krb-negatives">Negatives</h3>
+              <span class="krb__count">1</span>
+            </div>
+            <ul class="krb__list">
+              <li>Raw material costs. The broader geopolitical environment has put pressure on cross-currency rates. This has flowed through to the cost of imports.</li>
+            </ul>
+          </section>
           </div>
-          <ul class="krb__list">
-            <li>Strong growth driven primarily by higher volumes in both India &amp; international.</li>
-            <li>Healthy margin improvement in both India and International businesses.</li>
-            <li>Net addition of 604 stores in FY26; long-term margin ambition of ~25%.</li>
-            <li>Balance sheet healthy with FCF generation.</li>
-            <li>We model revenue growth of 22%/21% for India and international businesses, respectively, over FY26-29.</li>
-            <li>We model revenue CAGR of 23% and a PAT CAGR of 48% over FY26-29.</li>
-          </ul>
-        </section>
-
-        <section class="krb__section" data-tone="negative" aria-labelledby="krb-negatives">
-          <div class="krb__section-head">
-            <span class="krb__icon" style="color: var(--krb-red)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M22 3h-4v12h4V3zM1 14a2 2 0 0 0 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59A2 2 0 0 0 17 15V5a2 2 0 0 0-2-2H6a2 2 0 0 0-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2z"/></svg></span>
-            <h3 class="krb__section-title" id="krb-negatives">Negatives</h3>
+          <p class="krb__note">EBITDA - Earnings Before Interest, Taxes, Depreciation and Amortization; EPS - Earnings Per Share; CAGR - Compound Annual Growth Rate; FCF - Free Cash Flow; DCF - Discounted Cash Flow; bps - basis points; yoy - year on year.</p>
+          <div class="krb__actions">
+            <a class="krb__btn krb__btn--primary" href="https://ks-oncloudpublic-reports.s3.ap-south-1.amazonaws.com/jaamoon-pdf-files/131440_1_Lenskart_Solutions__One_Pager_Q4FY26_Result_Update.pdf" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Download full report (PDF)</span>
+            </a>
           </div>
-          <ul class="krb__list">
-            <li>Raw material costs. The broader geopolitical environment has put pressure on cross-currency rates. This has flowed through to the cost of imports.</li>
-          </ul>
-        </section>
-
-        <p class="krb__note">EBITDA - Earnings Before Interest, Taxes, Depreciation and Amortization; EPS - Earnings Per Share; CAGR - Compound Annual Growth Rate; FCF - Free Cash Flow; DCF - Discounted Cash Flow; bps - basis points; yoy - year on year.</p>
-      </div>
-
-        <div class="krb__actions">
-          <a class="krb__btn krb__btn--primary" href="https://ks-oncloudpublic-reports.s3.ap-south-1.amazonaws.com/jaamoon-pdf-files/131440_1_Lenskart_Solutions__One_Pager_Q4FY26_Result_Update.pdf" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0 4-4m-4 4-4-4M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg><span>Download full report (PDF)</span>
-          </a>
         </div>
 
         <p class="krb__attribution">The content of this document has been derived from KIE research report. Kotak&#39;s PCG Research has summarized the report (Research Team: shrikant.chouhan@kotak.com). Readers who wish to access the complete report are kindly requested to contact their respective Relationship Manager. Further, the recipient of this material should take their own professional advice before investing.</p>
