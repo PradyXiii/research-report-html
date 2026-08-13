@@ -1,0 +1,18 @@
+{
+  "name": "kotak-research-report-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Jamun PDF -> schema.json -> src/render.js -> Strapi. Node-only, one runtime dependency.",
+  "license": "UNLICENSED",
+  "engines": { "node": ">=18.17" },
+  "main": "run.js",
+  "scripts": {
+    "start": "node run.js",
+    "test": "node --test test/",
+    "dry-run": "node run.js --dry-run",
+    "doctor": "node run.js --doctor"
+  },
+  "dependencies": {
+    "pdfjs-dist": "4.10.38"
+  }
+}

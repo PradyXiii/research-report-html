@@ -1,4 +1,11 @@
+# Dev-only: the root package has no runtime deps. Playwright is installed
+# ad hoc for tools/audit.js, so the root lockfile is noise.
+/node_modules/
+/package-lock.json
+
+# The bot ships to Kotak's server, so bot/package-lock.json IS tracked --
+# a regulated deployment needs reproducible installs.
 node_modules/
-package-lock.json
+
 *.log
 .DS_Store
