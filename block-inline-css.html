@@ -280,7 +280,10 @@
   gap: 5px;
   overflow: hidden;
 }
-.krb__kpi--hero { border-color: color-mix(in srgb, var(--krb-red) 40%, var(--krb-border)); }
+.krb__kpi--hero {
+  border-color: var(--krb-red);                                        /* fallback */
+  border-color: color-mix(in srgb, var(--krb-red) 40%, var(--krb-border));
+}
 .krb__kpi--hero::before {
   content: "";
   position: absolute;
@@ -443,6 +446,7 @@
 .krb__card--thesis {
   background:
     linear-gradient(180deg, var(--krb-tint-red) 0%, var(--krb-surface-2) 42%);
+  border-color: var(--krb-border);                                      /* fallback */
   border-color: color-mix(in srgb, var(--krb-red) 22%, var(--krb-border));
 }
 
@@ -657,6 +661,30 @@
 @container krb (max-width: 400px) {
   .krb__scale div { grid-template-columns: 1fr; gap: 2px; }
   .krb__gauge-scale { font-size: 10px; }
+}
+
+/* Engines without container-query support (pre-2023 Safari/Chrome/Firefox) fall
+   back to viewport widths. Less accurate -- the block may be narrower than the
+   viewport -- but the intrinsic layout already handles the hard part, so these
+   only mirror the refinements. Inert wherever container queries work. */
+@supports not (container-type: inline-size) {
+  @media (max-width: 820px) {
+    .krb__headrow { align-items: flex-start; }
+    .krb__verdict { width: 100%; flex-direction: row; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .krb__verdict-label { order: 1; width: 100%; }
+    .krb__verdict-value { order: 2; }
+    .krb__verdict-note { order: 3; }
+  }
+  @media (max-width: 640px) {
+    .krb__kpis { margin-top: 0; padding-top: var(--krb-gap); }
+    .krb__actions .krb__btn { width: 100%; justify-content: center; }
+    .krb__band { font-size: 10px; letter-spacing: .04em; }
+    .krb__track { height: 34px; }
+  }
+  @media (max-width: 460px) {
+    .krb__scale div { grid-template-columns: 1fr; gap: 2px; }
+    .krb__gauge-scale { font-size: 10px; }
+  }
 }
 
 /* ==========================================================================
