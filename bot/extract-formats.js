@@ -152,22 +152,96 @@ module.exports = { extractPickOfWeek, toIso, num, bullets, RATINGS };
 
 /* --------------------------------------------------------------- KIE report */
 
-/** How many numeric cells make a line a table row rather than prose. */
-const TABLE_MIN_NUMS = 4;
+/** Numeric cells that make a row a table row rather than prose. */
+const TABLE_MIN_NUMS = 3;
+/** Gap between words, in points, that separates one column from the next. */
+const COL_GAP = 5.5;
 
-function numericTokens(t) {
-  return (String(t).match(/(?:^|\s)\(?-?[\d,]+(?:\.\d+)?\)?%?(?=\s|$)/g) || []).length;
+function isNumericCell(t) {
+  return /^\(?-?[\d,]+(?:\.\d+)?\)?%?$/.test(String(t).trim());
 }
 
 /**
- * The full Kotak Institutional Equities note. Content runs over the first pages
- * as prose interleaved with exhibit tables; the last pages are the standard
- * disclaimers and are dropped.
+ * Find a page's column boundary, if it has one. The KIE cover page runs prose
+ * on the left and a data panel on the right; both share baselines, so
+ * clustering by y alone merges a sentence with an unrelated table row. Look for
+ * a vertical band no word crosses, wide enough to be a gutter.
+ */
+function columnSplit(items) {
+  if (!items || items.length < 60) return null;
+  const xs = items.map((i) => i.x);
+  const minX = Math.min.apply(null, xs);
+  const maxX = Math.max.apply(null, items.map((i) => i.x + (i.w || 0)));
+  const width = maxX - minX;
+  if (width < 200) return null;
+
+  // Coverage histogram: how many words overlap each 2pt slice. A gutter is a
+  // band of near-zero coverage. A histogram survives the full-width footer that
+  // defeats a simple gap scan.
+  const SLICE = 2;
+  const n = Math.ceil(width / SLICE);
+  const cover = new Array(n).fill(0);
+  for (const it of items) {
+    const a = Math.max(0, Math.floor((it.x - minX) / SLICE));
+    const b = Math.min(n - 1, Math.ceil((it.x + (it.w || 0) - minX) / SLICE));
+    for (let k = a; k <= b; k++) cover[k]++;
+  }
+  const busy = cover.filter((c) => c > 0).length || 1;
+  const floor = Math.max(1, Math.round(items.length / busy * 0.12));
+
+  let best = null, run = 0;
+  for (let k = 0; k < n; k++) {
+    if (cover[k] <= floor) run++;
+    else {
+      if (run * SLICE > 18) {
+        const at = minX + (k - run / 2) * SLICE;
+        const frac = (at - minX) / width;
+        if (frac > 0.3 && frac < 0.85 && (!best || run > best.run)) best = { at: at, run: run };
+      }
+      run = 0;
+    }
+  }
+  if (!best) return null;
+  const left = items.filter((i) => i.x < best.at).length;
+  if (left < items.length * 0.25 || left > items.length * 0.85) return null;
+  return best.at;
+}
+
+/** pdf.js items -> rows of cells, clustered by baseline then by x gap. */
+function itemsToRows(items) {
+  const byY = new Map();
+  for (const it of items || []) {
+    const key = Math.round(it.y / 2.2);
+    if (!byY.has(key)) byY.set(key, []);
+    byY.get(key).push(it);
+  }
+  return [...byY.entries()]
+    .sort((a, b) => b[0] - a[0])                      // PDF y grows upward
+    .map(([, group]) => {
+      const sorted = group.sort((a, b) => a.x - b.x);
+      const cells = [];
+      let cur = null, endX = null;
+      for (const it of sorted) {
+        if (cur !== null && it.x - endX < COL_GAP) cur.text += (it.x - endX > 0.6 ? ' ' : '') + it.s;
+        else { cur = { text: it.s, x: it.x }; cells.push(cur); }
+        endX = it.x + (it.w || 0);
+      }
+      return {
+        cells: cells.map((c) => ({ text: c.text.replace(/\s+/g, ' ').trim(), x: c.x })).filter((c) => c.text),
+        text: sorted.map((i) => i.s).join(' ').replace(/\s+/g, ' ').trim(),
+        height: Math.max.apply(null, sorted.map((i) => i.h || 0))
+      };
+    })
+    .filter((r) => r.cells.length);
+}
+
+/**
+ * The full Kotak Institutional Equities note: prose interleaved with exhibit
+ * tables over the content pages, then the standard disclaimers.
  *
- * pdftext merges text items that share a baseline, so a table ROW arrives as a
- * single line. That is what makes exhibits recoverable without ruled lines:
- * a line carrying several numeric cells is a row, and consecutive rows are one
- * table.
+ * Merged lines lose the x positions, and the exhibits have no ruled lines, so
+ * this works from pdf.js's raw items: words are clustered onto baselines, then
+ * split into columns wherever the gap between them exceeds normal word spacing.
  */
 function extractKieReport(pages, meta) {
   const errors = [], warnings = [];
@@ -181,18 +255,14 @@ function extractKieReport(pages, meta) {
   const find = (re) => p1.find((l) => re.test(l.t));
   const grab = (re) => { const l = find(re); return l ? (re.exec(l.t) || [])[1] : null; };
 
-  // The company, ticker and rating are printed on ONE line.
   const TITLE_RE = /^(.+?)\s*\(([A-Z0-9&.-]{2,12})\)\s*(BUY|ADD|REDUCE|SELL|NR|SUBSCRIBE|RS|NA|NM)?\s*$/;
   const titleL = p1.find((l) => TITLE_RE.test(l.t) && !/^\d/.test(l.t));
-  const cmp = grab(/CMP\s*\(₹\)\s*:\s*([\d,]+)/i) || grab(/CMP\s*\(Rs\)\s*:\s*([\d,]+)/i);
-  const fv = grab(/Fair\s*Value\s*\(₹\)\s*:\s*([\d,]+)/i) || grab(/Fair\s*Value\s*\(Rs\)\s*:\s*([\d,]+)/i);
+  const cmp = grab(/CMP\s*\([₹R]s?\)?\s*:\s*([\d,]+)/i);
+  const fv = grab(/Fair\s*Value\s*\([₹R]s?\)?\s*:\s*([\d,]+)/i);
   const titleM = titleL ? TITLE_RE.exec(titleL.t) : null;
-  const ratingL = (titleM && titleM[3])
-    ? { t: titleM[3] }
-    : p1.find((l) => RATINGS.includes(l.t.toUpperCase()));
-  // The date sits at the end of the shared meta line, not on its own.
+  const ratingL = (titleM && titleM[3]) ? { t: titleM[3] } : p1.find((l) => RATINGS.includes(l.t.toUpperCase()));
   const dateHit = p1.map((l) => (/([A-Z][a-z]+\s+\d{1,2},\s*\d{4})/.exec(l.t) || [])[1]).find(Boolean);
-  const dateL = dateHit ? { t: dateHit } : null;
+  const metaL = find(/CMP\s*\([₹R]/i);
 
   if (!titleL) errors.push({ code: 'TITLE_NOT_FOUND', field: 'stock',
     message: 'Could not find the "<Company> (<TICKER>)" headline on page 1.' });
@@ -202,38 +272,50 @@ function extractKieReport(pages, meta) {
     message: 'Could not read CMP from page 1.' });
   if (errors.length) return { ok: false, report: null, errors, warnings };
 
-  const tm = titleM;
-  const iso = dateL ? toIso(dateL.t.replace(',', '')) : null;
+  /* ---- body ---- */
+  // The commonest line height is the body size; headings stand above it.
+  const tally = {};
+  for (const pg of all) for (const l of (pg.lines || [])) {
+    const k = Math.round(l.height || 0); tally[k] = (tally[k] || 0) + 1;
+  }
+  const bodyH = Number(Object.keys(tally).sort((a, b) => tally[b] - tally[a])[0]) || 9;
 
-  /* ---- body: prose and exhibits, in document order ---- */
-  const bodySize = p1.length ? p1.reduce((a, l) => a + (l.height || 0), 0) / p1.length : 12;
-  const SKIP = /^(India Research|KOTAK INSTITUTIONAL EQUITIES|Refer to the disclosures|This report is not intended|\d{1,2}|RESULT)$/i;
+  const SKIP = /^(India Research|KOTAK INSTITUTIONAL EQUITIES|Refer to the disclosures|This report is not intended|Source:|Prices in this report|Full sector coverage|Related Research|\d{1,3}|RESULT)$/i;
+  const seen = new Set([titleL.t, metaL && metaL.t].filter(Boolean));
+
+  const contentPages = all.filter((pg) =>
+    !/DISCLAIMERS, DISCLOSURES & LEGAL/i.test((pg.lines || []).map((l) => l.text).join(' ')));
+
   const content = [];
-  const contentPages = all.filter((pg) => {
-    const txt = (pg.lines || []).map((l) => l.text).join(' ');
-    return !/DISCLAIMERS, DISCLOSURES & LEGAL/i.test(txt);
-  });
-
   for (const pg of contentPages) {
+    let rows;
+    if (pg.items) {
+      const split = columnSplit(pg.items);
+      rows = split === null
+        ? itemsToRows(pg.items)
+        // Read the whole left column, then the whole right one -- never
+        // interleaved, which is what produced sentences spliced into tables.
+        : itemsToRows(pg.items.filter((i) => i.x < split))
+            .concat(itemsToRows(pg.items.filter((i) => i.x >= split)));
+    } else {
+      rows = (pg.lines || []).map((l) => ({ cells: [{ text: l.text }], text: l.text, height: l.height }));
+    }
     let table = null, para = null;
-    for (const l of (pg.lines || [])) {
-      const t = (l.text || '').trim();
-      if (!t || SKIP.test(t)) continue;
-      if (t === titleL.t || (dateL && t === dateL.t)) continue;
+    for (const row of rows) {
+      const t = (row.text || '').trim();
+      if (!t || SKIP.test(t) || seen.has(t)) continue;
 
-      if (numericTokens(t) >= TABLE_MIN_NUMS) {
+      const nums = row.cells.filter((c) => isNumericCell(c.text)).length;
+      if (nums >= TABLE_MIN_NUMS && row.cells.length >= nums) {
         para = null;
-        const cells = t.split(/\s{2,}|\t/).map((c) => c.trim()).filter(Boolean);
-        const row = cells.length > 1 ? cells : t.split(/\s+/);
         if (!table) { table = { kind: 'table', rows: [] }; content.push(table); }
-        table.rows.push(row);
+        table.rows.push(row.cells.map((c) => c.text));
         continue;
       }
       table = null;
-      const isHead = (l.height || 0) > bodySize * 1.08 && t.length < 150 && !/[.]$/.test(t);
+      const isHead = row.cells.length === 1 && (row.height || 0) >= bodyH + 1 &&
+                     t.length < 110 && !/[.;,:]$/.test(t);
       if (isHead) { para = null; content.push({ kind: 'head', text: t, page: pg.number }); continue; }
-      // Prose is laid out one visual line at a time; join it back into
-      // paragraphs, breaking only at a heading or a table.
       if (para) para.text += ' ' + t;
       else { para = { kind: 'para', text: t, page: pg.number }; content.push(para); }
     }
@@ -243,23 +325,20 @@ function extractKieReport(pages, meta) {
     return { ok: false, report: null, errors, warnings };
   }
 
-  // The first long paragraph after the headline is the summary.
   const headIdx = content.findIndex((c) => c.kind === 'head' && c.text.length > 25);
   const headline = headIdx >= 0 ? content[headIdx].text : null;
   const sumIdx = content.findIndex((c, i) => i > headIdx && c.kind === 'para' && c.text.length > 180);
   const summary = sumIdx >= 0 ? content[sumIdx].text : null;
-  const body = content.filter((_, i) => i !== headIdx && i !== sumIdx);
-
-  if (!headline) warnings.push({ code: 'NO_HEADLINE', field: 'headline',
-    message: 'No headline identified; the report renders without one.' });
+  const body = content.filter((_, i) => i !== headIdx && i !== sumIdx)
+                      .filter((c) => c.kind !== 'table' || c.rows.length > 1);
 
   const report = {
     schemaVersion: '1.0',
     format: 'kie-full-report',
-    reportId: (meta && meta.reportId) || `kie-${tm[2].toLowerCase()}-${iso || 'undated'}`,
-    publishedAt: iso,
-    stock: { name: tm[1].trim(), ticker: tm[2].trim().toUpperCase(),
-             sector: (find(/^(Retailing|Automobiles|Banks|[A-Z][a-z]+(?: [A-Z&][a-z]+)*)$/) || {}).t || null },
+    reportId: (meta && meta.reportId) || `kie-${titleM[2].toLowerCase()}-${toIso(dateHit) || 'undated'}`,
+    publishedAt: toIso(dateHit),
+    stock: { name: titleM[1].trim(), ticker: titleM[2].trim().toUpperCase(),
+             sector: (p1.find((l) => /^[A-Z][a-z]+(?:\s[A-Z&][a-z]+)*$/.test(l.t) && l.t.length < 30 && l.t !== titleM[1].trim()) || {}).t || null },
     report: { type: 'Result', template: 'KIE Full Report' },
     recommendation: {
       rating: ratingL.t.toUpperCase(),
@@ -274,10 +353,8 @@ function extractKieReport(pages, meta) {
     content: body,
     panels: []
   };
-  if (!report.publishedAt) {
-    warnings.push({ code: 'NO_DATE', field: 'publishedAt', message: 'No report date found on page 1.' });
-    report.publishedAt = (meta && meta.publishedAt) || null;
-  }
+  if (!headline) warnings.push({ code: 'NO_HEADLINE', field: 'headline', message: 'No headline identified.' });
+  if (!report.publishedAt) warnings.push({ code: 'NO_DATE', field: 'publishedAt', message: 'No report date found.' });
   return { ok: true, report, errors, warnings };
 }
 

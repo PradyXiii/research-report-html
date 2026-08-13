@@ -66,7 +66,10 @@ function isPdf(buffer) {
  * @param {object} [opts] { pages: number[]|null, maxBytes, password }
  */
 async function extractLines(buffer, opts) {
-  const o = Object.assign({ pages: null, maxBytes: DEFAULT_MAX_BYTES }, opts || {});
+  // withItems: also return pdf.js's raw text items per page. Merged lines lose
+  // the x positions that column detection needs, so table-heavy formats ask for
+  // the items too. Off by default -- nothing else pays for it.
+  const o = Object.assign({ pages: null, maxBytes: DEFAULT_MAX_BYTES, withItems: false }, opts || {});
   const buf = Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer || []);
 
   if (!buf.length) throw new Error('PDF is empty (0 bytes).');
@@ -111,7 +114,13 @@ async function extractLines(buffer, opts) {
       } finally {
         page.cleanup();
       }
-      pages.push({ number: n, lines: toLines(content.items) });
+      const page_ = { number: n, lines: toLines(content.items) };
+      if (o.withItems) {
+        page_.items = content.items
+          .filter((i) => i.str && i.str.trim())
+          .map((i) => ({ s: i.str, x: i.transform[4], y: i.transform[5], w: i.width, h: i.height }));
+      }
+      pages.push(page_);
     }
     return { pageCount: doc.numPages, pages };
   } finally {

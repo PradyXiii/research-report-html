@@ -66,7 +66,13 @@ const IMPLEMENTED = new Set(['one-pager', 'pick-of-the-week', 'stock-recommendat
  * these two sets apart is deliberate: it lets the converter say precisely which
  * half is missing instead of failing with a misleading parser error.
  */
-const EXTRACTABLE = new Set(['one-pager', 'pick-of-the-week', 'kie-full-report', 'stock-recommendations']);
+const EXTRACTABLE = new Set(['one-pager', 'pick-of-the-week', 'stock-recommendations']);
+// kie-full-report is deliberately NOT here. Its cover page is two-column --
+// prose left, data panel right -- and pdf.js gives words, not blocks, so
+// clustering by baseline splices sentences into unrelated tables. The template
+// renders correctly from good data (see sample-kie-report.html, built from a
+// block-level extraction); the browser parser is not trustworthy yet, and a
+// garbled research note is worse than no note.
 
 /**
  * @param {string} page1Text  text of page 1 (detection never needs more)
@@ -126,9 +132,10 @@ function detectFormat(page1Text, meta) {
     out.reason = `Recognised as "${f.label}", but no template exists for it yet. ` +
                  'Refusing rather than rendering it with the wrong one.';
   } else if (!out.extractable) {
-    out.reason = `Recognised as "${f.label}". The HTML template for this format is built, ` +
-                 'but its automatic PDF parser is not written yet, so the fields cannot be read ' +
-                 'from this file. Refusing rather than guessing at them.';
+    out.reason = `Recognised as "${f.label}". The HTML template for this format is built and ` +
+                 'renders correctly, but this document is two-column and the in-browser parser ' +
+                 'cannot yet separate the columns reliably. Refusing rather than publishing a ' +
+                 'garbled report.';
   }
   if (info.pageCount && f.id === 'one-pager' && info.pageCount > 6) {
     out.warning = `Detected a one-pager but the PDF has ${info.pageCount} pages; confirm the template.`;
