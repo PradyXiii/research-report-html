@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kotakneo.com/schemas/research-one-pager-1.0.json",
+  "title": "Kotak PCG research one-pager",
+  "description": "Contract between the PDF-extraction bot and Strapi. Covers PAGE 1 of the one-pager only -- pages 2-4 are static boilerplate held in src/boilerplate.js and are never parsed.",
+  "type": "object",
+  "required": ["schemaVersion", "publishedAt", "stock", "report", "recommendation", "sections"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0" },
+    "reportId": {
+      "type": "string",
+      "description": "Jamun report id, taken from the PDF filename prefix (e.g. '131440_1')."
+    },
+    "sourcePdf": {
+      "type": "string",
+      "format": "uri",
+      "description": "Public S3 URL of the source PDF. Rendered as the 'Download full report' button."
+    },
+    "publishedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Report date from the PDF header ('Dated: 21 May 2026' -> '2026-05-21'). NOT the publish date on the website."
+    },
+    "stock": {
+      "type": "object",
+      "required": ["name", "ticker"],
+      "additionalProperties": false,
+      "properties": {
+        "name":   { "type": "string", "minLength": 1, "description": "e.g. 'Lenskart Solutions'" },
+        "ticker": { "type": "string", "minLength": 1, "description": "e.g. 'LENSKART'" },
+        "isin":   { "type": ["string", "null"] },
+        "slug":   { "type": ["string", "null"], "description": "URL slug of the recommendation page, for cross-linking." }
+      }
+    },
+    "report": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type":     { "type": "string", "description": "e.g. 'Result Update', 'Company Update', 'Initiating Coverage'." },
+        "period":   { "type": ["string", "null"], "description": "e.g. 'Q4FY26'." },
+        "template": { "type": ["string", "null"], "description": "e.g. 'One Pager'. Selects the renderer once more templates exist." }
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "required": ["rating", "cmp"],
+      "additionalProperties": false,
+      "properties": {
+        "rating": {
+          "type": "string",
+          "enum": ["BUY", "ADD", "REDUCE", "SELL", "NR", "SUBSCRIBE", "RS", "NA", "NM"],
+          "description": "Must match the PCG rating scale on page 2 of the PDF."
+        },
+        "cmp": { "type": "number", "exclusiveMinimum": 0, "description": "Current Market Price as printed in the report. Always displayed with an 'as on <date>' qualifier so it cannot be mistaken for the live ticker price." },
+        "fairValue": { "type": ["number", "null"], "description": "Null for NR / RS reports. When null, the Fair Value and Upside tiles are omitted." },
+        "currency": { "type": "string", "default": "INR" },
+        "holdingPeriod": { "type": ["string", "null"], "default": "12 months" }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered content sections. Generic on purpose: future report types add sections without a schema change.",
+      "items": {
+        "type": "object",
+        "required": ["title"],
+        "additionalProperties": false,
+        "properties": {
+          "id":    { "type": "string", "description": "Slug used for the aria-labelledby anchor." },
+          "title": { "type": "string", "minLength": 1, "description": "e.g. 'Rationale', 'Positives', 'Negatives'." },
+          "tone": {
+            "type": "string",
+            "enum": ["neutral", "positive", "negative"],
+            "default": "neutral",
+            "description": "Drives the icon and marker colour only. Never introduces a non-brand colour."
+          },
+          "icon": { "type": "string", "enum": ["rationale", "positive", "negative"] },
+          "bullets":    { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "paragraphs": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        },
+        "anyOf": [
+          { "required": ["bullets"] },
+          { "required": ["paragraphs"] }
+        ]
+      }
+    },
+    "abbreviations": { "type": ["string", "null"], "description": "The glossary line at the foot of page 1." },
+    "attribution":   { "type": ["string", "null"], "description": "The KIE-derivation note at the foot of page 1." }
+  }
+}

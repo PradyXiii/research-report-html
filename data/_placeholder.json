@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "reportId": "{{reportId}}",
+  "sourcePdf": "https://example.com/{{sourcePdf}}",
+  "publishedAt": "2026-01-01",
+  "stock": {
+    "name": "{{stock.name}}",
+    "ticker": "{{stock.ticker}}",
+    "slug": "{{stock.slug}}"
+  },
+  "report": {
+    "type": "{{report.type}}",
+    "period": "{{report.period}}",
+    "template": "One Pager"
+  },
+  "recommendation": {
+    "rating": "ADD",
+    "cmp": 0,
+    "fairValue": 0,
+    "currency": "INR",
+    "holdingPeriod": "{{recommendation.holdingPeriod}}"
+  },
+  "sections": [
+    { "id": "rationale", "title": "{{sections[0].title}}", "tone": "neutral",  "bullets": ["{{sections[0].bullets[n]}} -- repeat one <li> per bullet"] },
+    { "id": "positives", "title": "{{sections[1].title}}", "tone": "positive", "bullets": ["{{sections[1].bullets[n]}} -- repeat one <li> per bullet"] },
+    { "id": "negatives", "title": "{{sections[2].title}}", "tone": "negative", "bullets": ["{{sections[2].bullets[n]}} -- repeat one <li> per bullet"] }
+  ],
+  "abbreviations": "{{abbreviations}}",
+  "attribution": "{{attribution}}"
+}

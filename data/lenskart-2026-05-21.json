@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0",
+  "reportId": "131440_1",
+  "sourcePdf": "https://ks-oncloudpublic-reports.s3.ap-south-1.amazonaws.com/jaamoon-pdf-files/131440_1_Lenskart_Solutions__One_Pager_Q4FY26_Result_Update.pdf",
+  "publishedAt": "2026-05-21",
+  "stock": {
+    "name": "Lenskart Solutions",
+    "ticker": "LENSKART",
+    "slug": "lenskart-solutions-share-price"
+  },
+  "report": {
+    "type": "Result Update",
+    "period": "Q4FY26",
+    "template": "One Pager"
+  },
+  "recommendation": {
+    "rating": "ADD",
+    "cmp": 487,
+    "fairValue": 560,
+    "currency": "INR",
+    "holdingPeriod": "12 months"
+  },
+  "sections": [
+    {
+      "id": "rationale",
+      "title": "Rationale",
+      "tone": "neutral",
+      "bullets": [
+        "Lenskart posted strong revenue growth of 41% yoy, driven by 44% yoy growth in the India business and 35% yoy growth in the international business.",
+        "India’s gross margin was flat yoy and EBITDA margin expanded 622 bps yoy, sharply ahead of estimates.",
+        "International gross margin/EBITDA margin increased 144/111 bps yoy and also beat estimates.",
+        "We upgrade FY27-28 EBITDA estimates by 5-6% as we bake in higher revenue growth and margin expansion.",
+        "This, coupled with the roll-forward, drives a revised DCF-based FV of Rs560 (Rs525 previously). Retain ADD."
+      ]
+    },
+    {
+      "id": "positives",
+      "title": "Positives",
+      "tone": "positive",
+      "bullets": [
+        "Strong growth driven primarily by higher volumes in both India & international.",
+        "Healthy margin improvement in both India and International businesses.",
+        "Net addition of 604 stores in FY26; long-term margin ambition of ~25%.",
+        "Balance sheet healthy with FCF generation.",
+        "We model revenue growth of 22%/21% for India and international businesses, respectively, over FY26-29.",
+        "We model revenue CAGR of 23% and a PAT CAGR of 48% over FY26-29."
+      ]
+    },
+    {
+      "id": "negatives",
+      "title": "Negatives",
+      "tone": "negative",
+      "bullets": [
+        "Raw material costs. The broader geopolitical environment has put pressure on cross-currency rates. This has flowed through to the cost of imports."
+      ]
+    }
+  ],
+  "abbreviations": "EBITDA - Earnings Before Interest, Taxes, Depreciation and Amortization; EPS - Earnings Per Share; CAGR - Compound Annual Growth Rate; FCF - Free Cash Flow; DCF - Discounted Cash Flow; bps - basis points; yoy - year on year.",
+  "attribution": "The content of this document has been derived from KIE research report. Kotak's PCG Research has summarized the report (Research Team: shrikant.chouhan@kotak.com). Readers who wish to access the complete report are kindly requested to contact their respective Relationship Manager. Further, the recipient of this material should take their own professional advice before investing."
+}
