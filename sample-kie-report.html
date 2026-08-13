@@ -804,6 +804,30 @@
   @media (max-width: 820px) { .krb__kie-grid { grid-template-columns: minmax(0, 1fr); } }
 }
 
+/* KIE exhibits: a wide table scrolls in its own region rather than forcing the
+   whole page sideways. */
+.krb__exhibit {
+  overflow-x: auto;
+  margin: 16px 0 20px;
+  border: 1px solid var(--krb-border);
+  border-radius: var(--krb-r-sm);
+}
+.krb__exhibit:focus-visible { outline: 2px solid var(--krb-red); outline-offset: 2px; }
+.krb__exhibit table { border-collapse: collapse; width: max-content; min-width: 100%; font-size: var(--krb-fs-xs); }
+.krb__exhibit th, .krb__exhibit td {
+  padding: 7px 11px; text-align: right; white-space: nowrap;
+  border-bottom: 1px solid var(--krb-border-soft);
+}
+.krb__exhibit thead th { background: var(--krb-surface); font-weight: 700; color: var(--krb-text); border-bottom: 2px solid var(--krb-red); }
+.krb__exhibit th[scope="row"] { text-align: left; font-weight: 600; color: var(--krb-text); }
+.krb__kie-h {
+  font-size: var(--krb-fs-sm);
+  font-weight: 800;
+  color: var(--krb-link);
+  margin: 20px 0 7px;
+}
+.krb__kie-main p + p { margin-top: 10px; }
+
   </style>
 </head>
 <body class="krb-page">
@@ -832,10 +856,273 @@
           <div class="krb__kie-main">
             <h3 class="krb__kie-headline">International segment drives earnings outperformance</h3>
             <p class="krb__kie-summary">Lenskart posted strong revenue growth of 34% yoy, driven by 31% yoy growth in the India business and 38% yoy growth in the international business. India gross margin was up 74 bps yoy and EBITDA margin expanded 197 bps yoy. International gross margin/EBITDA margin increased 111/506 bps yoy. The company exceeded our pre-Ind AS EBITDA estimate by 9.2% and EPS estimate by 14%. We upgrade our FY2027-29 EPS estimates by 9-15%, as we bake in higher revenue growth and margin expansion for both segments. This drives a revised DCF-based FV of Rs615 (Rs560 earlier). Retain ADD.</p>
-            <section class="krb__kie-sec"><h4>Strong 34% yoy revenue growth, driven by India and international segments</h4><p>Lenskart’s revenue grew 34% yoy, with both the India and international businesses reporting strong growth. Segmentally, (1) India business revenue increased 31% yoy, led by a 23% yoy rise in eyewear units sold and remainder by an ASP increase, also demonstrated by healthy SSSG of 18% and (2) international business revenue rose 38% yoy, led by a 34% yoy rise in eyewear units sold. According to Lenskart, it will continue to focus on network expansion and improved merchandising to structurally drive future growth.</p></section>
-            <section class="krb__kie-sec"><h4>Higher GM and operating leverage drive 374 bps yoy EBITDA margin expansion</h4><p>Lenskart reported overall gross margin of 70.3% in 1QFY27 (versus 68.7% in 1QFY26). The company managed to offset the currency headwind by increasing reliance on in-house manufacturing. Pre-Ind AS EBITDA margin was at 13.3%, registering a strong expansion of 374 bps yoy. Segmentally, (1) India business EBITDA margin expanded 197 bps yoy and pre-Ind AS EBITDA margin expanded 208 bps yoy and (2) international EBITDA margin increased 506 bps yoy and pre-Ind AS EBITDA margin expanded 620 bps yoy. EBITDA margin expansion was driven by gross margin expansion and operating leverage from marketing and other fixed expenses.</p></section>
-            <section class="krb__kie-sec"><h4>Healthy store expansion, large opportunity ahead</h4><p>Other highlights include (1) India store count increasing to 2,725 from 2,609 stores in 4QFY26 and 2,137 stores in 1QFY26. Of its 2,725 stores, 1,067 stores were in metro cities and (2) international store count rising to 734 from 718 stores in 4QFY26 and 669 stores in 1QFY26. Stores were added across Japan, Southeast Asia and the Middle East. Lenskart is witnessing strong revenue ramp-up and SSSG in metro and non-metro stores in India. The company believes there is clear potential to add 10k+ stores in India across existing and new cities.</p></section>
-            <section class="krb__kie-sec"><h4>Retain ADD with a revised FV of Rs615</h4><p>Lenskart is on a strong revenue growth trajectory, which is driving operating leverage. We account for stronger-than-expected 1Q performance, particularly in the international segment. We upgrade our FY2027-29 revenue estimates by ~3% and EPS estimates by 9-15%. This, coupled with a roll forward to September 2027, drives a revised DCF-based FV of Rs615. Retain ADD.</p></section>
+            <h4 class="krb__kie-h">Strong 34% yoy revenue growth, driven by India and international segments</h4>
+            <p>Lenskart’s revenue grew 34% yoy, with both the India and international</p>
+            <p>businesses reporting strong growth. Segmentally, (1) India business revenue</p>
+            <p>increased 31% yoy, led by a 23% yoy rise in eyewear units sold and remainder</p>
+            <p>by an ASP increase, also demonstrated by healthy SSSG of 18% and (2)</p>
+            <p>international business revenue rose 38% yoy, led by a 34% yoy rise in eyewear</p>
+            <p>units sold. According to Lenskart, it will continue to focus on network expansion</p>
+            <p>and improved merchandising to structurally drive future growth.</p>
+            <h4 class="krb__kie-h">Higher GM and operating leverage drive 374 bps yoy EBITDA margin expansion</h4>
+            <p>Lenskart reported overall gross margin of 70.3% in 1QFY27 (versus 68.7% in</p>
+            <p>1QFY26). The company managed to offset the currency headwind by increasing</p>
+            <p>reliance on in-house manufacturing. Pre-Ind AS EBITDA margin was at 13.3%,</p>
+            <p>registering a strong expansion of 374 bps yoy. Segmentally, (1) India business</p>
+            <p>EBITDA margin expanded 197 bps yoy and pre-Ind AS EBITDA margin expanded</p>
+            <p>208 bps yoy and (2) international EBITDA margin increased 506 bps yoy and</p>
+            <p>pre-Ind AS EBITDA margin expanded 620 bps yoy. EBITDA margin expansion</p>
+            <p>was driven by gross margin expansion and operating leverage from marketing</p>
+            <p>and other fixed expenses.</p>
+            <h4 class="krb__kie-h">Healthy store expansion, large opportunity ahead</h4>
+            <p>Other highlights include (1) India store count increasing to 2,725 from 2,609</p>
+            <p>stores in 4QFY26 and 2,137 stores in 1QFY26. Of its 2,725 stores, 1,067 stores</p>
+            <p>were in metro cities and (2) international store count rising to 734 from 718</p>
+            <p>stores in 4QFY26 and 669 stores in 1QFY26. Stores were added across Japan,</p>
+            <p>Southeast Asia and the Middle East. Lenskart is witnessing strong revenue</p>
+            <p>ramp-up and SSSG in metro and non-metro stores in India. The company</p>
+            <p>believes there is clear potential to add 10k+ stores in India across existing and</p>
+            <p>new cities.</p>
+            <h4 class="krb__kie-h">Retain ADD with a revised FV of Rs615</h4>
+            <p>Lenskart is on a strong revenue growth trajectory, which is driving operating</p>
+            <p>leverage. We account for stronger-than-expected 1Q performance, particularly</p>
+            <p>in the international segment. We upgrade our FY2027-29 revenue estimates by</p>
+            <p>~3% and EPS estimates by 9-15%. This, coupled with a roll forward to</p>
+            <p>September 2027, drives a revised DCF-based FV of Rs615. Retain ADD.</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">2</th></tr></thead><tbody></tbody></table>
+            </div>
+            <h4 class="krb__kie-h">Revenue growth of 34% yoy was driven by 31% yoy growth in the India business and 38% yoy growth in the international business</h4>
+            <p>Consolidated quarterly pro forma financials of Lenskart, March fiscal year-ends, 2026-27E (Rs mn)</p>
+            <p>Change (%) yoy growth</p>
+            <p>1QFY27 1QFY27E 1QFY26 4QFY26 1QFY27E yoy qoq FY2027E FY2026</p>
+            <p>(%)</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Key financials (Rs mn)</th><th scope="col"></th><th scope="col"></th></tr></thead><tbody><tr><th scope="row">Revenue</th><td>27,142</td><td>26,564 20,322 25,157 2.2 33.6 7.9 115,919 88,140 31.5</td></tr><tr><th scope="row">Total expenses</th><td>(21,257)</td><td>(21,002) (16,677) (19,773) 1.2 27.5 7.5 (91,001) (70,611) 28.9</td></tr><tr><th scope="row">COGS</th><td>(8,073)</td><td>(8,155) (6,361) (7,645) (1.0) 26.9 5.6 (36,198) (27,357) 32.3</td></tr><tr><th scope="row">Gross profit</th><td>19,069</td><td>18,410 13,961 17,512 3.6 36.6 8.9 79,720 60,784 31.2</td></tr><tr><th scope="row">Employee benefits expense</th><td>(5,994)</td><td>(5,727) (4,722) (5,476) 4.7 26.9 9.4 (25,261) (20,436) 23.6</td></tr><tr><th scope="row">Other expenses</th><td>(7,191)</td><td>(7,121) (5,594) (6,652) 1.0 28.5 8.1 (29,541) (22,818) 29.5</td></tr><tr><th scope="row">EBITDA</th><td>5,885</td><td>5,562 3,646 5,384 5.8 61.4 9.3 24,918 17,530 42.1</td></tr><tr><th scope="row">EBITDA (pre-IndAS)</th><td>3,605</td><td>3,300 1,846 3,216 9.2 95.3 12.1 15,554 10,174 52.9</td></tr><tr><th scope="row">Depreciation and amortisation expense</th><td>(3,046)</td><td>(3,049) (2,383) (2,875) (0.1) 27.8 6.0 (12,344) (10,484) 17.7</td></tr><tr><th scope="row">EBIT</th><td>2,839</td><td>2,513 1,263 2,509 13.0 124.8 13.1 12,574 7,046 78.5</td></tr><tr><th scope="row">Other income</th><td>685</td><td>582 519 490 17.7 32.0 39.7 2,423 1,743 39.0</td></tr><tr><th scope="row">Finance costs</th><td>(532)</td><td>(500) (418) (435) 6.4 27.3 22.2 (2,088) (1,785) 17.0</td></tr><tr><th scope="row">Restated profit/(loss) before tax</th><td>2,991</td><td>2,595 1,364 2,564 15.3 119.3 16.7 12,909 7,004 84.3</td></tr><tr><th scope="row">Total tax expense</th><td>(712)</td><td>(649) (459) (506) (3,305) (1,794) 84.2</td></tr><tr><th scope="row">Profit after tax</th><td>2,280</td><td>1,946 905 2,058 17.1 151.9 10.8 9,604 5,211 84.3</td></tr><tr><th scope="row">Share of (loss) of an associate and joint venture</th><td>5</td><td>(10) 7 (22) — (44.0)</td></tr><tr><th scope="row">Exceptional item</th><td>—</td><td>— (104) — — (157)</td></tr><tr><th scope="row">Reported PAT</th><td>2,284</td><td>1,936 808 2,036 18.0 182.8 12.2 9,604 5,010 91.7</td></tr><tr><th scope="row">EPS</th><td>1.3</td><td>1.1 0.5 1.2 14.0 169.2 10.3 5.5 2.9 91.7</td></tr><tr><th scope="row">Costs (% of revenues)</th><td></td><td></td></tr><tr><th scope="row">Employee expenses</th><td>22.1</td><td>21.6 23.2 21.8 52 bps -116 bps 31 bps 21.8 23.2 -139 bps</td></tr><tr><th scope="row">Other expenses</th><td>26.5</td><td>26.8 27.5 26.4 -32 bps -104 bps 5 bps 25.5 25.9 -40 bps</td></tr><tr><th scope="row">Gross margin</th><td>70.3</td><td>69.3 68.7 69.6 95 bps 155 bps 64 bps 68.8 69.0 -19 bps</td></tr><tr><th scope="row">EBITDA margin</th><td>21.7</td><td>20.9 17.9 21.4 74 bps 374 bps 27 bps 21.5 19.9 161 bps</td></tr><tr><th scope="row">Pre-IndAS EBITDA margin</th><td>13.3</td><td>12.4 9.1 12.8 85 bps 419 bps 49 bps 13.4 11.5 188 bps</td></tr><tr><th scope="row">PAT margin</th><td>8.4</td><td>7.3 4.0 8.1 112 bps 444 bps 32 bps 8.3 5.7 260 bps</td></tr><tr><th scope="row">Effective tax rate</th><td>23.8</td><td>25.0 33.7 19.7 -121 bps -986 bps 406 bps 25.6 25.6 -1 bps</td></tr><tr><th scope="row">India business</th><td></td><td></td></tr><tr><th scope="row">Revenue (Rs mn)</th><td>15,310</td><td>15,230 11,715 14,750 0.5 30.7 3.8 66,864 52,648 27.0</td></tr><tr><th scope="row">EBITDA (Rs mn)</th><td>3,280</td><td>3,201 2,278 3,115 2.5 44.0 5.3 15,056 10,675 41.0</td></tr><tr><th scope="row">Pre-IndAS EBITDA (Rs mn)</th><td>2,360</td><td>2,286 1,561 2,252 3.2 51.2 4.8 11,018 7,535 46.2</td></tr><tr><th scope="row">Pre-IndAS EBITDA margin (%)</th><td>15.4</td><td>15.0 13.3 15.3 40 bps 208 bps 14 bps 16.5 14.3 217 bps</td></tr><tr><th scope="row">International business</th><td></td><td></td></tr><tr><th scope="row">Revenue (Rs mn)</th><td>12,030</td><td>11,335 8,719 10,540 6.1 38.0 14.1 49,628 37,896 31.0</td></tr><tr><th scope="row">EBITDA (Rs mn)</th><td>2,640</td><td>2,361 1,472 2,258 11.8 79.3 16.9 10,434 7,302 42.9</td></tr><tr><th scope="row">Pre-IndAS EBITDA (Rs mn)</th><td>1,280</td><td>1,014 387 975 26.2 230.7 31.3 4,537 2,639 71.9</td></tr><tr><th scope="row">Pre-IndAS EBITDA margin (%)</th><td>10.6</td><td>8.9 4.4 9.3 169 bps 620 bps 138 bps 9.1 7.0 218 bps</td></tr></tbody></table>
+            </div>
+            <p>Source: Company, Kotak Institutional Equities estimates</p>
+            <p>Pro forma financials assume that acquisitions such as Dealskart and Meller are included in the base quarter as well, even though the acquisition actually closed later. We refer to these financials when providing growth and margin expansion commentary. In 2HFY26, pro forma and reported financials were similar.</p>
+            <p>Retailing India Research</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">3</th></tr></thead><tbody></tbody></table>
+            </div>
+            <h4 class="krb__kie-h">Strong yoy growth in revenue and EBITDA</h4>
+            <p>Consolidated quarterly financials of Lenskart, March fiscal year-ends, 2026-27E (Rs mn)</p>
+            <p>Change (%) yoy growth</p>
+            <p>1QFY27 1QFY27E 1QFY26 4QFY26 1QFY27E yoy qoq FY2027E FY2026</p>
+            <p>(%)</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Key financials (Rs mn)</th><th scope="col"></th><th scope="col"></th></tr></thead><tbody><tr><th scope="row">Revenue</th><td>27,142</td><td>26,564 18,945 25,157 2.2 43.3 7.9 115,919 88,140 31.5</td></tr><tr><th scope="row">Total expenses</th><td>(21,257)</td><td>(21,002) (15,584) (19,773) 1.2 36.4 7.5 (91,001) (70,611) 28.9</td></tr><tr><th scope="row">COGS</th><td>(8,073)</td><td>(8,155) (6,040) (7,645) (1.0) 33.6 5.6 (36,198) (27,357) 32.3</td></tr><tr><th scope="row">Gross profit</th><td>19,069</td><td>18,410 12,904 17,512 3.6 47.8 8.9 79,720 60,784 31.2</td></tr><tr><th scope="row">Employee benefits expense</th><td>(5,994)</td><td>(5,727) (4,656) (5,476) 4.7 28.7 9.4 (25,261) (20,436) 23.6</td></tr><tr><th scope="row">Other expenses</th><td>(7,191)</td><td>(7,121) (4,888) (6,652) 1.0 47.1 8.1 (29,541) (22,818) 29.5</td></tr><tr><th scope="row">EBITDA</th><td>5,885</td><td>5,562 3,360 5,384 5.8 75.1 9.3 24,918 17,530 42.1</td></tr><tr><th scope="row">EBITDA (pre-IndAS)</th><td>3,605</td><td>3,300 1,560 3,216 9.2 131.1 12.1 15,554 10,174 52.9</td></tr><tr><th scope="row">Depreciation and amortisation expense</th><td>(3,046)</td><td>(3,049) (2,371) (2,875) (0.1) 28.5 6.0 (12,344) (10,484) 17.7</td></tr><tr><th scope="row">EBIT</th><td>2,839</td><td>2,513 989 2,509 13.0 187.0 13.1 12,574 7,046 78.5</td></tr><tr><th scope="row">Other income</th><td>685</td><td>582 516 490 17.7 32.6 39.7 2,423 1,743 39.0</td></tr><tr><th scope="row">Finance costs</th><td>(532)</td><td>(500) (410) (435) 6.4 29.6 22.2 (2,088) (1,785) 17.0</td></tr><tr><th scope="row">Restated profit/(loss) before tax</th><td>2,991</td><td>2,595 1,095 2,564 15.3 173.1 16.7 12,909 7,004 84.3</td></tr><tr><th scope="row">Total tax expense</th><td>(712)</td><td>(649) (385) (506) (3,305) (1,794) 84.2</td></tr><tr><th scope="row">Profit after tax</th><td>2,280</td><td>1,946 710 2,058 17.1 221.2 10.8 9,604 5,211 84.3</td></tr><tr><th scope="row">Share of (loss) of an associate and joint venture</th><td>5</td><td>(10) 6 (22) - (44.0)</td></tr><tr><th scope="row">Exceptional item</th><td>—</td><td>— (104) - - (157.09)</td></tr><tr><th scope="row">Reported PAT</th><td>2,284</td><td>1,936 612 2,036 18.0 273.4 12.2 9,604 5,010 91.7</td></tr><tr><th scope="row">EPS</th><td>1.3</td><td>1.1 0.4 1.2 14.0 255.6 10.3 5.5 2.9 91.7</td></tr><tr><th scope="row">Costs (% of revenues)</th><td></td><td></td></tr><tr><th scope="row">Employee expenses</th><td>22.1</td><td>21.6 24.6 21.8 52 bps -250 bps 31 bps 21.8 23.2 -139 bps</td></tr><tr><th scope="row">Other expenses</th><td>26.5</td><td>26.8 25.8 26.4 -32 bps 69 bps 5 bps 25.5 25.9 -40 bps</td></tr><tr><th scope="row">Gross margin</th><td>70.3</td><td>69.3 68.1 69.6 95 bps 214 bps 64 bps 68.8 69.0 -19 bps</td></tr><tr><th scope="row">EBITDA margin</th><td>21.7</td><td>20.9 17.7 21.4 74 bps 394 bps 27 bps 21.5 19.9 161 bps</td></tr><tr><th scope="row">Pre-IndAS EBITDA margin</th><td>13.3</td><td>12.4 8.2 12.8 85 bps 504 bps 49 bps 13.4 11.5 188 bps</td></tr><tr><th scope="row">PAT margin</th><td>8.4</td><td>729% 3.2 8.1 112 bps 518 bps 32 bps 8.3 5.7 260 bps</td></tr><tr><th scope="row">Effective tax rate</th><td>23.8</td><td>25.0 35.2 19.7 -121 bps -1141 bps 406 bps 25.6 25.6 -1 bps</td></tr><tr><th scope="row">India business</th><td></td><td></td></tr><tr><th scope="row">Revenue (Rs mn)</th><td>15,308</td><td>15,230 11,691 14,750 0.5 30.9 3.8 66,864 52,648 27.0</td></tr><tr><th scope="row">EBITDA (Rs mn)</th><td>3,280</td><td>3,201 2,281 3,115 2.5 43.8 5.3 15,056.4 10,675 41.0</td></tr><tr><th scope="row">Pre-IndAS EBITDA (Rs mn)</th><td>2,360</td><td>- - 2,253 4.7 11,018 7,535 46.2</td></tr><tr><th scope="row">International business</th><td></td><td></td></tr><tr><th scope="row">Revenue (Rs mn)</th><td>12,033</td><td>11,335 7,365 10,540 6.2 63.4 14.2 49,628 37,896 31.0</td></tr><tr><th scope="row">EBITDA (Rs mn)</th><td>2,640</td><td>2,040 1,172 2,258 29.4 125.2 16.9 10,434 7,302 42.9</td></tr><tr><th scope="row">Pre-IndAS EBITDA (Rs mn)</th><td>1,280</td><td>- - 975 31.3 4,537 2,639 71.9</td></tr></tbody></table>
+            </div>
+            <h4 class="krb__kie-h">Pre-Ind AS EBITDA margin expansion of ~208 bps yoy in the India business and 620 bps in the international business</h4>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">Segmental pro forma financials of Lenskart, March fiscal year-ends, 2025-27</th></tr></thead><tbody></tbody></table>
+            </div>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">1QFY25 2QFY25 3QFY25 4QFY25</th><th scope="col">1QFY26</th><th scope="col">2QFY26 3QFY26 4QFY26</th><th scope="col">1QFY27</th><th scope="col">yoy (%)</th></tr></thead><tbody><tr><th scope="row">India business</th><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Revenue 9,203 10,086 9,866 10,236</th><td>11,715</td><td>12,329 13,853 14,750</td><td>15,310</td><td>30.7</td></tr><tr><th scope="row">Gross profit 5,853 6,359 6,275 6,555</th><td>7,427</td><td>7,822 8,828 9,447</td><td>9,820</td><td>32.2</td></tr><tr><th scope="row">Gross margin (%) 63.6 63.0 63.6 64.0</th><td>63.4</td><td>63.4 63.7 64.0</td><td>64.1</td><td>74 bps</td></tr><tr><th scope="row">EBITDA 1,256 1,824 1,607 1,590</th><td>2,278</td><td>2,407 2,875 3,115</td><td>3,280</td><td>44.0</td></tr><tr><th scope="row">EBITDA margin (%) 13.6 18.1 16.3 15.5</th><td>19.4</td><td>19.5 20.8 21.1</td><td>21.4</td><td>197 bps</td></tr><tr><th scope="row">Pre-IndAS EBITDA 692 1,239 990 926</th><td>1,561</td><td>1,655 2,067 2,252</td><td>2,360</td><td>51.2</td></tr><tr><th scope="row">Pre-IndAS EBITDA margin (%) 7.5 12.3 10.0 9.0</th><td>13.3</td><td>13.4 14.9 15.3</td><td>15.4</td><td>208 bps</td></tr><tr><th scope="row">International business</th><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Revenue 6,915 7,353 7,055 7,784</th><td>8,719</td><td>9,278 9,359 10,540</td><td>12,030</td><td>38.0</td></tr><tr><th scope="row">Gross profit 5,221 5,453 5,201 5,853</th><td>6,621</td><td>7,002 7,091 8,077</td><td>9,270</td><td>40.0</td></tr><tr><th scope="row">Gross margin (%) 75.5 74.2 73.7 75.2</th><td>75.9</td><td>75.5 75.8 76.6</td><td>77.1</td><td>111 bps</td></tr><tr><th scope="row">EBITDA 1,266 1,300 771 1,677</th><td>1,472</td><td>1,810 1,762 2,258</td><td>2,640</td><td>79.3</td></tr><tr><th scope="row">EBITDA margin (%) 18.3 17.7 10.9 21.5</th><td>16.9</td><td>19.5 18.8 21.4</td><td>21.9</td><td>506 bps</td></tr><tr><th scope="row">Pre-IndAS EBITDA 358 311 (254) 633</th><td>387</td><td>677 595 975</td><td>1,280</td><td>na</td></tr><tr><th scope="row">Pre-IndAS EBITDA margin (%) 5.2 4.2 (3.6) 8.1</th><td>4.4</td><td>7.3 6.4 9.3</td><td>10.6</td><td>620 bps</td></tr></tbody></table>
+            </div>
+            <p>Retailing India Research</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">4</th></tr></thead><tbody></tbody></table>
+            </div>
+            <h4 class="krb__kie-h">Strong growth driven primarily by higher volumes in both the India and international segments</h4>
+            <p>Key quarterly operating metrics of Lenskart, March fiscal year-ends, 2025-27</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">1QFY25 2QFY25 3QFY25 4QFY25</th><th scope="col">1QFY26</th><th scope="col">2QFY26 3QFY26 4QFY26</th><th scope="col">1QFY27</th><th scope="col">yoy (%)</th></tr></thead><tbody><tr><th scope="row">India business</th><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Revenue (Rs mn) 9,203 10,086 9,866 10,236</th><td>11,715</td><td>12,329 13,853 14,750</td><td>15,310</td><td>30.7</td></tr><tr><th scope="row">Eye tests performed (mn) 2.8 3.3 3.4 3.9</th><td>4.4</td><td>4.9 5.5 6.0</td><td>6.3</td><td>43.2</td></tr><tr><th scope="row">Eyewear units sold (mn) 5.3 5.6 5.6 6.4</th><td>6.7</td><td>6.8 7.4 7.9</td><td>8.3</td><td>23.1</td></tr><tr><th scope="row">Quarterly transacting customer accounts (mn) 2.8 3.1 3.2 3.3</th><td>3.7</td><td>3.9 4.1 4.3</td><td>4.4</td><td>18.5</td></tr><tr><th scope="row">Net store addition (#) 31 55 65 131</th><td>70</td><td>133 169 170</td><td>116</td><td></td></tr><tr><th scope="row">Total store count (#) 1,816 1,871 1,936 2,067</th><td>2,137</td><td>2,270 2,439 2,609</td><td>2,725</td><td>27.5</td></tr><tr><th scope="row">ASP (Rs) 1,694 1,609</th><td>1,744</td><td>1,813 1,865</td><td>1,856</td><td>6.4</td></tr><tr><th scope="row">Net promoter score 79</th><td></td><td>80.9 81.4</td><td>77.6</td><td></td></tr><tr><th scope="row">International business</th><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Revenue (Rs mn) 6,915 7,353 7,055 7,784</th><td>8,719</td><td>9,278 9,359 10,540</td><td>12,030</td><td>38.0</td></tr><tr><th scope="row">Eye tests performed (mn) 0.6 0.6 0.7 0.7</th><td>0.7</td><td>0.7 0.8 0.8</td><td>0.8</td><td>17.1</td></tr><tr><th scope="row">Eyewear units sold (mn) 1.4 1.4 1.2 1.4</th><td>1.7</td><td>1.6 1.5 1.8</td><td>2.3</td><td>34.1</td></tr><tr><th scope="row">Quarterly transacting customer accounts (mn) 0.8 0.8 0.8 0.8</th><td>1.0</td><td>1.0 0.9 1.0</td><td>1.2</td><td>22.0</td></tr><tr><th scope="row">Net store addition (#) 15 11 16 11</th><td>13</td><td>9 26 13</td><td>16</td><td></td></tr><tr><th scope="row">Total store count (#) 619 630 646 656</th><td>669</td><td>679 705 718</td><td>734</td><td>9.7</td></tr></tbody></table>
+            </div>
+            <h4 class="krb__kie-h">Lenskart has added 116 stores in India in 1QFY27</h4>
+            <p>Store network of Lenskart, March fiscal year-ends, 2025-27</p>
+            <p>1QFY25 2QFY25 3QFY25 4QFY25 1QFY26 2QFY26 3QFY26 4QFY26 1QFY27 India 1,816 1,871 1,936 2,067 2,137 2,270 2,439 2,609 2,725</p>
+            <p>-Metropolitan cities 809 836 849 900 928 970 1,006 1,043 1,067</p>
+            <p>-Tier-1 cities 395 412 438 469 491 509 571 614 623</p>
+            <p>-Tier-2 cities and beyond 612 623 649 698 718 791 862 952 1,035</p>
+            <p>International 619 630 646 656 669 679 705 718 734</p>
+            <p>-Japan 263 265 265 267 272 275 285 287 289</p>
+            <p>-Southeast Asia 230 234 246 251 256 263 274 284 288</p>
+            <p>-Middle East 32 35 36 39 39 39 41 41 43</p>
+            <p>-Others 94 96 99 99 102 102 105 106 114</p>
+            <p>Total 2,435 2,501 2,582 2,723 2,806 2,949 3,144 3,327 3,459</p>
+            <h4 class="krb__kie-h">Key takeaways from earnings call  Management guidance. Management maintained its guidance for long-term, steady-state pre-Ind AS</h4>
+            <p>EBITDA margin of ~25%.</p>
+            <h4 class="krb__kie-h"> Gross margin. A meaningful share of Lenskart’s frame procurement is sourced from China—so the</h4>
+            <p>depreciation of INR against RMB exerts direct pressure on the cost of goods. Despite this, the product margin has continued to be resilient in both the India and international businesses through (1) growing premiumization and, increasingly, (2) a higher proportion of in-house manufacturing. At a consolidated level, the product margin crossed 70% for the first time this quarter, helped in part by a seasonally heavier international sunglasses mix.</p>
+            <p> Alongside its own manufacturing, vendor relationships and the volume-based cost efficiencies that</p>
+            <p>come with scale are equally important levers to absorb input cost pressures. Management will</p>
+            <p>focus on negotiations with vendors to improve product margins.</p>
+            <h4 class="krb__kie-h"> Manufacturing. Lenskart’s long-term goal is self-reliance in frame and lens manufacturing. This</h4>
+            <p>quarter, the company increased its investment in Baofeng Framekart, its China frame-manufacturing JV, to add in-house capacity. The Hyderabad facility will be the next major step-up in this journey.</p>
+            <p>Retailing India Research</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">5</th></tr></thead><tbody></tbody></table>
+            </div>
+            <p>According to management, as more of the manufacturing is in-house, the impact of currency movements on the cost base will keep reducing.</p>
+            <h4 class="krb__kie-h">Lenskart has been shifting more manufacturing to its Indian facilities</h4>
+            <p>Snapshot of Lenskart’s in-house manufacturing</p>
+            <h4 class="krb__kie-h"> Eye tests. Lenskart conducts free eye tests to increase the size of the market. Management believes</h4>
+            <p>eye testing is the biggest driver of the 23% volume growth in India. A significant majority of customers who do an eye test at Lenskart will purchase eyeglasses from the store, either immediately or within a few months. Management noted that customers who get an eye test for the first time take longer to make their purchase. It is possible that as the volume of eye tests increases, the conversion rates will drop and the company will have to work on improving rates.</p>
+            <h4 class="krb__kie-h"> India business. In 1QFY27, the India business reported revenue growth of 31% yoy. The revenue</h4>
+            <p>growth was primarily volume-driven, with eyewear units growing 23% yoy. This was powered by a 43% yoy increase in the eye tests conducted. ASP contributed a 6.4% increase yoy, driven by customers choosing premium lens options and not just by price increases. The SSSG came in at 18% in 1Q, driven by volume expansion from new customers acquired and also deepening relationships with gold members, driving repeat purchases. Gold membership now has 9 mn+ active members.</p>
+            <h4 class="krb__kie-h"> Market size. According to management, as India urbanizes, studies longer and lives on screens,</h4>
+            <p>the market size keeps growing. ~780 mn Indians need vision correction today, heading toward</p>
+            <p>~940 mn by FY2030E. Daily, 35k Indians get tested at Lenskart for the first time and discover they</p>
+            <p>need prescription eyewear.</p>
+            <h4 class="krb__kie-h"> Growth. According to management, supply and not demand, is the constraint in India. Management</h4>
+            <p>noted that while there is a large opportunity for store expansion in Tier 2+ regions, it requires better</p>
+            <p>understanding of the logistics, finding manpower for these stores, hiring optometrists and more.</p>
+            <p>Remote optometry has enabled Lenskart to expand faster; management is also investing in AI eye</p>
+            <p>testing to solve constraints related to Tier 2+ store expansion.</p>
+            <h4 class="krb__kie-h"> Network expansion (1/2). Lenskart has grown in three directions, i.e., (1) deeper in the pin codes</h4>
+            <p>it already served, (2) wider into unserved pin codes within existing cities and (3) into new towns. In</p>
+            <p>the 1,517 pin codes that already had a Lenskart store in 2QFY26, density rose from 1.5 to 1.6 stores</p>
+            <p>per pin code in nine months and the same stores kept growing, with SSSG of ~18% and SPSG of</p>
+            <p>~24%. Of the 2,821 unserved pin codes in 2QFY26 mapped in Lenskart’s existing cities, it entered</p>
+            <p>152 and opened 155 stores. 2,669 unserved pin codes remain, as of 1QFY27. It opened up stores</p>
+            <p>in 140 Tier 2+ towns that Lenskart had never entered, with 142 stores in towns such as Hassan in</p>
+            <p>Karnataka, Balasore in Odisha, Tura in Meghalaya and Gandhidham in Gujarat. According to GeoIQ,</p>
+            <p>there are an additional 3,644 viable new Tier 2+ towns for Lenskart to enter.</p>
+            <h4 class="krb__kie-h"> Network expansion (2/2). Management noted that despite the net addition of 455 stores in the</h4>
+            <p>past nine months, it only covered ~5% of the 6,400 pin codes it had identified in 2QFY26.</p>
+            <p>Management noted that most of its stores are still relatively young and can continue to grow at a</p>
+            <p>healthy rate, given the high demand in India.</p>
+            <p>Retailing India Research</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">6</th></tr></thead><tbody></tbody></table>
+            </div>
+            <h4 class="krb__kie-h">Lenskart envisages store count of 10,000 over the medium term</h4>
+            <p>Snapshot of Lenskart’s store network expansion strategy</p>
+            <h4 class="krb__kie-h"> Premiumization. According to management, prescription eyeglasses with premium lenses form a</h4>
+            <p>healthy share of the overall business. Owndays lenses have captured a significant share of the</p>
+            <p>premium price point. Owndays premium lenses now generate over Rs15 bn annually in prescription</p>
+            <p>eyeglass sales. Lenskart also has a luxury lens portfolio: Rodenstock and Tokai. Rodenstock is a</p>
+            <p>century-old German optical house and Tokai is Japan&#39;s neuroscience-led lens maker. Volumes of</p>
+            <p>this portfolio grew over 35% yoy combined in 1QFY27; together they generated Rs2.5 bn in</p>
+            <p>prescription eyeglass sales last year. The frame portfolio is premiumizing too, with Meller on track</p>
+            <p>to be a ~US$70 mn brand globally for sunglasses alone.</p>
+            <h4 class="krb__kie-h"> Progressive Lens. The progressive lens market has a distinct and growing share of volume,</h4>
+            <p>addressing presbyopia—where eyeglasses coverage in India is as low as ~25%. Lenskart has</p>
+            <p>digitized progressive eye testing and units grew 33% yoy in 1QFY27.</p>
+            <h4 class="krb__kie-h"> Value-eyewear. The company has launched glasses priced at Rs500, sold profitably through Hustlr</h4>
+            <p>Club. According to management, lower-priced products are more margin accretive and will not</p>
+            <p>dilute profitability as the business scales.</p>
+            <h4 class="krb__kie-h"> ASP. India ASP grew 6.4% yoy in 1Q to Rs1,856, driven by a continued shift in product mix toward</h4>
+            <p>premium products and progressive lenses.</p>
+            <h4 class="krb__kie-h"> International business. Its revenue grew 38% yoy. While the business benefited from favorable</h4>
+            <p>currency tailwinds, the underlying momentum remains strong. On a constant-currency basis, 1Q clocked revenue growth of ~29% yoy. This growth was broad-based, with robust performance across Japan, Southeast Asia, the Middle East and its other geographies. In the international business, the store addition will gradually accelerate once the unit economics improves.</p>
+            <h4 class="krb__kie-h"> Growth. Volume was the primary driver of growth; eyewear units grew 37.6% yoy. Additionally,</h4>
+            <p>sunglasses had a pronounced seasonal quarter, with units growing 58% yoy and nearly doubling</p>
+            <p>sequentially, as April-June is the segment&#39;s seasonal peak, amplified by Meller&#39;s fast-growing</p>
+            <p>online channel.</p>
+            <h4 class="krb__kie-h"> ASP. The ASP was roughly flat yoy at Rs5,267. On a constant-currency basis, ASP would have</h4>
+            <p>declined, reflecting this quarter&#39;s heavier sunglasses mix, a structurally lower-ASP category.</p>
+            <h4 class="krb__kie-h"> Profitability. According to management, international has structurally higher product margins than</h4>
+            <p>the India business, which should translate into even higher profitability as it scales. The</p>
+            <p>international business has a higher product margin than the India business, as international ASP</p>
+            <p>is 3X of India, while the ACP is 2X. In 1QFY27, the pre-Ind AS EBITDA margin expansion of 620 bps</p>
+            <p>was driven by (1) operating leverage and (2) product margin expansion. The margin was also driven</p>
+            <p>by higher sales of sunglasses this quarter, which carry a structurally higher margin.</p>
+            <p>Retailing India Research</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">7</th></tr></thead><tbody></tbody></table>
+            </div>
+            <h4 class="krb__kie-h"> Smart glasses. Lenskart opened early access for its smart glasses in 4QFY26; sign-ups crossed 80k.</h4>
+            <p>The B Smart glasses are priced at Rs22k and have photo and video capture, open-ear audio, Google Gemini integration with multilingual support and prescription-lens capability. The product will be available for sale across Lenskart stores very soon, so customers can experience it before purchasing.</p>
+            <h4 class="krb__kie-h"> Currency risk. In the India business, a significant proportion of frames are imported and that has a</h4>
+            <p>currency risk. Lenskart’s international business provides a natural hedge to some extent and it is a net importer from that perspective. For the long term, the company is accelerating its in-house manufacturing for frames. This will reduce its exposure to currency on the negative side.</p>
+            <h4 class="krb__kie-h">Key changes to estimates</h4>
+            <p>We upgrade our FY2027-29 revenue estimates by ~3% and EPS estimates by 9-15%.</p>
+            <h4 class="krb__kie-h">We raise EPS by 9-15% for FY2027-29E</h4>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">Key changes in estimates for Lenskart, March fiscal year-ends, 2027-29E (Rs mn)</th></tr></thead><tbody></tbody></table>
+            </div>
+            <p>New estimates Old estimates Change (%)</p>
+            <p>2027E 2028E 2029E 2027E 2028E 2029E 2027E 2028E 2029E</p>
+            <p>Total</p>
+            <p>Revenue (Rs mn) 115,919 140,673 168,981 112,159 136,135 163,551 3.4 3.3 3.3</p>
+            <p>Revenue growth (%) 32 21 20 27 21 20</p>
+            <p>Gross profit (Rs mn) 79,720 97,566 117,677 77,023 93,998 113,399 3.5 3.8 3.8</p>
+            <p>Gross margin (%) 68.8 69.4 69.6 68.7 69.0 69.3</p>
+            <p>EBITDA (Rs mn) 24,918 31,859 39,976 23,287 29,928 38,207 7.0 6.5 4.6</p>
+            <p>EBITDA margin (%) 21.5 22.6 23.7 20.8 22.0 23.4</p>
+            <p>Pre-IndAS EBITDA (Rs mn) 15,554 20,426 26,165 13,706 18,637 24,620 13.5 9.6 6.3</p>
+            <p>EBITDA margin (%) 13.4 14.5 15.5 12.2 13.7 15.1</p>
+            <p>PBT (Rs mn) 12,909 17,223 23,900 11,247 15,184 21,937 14.8 13.4 9.0</p>
+            <p>Net Profit (Rs mn) 9,604 12,814 17,686 8,368 11,297 16,233 14.8 13.4 9.0</p>
+            <p>EPS (Rs) 5.5 7.4 10.2 4.8 6.5 9.4 14.8 13.4 9.0</p>
+            <p>India business</p>
+            <p>Revenue 66,864 81,546 98,186 65,565 79,962 96,279 2.0 2.0 2.0</p>
+            <p>Gross profit 42,576 52,333 63,502 41,749 51,316 62,269 2.0 2.0 2.0</p>
+            <p>Gross margin (%) 63.7 64.2 64.7 63.7 64.2 64.7</p>
+            <p>EBITDA 15,056 19,684 24,914 14,112 18,516 23,490 6.7 6.3 6.1</p>
+            <p>EBITDA margin (%) 22.5 24.1 25.4 21.5 23.2 24.4</p>
+            <p>Pre-IndAS EBITDA 11,018 14,722 18,904 10,160 13,660 17,609 8.4 7.8 7.4</p>
+            <p>Pre-IndAS EBITDA margin (%) 16.5 18.1 19.3 15.5 17.1 18.3</p>
+            <p>International business</p>
+            <p>Revenue 49,628 59,757 71,489 47,167 56,803 67,965 5.2 5.2 5.2</p>
+            <p>Gross profit 37,717 45,864 54,868 35,847 43,312 51,823 5.2 5.9 5.9</p>
+            <p>Gross margin (%) 76.0 76.8 76.8 76.0 76.3 76.3</p>
+            <p>EBITDA 10,434 12,806 15,756 9,748 12,042 15,410 7.0 6.3 2.2</p>
+            <p>EBITDA margin (%) 21.0 21.4 22.0 20.7 21.2 22.7</p>
+            <p>Pre-IndAS EBITDA 4,537 5,704 7,260 3,545 4,977 7,010 28.0 14.6 3.6</p>
+            <p>Pre-IndAS EBITDA margin (%) 9.1 9.5 10.2 7.5 8.8 10.3</p>
+            <p>Source: Company, Kotak Institutional Equities estimates</p>
+            <p>Retailing India Research</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">8</th></tr></thead><tbody></tbody></table>
+            </div>
+            <h4 class="krb__kie-h">We model revenue growth of 23%/24% for the India/international businesses over FY2026-29</h4>
+            <p>Key operating metrics of Lenskart, March fiscal year-ends, 2024-29E</p>
+            <p>CAGR (%)</p>
+            <p>2024 2025 2026 2027E 2028E 2029E 2026-29</p>
+            <p>India</p>
+            <p>Annual transacting customer accounts (mn) 8.1 9.9 12.3 15.0 17.9 21.0 20</p>
+            <p>Eyewear units sold (mn) 17.7 22.9 28.8 35.5 42.9 51.1 21</p>
+            <p>Store count (#) 1,785 2,067 2,609 3,159 3,709 4,259 18</p>
+            <p>Revenue (Rs mn) 31,628 40,149 52,648 66,864 81,546 98,186 23</p>
+            <p>Revenue growth (%) 32 27 31 27 22 20</p>
+            <p>Gross profit (Rs mn) 19,569 25,000 33,524 42,576 52,333 63,502 24</p>
+            <p>Gross margin (%) 61.9 62.3 63.7 63.7 64.2 64.7</p>
+            <p>EBITDA (Rs mn) 2,600 4,439 10,675 15,056 19,684 24,914 33</p>
+            <p>EBITDA margin (%) 8.2 11.1 20.3 22.5 24.1 25.4</p>
+            <p>Pre-IndAS EBITDA (Rs mn) 1,363 2,460 7,535 11,018 14,722 18,904 36</p>
+            <p>Pre-IndAS EBITDA margin (%) 4.3 6.1 14.3 16.5 18.1 19.3</p>
+            <p>International</p>
+            <p>Annual transacting customer accounts (mn) 2.1 2.5 3.5 4.7 5.6 6.5 23</p>
+            <p>Eyewear units sold (mn) 3.6 4.3 6.5 9.2 10.9 12.9 26</p>
+            <p>Store count (#) 604 656 718 768 818 868 7</p>
+            <p>Revenue (Rs mn) 22,649 26,377 37,896 49,628 59,757 71,489 24</p>
+            <p>Revenue growth (%) 58 16 44 31 20 20</p>
+            <p>Gross profit (Rs mn) 16,483 19,639 28,792 37,717 45,864 54,868 24</p>
+            <p>Gross margin (%) 72.8 74.5 76.0 76.0 76.8 76.8</p>
+            <p>EBITDA (Rs mn) 3,444 4,574 7,302 10,434 12,806 15,756 29</p>
+            <p>EBITDA margin (%) 15.2 17.3 19.3 21.0 21.4 22.0</p>
+            <p>Pre-IndAS EBITDA (Rs mn) (93) 620 2,639 4,537 5,704 7,260 40</p>
+            <p>Pre-IndAS EBITDA margin (%) (0.4) 2.4 7.0 9.1 9.5 10.2</p>
+            <p>Consolidated</p>
+            <p>Annual transacting customer accounts (mn) 10.2 12.4 15.8 19.7 23.4 27.6 20</p>
+            <p>Eyewear units sold (mn) 21.2 27.2 35.3 44.7 53.8 64.0 22</p>
+            <p>Store count (#) 2,389 2,723 3,327 3,927 4,527 5,127 16</p>
+            <p>Reported revenue (Rs mn) 54,277 66,525 88,140 115,919 140,673 168,981 24</p>
+            <p>Revenue growth (%) 43.3 22.6 32.5 31.5 21.4 20.1</p>
+            <p>Gross profit (Rs mn) 36,516 45,182 62,441 80,114 98,003 118,160 24</p>
+            <p>Gross margin (%) 67.3 67.9 69.0 68.8 69.4 69.6</p>
+            <p>EBITDA (Rs mn) 6,721 9,711 17,530 24,918 31,859 39,976 32</p>
+            <p>EBITDA margin (%) 12.4 14.6 19.9 21.5 22.6 23.7</p>
+            <p>Pre-IndAS EBITDA (Rs mn) 1,947 3,778 10,174 15,554 20,426 26,165 37</p>
+            <p>Pre-IndAS EBITDA margin (%) 3.6 5.7 11.5 13.4 14.5 15.5</p>
+            <p>Notes:</p>
+            <p>(a) Dealskart acquisition was effective from December 2024 and hence, financials for FY2026 and beyond are not like-for-like with previous years.</p>
+            <p>Source: Company, Kotak Institutional Equities estimates</p>
+            <p>Retailing India Research</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col"></th><th scope="col">9</th></tr></thead><tbody></tbody></table>
+            </div>
+            <h4 class="krb__kie-h">We model a revenue CAGR of 24% and PAT CAGR of 52% over FY2026-29E</h4>
+            <p>Condensed consolidated financials of Lenskart, March fiscal year-ends, 2024-29E (Rs mn)</p>
+            <p>2024 2025 2026 2027E 2028E 2029E Profit and loss statement Revenue 54,277 66,525 88,140 115,919 140,673 168,981 Gross profit 36,516 45,181 60,784 79,720 97,566 117,677 EBITDA 6,733 9,755 17,530 24,918 31,859 39,976 Pre-IndAS EBITDA 1,929 4,513 10,174 15,554 20,426 26,165 Depreciation and amortisation expense (6,722) (7,966) (10,484) (12,344) (14,609) (16,283) EBIT 11 1,789 7,046 12,574 17,251 23,693 Other income 1,822 3,568 1,743 2,423 2,484 3,195 Finance costs (1,230) (1,459) (1,785) (2,088) (2,512) (2,988) Profit before tax 603 3,898 7,004 12,909 17,223 23,900 Taxation (692) (880) (1,794) (3,305) (4,409) (6,214) Profit after tax (89) 3,018 5,211 9,604 12,814 17,686 Exceptional items - - (157) - - - Minority interest + share of loss in associates (12) (44) (44) - - - Reported PAT (102) 2,973 5,010 9,604 12,814 17,686 Diluted EPS (Rs/share) (0.6) 1.8 2.9 5.5 7.4 10.2 Weighted average number of shares - diluted (mn) 1,735 1,735 1,735 1,735 1,735 1,735 Balance sheet Shareholder&#39;s funds 56,493 60,987 87,385 96,990 109,803 127,489 Minority Interest 1,067 1,074 1,132 1,132 1,132 1,132 Total borrowings 4,972 3,459 2,196 2,196 2,196 2,196 Deferred tax liabilities 1,510 1,515 1,727 1,727 1,727 1,727 Lease liabilities 16,787 22,268 28,770 34,129 41,706 50,216 Total sources of funds 80,828 89,304 121,210 136,173 156,564 182,760 Fixed assets (tangible/intangible) 28,899 23,541 29,406 33,480 37,392 37,662 Investments 17,086 14,660 29,361 29,361 29,361 29,361 Goodwill 18,674 18,756 21,977 21,977 21,977 21,977 RoU assets 8,144 21,085 27,134 32,945 40,523 49,033 Cash and bank balances 8,052 8,649 15,437 9,769 17,449 33,467 Net working capital (ex-cash) 3,516 2,625 (899) 6,192 7,514 9,026 Deferred tax assets 1,195 2,024 2,919 2,919 2,919 2,919 Total usage of funds 80,828 89,304 121,210 136,173 156,564 182,760 Cash flow Operating Profits before working capital changes 1,757 3,335 7,884 13,806 18,708 24,449 Working capital adjustments: (1,656) 3,038 983 (10,746) (1,222) (1,397) Net finance cost/income 592 2,118 (42) 335 (28) 207 Cash flow from operations 692 8,491 8,825 3,396 17,458 23,258 Core capital expenditure (4,253) (4,154) (8,231) (7,649) (8,292) (5,679) Acquisitions (252) (1,483) (4,650) - - - Free cash flow (3,813) 2,854 (4,055) (4,253) 9,166 17,579 Key ratios/metrics Revenue growth (%) 43.3 22.6 32.5 31.5 21.4 20.1 Gross margin (%) 67.3 67.9 69.0 68.8 69.4 69.6 EBITDA margin (%) 12.4 14.7 19.9 21.5 22.6 23.7 RoAE (%) (0.2) 5.1 6.8 10.4 12.4 14.9 RoACE (%) 0.0 2.4 7.3 10.5 12.6 15.0</p>
+            <p>Notes:</p>
+            <p>(a) Dealskart acquisition was effective from December 2024 and hence, financials for FY2026 and beyond are not like-for-like with previous years.</p>
+            <p>Source: Company, Kotak Institutional Equities estimates</p>
+            <p>Retailing India Research</p>
             <p class="krb__kie-by">Garima Mishra · Ishani Swain</p>
           </div>
           <aside class="krb__kie-side">

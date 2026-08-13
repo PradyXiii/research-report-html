@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en-IN" data-app-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>Kotak Research Report Converter</title>
+<!--@INJECT:app.css-->
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="top__in">
+    <span class="wm" role="img" aria-label="Kotak Neo Private Client Group">
+      <span class="wm__mark" aria-hidden="true"></span>
+      <span class="wm__name">kotak <b>neo</b></span>
+      <span class="wm__rule" aria-hidden="true"></span>
+      <span class="wm__sub">Private<br>Client<br>Group</span>
+    </span>
+    <div class="top__meta">
+      <h1 class="top__title">Research Report Converter</h1>
+      <p class="top__sub">PDF in, publishable block out. Runs entirely in this tab.</p>
+    </div>
+    <div class="top__tools">
+      <div class="seg" role="group" aria-label="Theme">
+        <button type="button" class="seg__b" data-theme-set="auto" aria-pressed="true">Auto</button>
+        <button type="button" class="seg__b" data-theme-set="light" aria-pressed="false">Light</button>
+        <button type="button" class="seg__b" data-theme-set="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </div>
+  <div class="top__rule" aria-hidden="true"></div>
+</header>
+
+<main id="main" class="wrap">
+
+  <!-- ========================================================= drop zone -->
+  <section class="drop" id="drop" aria-labelledby="drop-h">
+    <div class="drop__in">
+      <svg class="drop__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <path d="M14 2v6h6"></path><path d="M12 18v-6"></path><path d="m9 15 3 3 3-3"></path>
+      </svg>
+      <h2 class="drop__h" id="drop-h">Drop a Kotak research PDF here</h2>
+      <p class="drop__p">or <button type="button" class="link" id="pick">choose a file</button> &middot; or paste one with <kbd>Ctrl</kbd>+<kbd>V</kbd></p>
+      <input type="file" id="file" accept="application/pdf,.pdf" hidden>
+      <p class="drop__note" id="engine">&nbsp;</p>
+    </div>
+  </section>
+
+  <!-- ========================================================== progress -->
+  <section class="busy" id="busy" hidden aria-live="polite">
+    <div class="busy__bar"><i></i></div>
+    <p class="busy__t" id="busy-stage">Reading file…</p>
+    <p class="busy__f" id="busy-file"></p>
+  </section>
+
+  <!-- ============================================================ result -->
+  <div id="result" hidden>
+
+    <!-- verdict banner -->
+    <section class="verdict" id="verdict" tabindex="-1">
+      <div class="verdict__badge" id="verdict-badge"></div>
+      <div class="verdict__txt">
+        <h2 id="verdict-h"></h2>
+        <p id="verdict-p"></p>
+      </div>
+    </section>
+
+    <!-- errors: only rendered when the extractor refused -->
+    <section class="panel panel--bad" id="errors" hidden>
+      <h3 class="panel__h">Errors <span class="pill pill--bad" id="errors-n"></span></h3>
+      <p class="panel__lead">These come straight from the extractor. Nothing is published while any of them stands.</p>
+      <ul class="diag" id="errors-list"></ul>
+    </section>
+
+    <!-- format advisory, shown only when extraction failed -->
+    <section class="panel panel--info" id="advice" hidden>
+      <h3 class="panel__h">What this PDF looks like</h3>
+      <div id="advice-body"></div>
+    </section>
+
+    <!-- warnings -->
+    <section class="panel panel--warn" id="warnings" hidden>
+      <h3 class="panel__h">Warnings <span class="pill pill--warn" id="warnings-n"></span></h3>
+      <p class="panel__lead">The block still renders. Read every one before publishing.</p>
+      <ul class="diag" id="warnings-list"></ul>
+    </section>
+
+    <!-- notes -->
+    <section class="panel panel--note" id="notes" hidden>
+      <h3 class="panel__h">Notes <span class="pill" id="notes-n"></span></h3>
+      <p class="panel__lead">Repairs the parser made to the text it found.</p>
+      <ul class="diag diag--plain" id="notes-list"></ul>
+    </section>
+
+    <!-- actions -->
+    <section class="acts" id="acts" hidden>
+      <div class="acts__row">
+        <button type="button" class="btn btn--primary" id="dl-html">
+          Download HTML
+          <span>standalone page</span>
+        </button>
+        <button type="button" class="btn" id="cp-html">
+          Copy HTML
+          <span>embeddable fragment, inline CSS</span>
+        </button>
+        <button type="button" class="btn" id="dl-json">
+          Download JSON
+          <span>schema.json document</span>
+        </button>
+      </div>
+      <p class="acts__note" id="acts-note"></p>
+    </section>
+
+    <!-- preview -->
+    <section class="preview" id="preview" hidden>
+      <div class="preview__bar">
+        <h3 class="preview__h">Live preview</h3>
+        <p class="preview__note">Rendered in an isolated frame by the same renderer the bot publishes with.</p>
+      </div>
+      <iframe id="frame" title="Rendered research block preview" referrerpolicy="no-referrer"></iframe>
+    </section>
+
+    <!-- data panels -->
+    <details class="fold" id="fold-json">
+      <summary><span class="fold__t">Extracted JSON</span><span class="fold__m" id="json-meta"></span></summary>
+      <div class="fold__b"><pre class="code" id="json-out"></pre></div>
+    </details>
+
+    <details class="fold" id="fold-ev">
+      <summary><span class="fold__t">Evidence</span><span class="fold__m">what the parser saw on page 1</span></summary>
+      <div class="fold__b"><div id="ev-out"></div></div>
+    </details>
+
+    <details class="fold" id="fold-block">
+      <summary><span class="fold__t">Block HTML</span><span class="fold__m" id="block-meta"></span></summary>
+      <div class="fold__b"><pre class="code code--wrap" id="block-out"></pre></div>
+    </details>
+
+    <p class="again"><button type="button" class="link" id="again">Convert another PDF</button></p>
+  </div>
+
+  <!-- ============================================================= fatal -->
+  <section class="panel panel--bad" id="fatal" hidden>
+    <h3 class="panel__h">The converter itself failed</h3>
+    <p class="panel__lead">This is a bug in converter.html, not in your PDF.</p>
+    <pre class="code" id="fatal-out"></pre>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p id="foot-line"></p>
+  <p class="foot__dim">No network access, no upload, no server. The PDF never leaves this device.</p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!--@INJECT:runtime-->
+<!--@INJECT:app.js-->
+</body>
+</html>

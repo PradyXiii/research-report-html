@@ -358,7 +358,7 @@ function renderPickOfWeek(data, opts) {
             <div class="krb__chips"><span class="krb__chip krb__chip--lead">${esc(data.report.type)}</span></div>
             <div class="krb__headrow">
               <div class="krb__identity">
-                <h2 class="krb__title" itemprop="headline"><span class="krb__potw-rating">${esc(rating)}</span> &ndash; ${esc(data.stock.name)} (${esc(data.stock.ticker)})</h2>
+                <h2 class="krb__title" itemprop="headline">${esc(data.stock.name)} (${esc(data.stock.ticker)})</h2>
 ${rec.timePeriod ? `                <span class="krb__holding">Time Period: ${esc(rec.timePeriod)}</span>` : ''}
               </div>
               <div class="krb__verdict">
@@ -423,6 +423,34 @@ ${disclosures(data)}`;
 }
 
 /* ---- KIE full research report -------------------------------------------- */
+
+/**
+ * Renders the whole report body: every heading, paragraph and exhibit table
+ * from the content pages, in the order they appear in the PDF. Tables are
+ * wrapped so a wide exhibit scrolls inside its own region instead of forcing
+ * the page sideways.
+ */
+function renderKieContent(data) {
+  const items = data.content || [];
+  return items.map((it) => {
+    if (it.kind === 'table') {
+      const rows = (it.rows || []);
+      if (!rows.length) return '';
+      const head = rows[0].map((c) => `<th scope="col">${esc(c)}</th>`).join('');
+      const body = rows.slice(1).map((r) =>
+        `<tr>${r.map((c, i) => i === 0
+          ? `<th scope="row">${esc(c)}</th>`
+          : `<td>${esc(c)}</td>`).join('')}</tr>`).join('');
+      return `            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>
+            </div>`;
+    }
+    if (it.kind === 'head') return `            <h4 class="krb__kie-h">${esc(it.text)}</h4>`;
+    return `            <p>${linkify(esc(it.text))}</p>`;
+  }).join('\n');
+}
+
+
 function renderKie(data, opts) {
   const rec = data.recommendation;
   const rating = String(rec.rating).toUpperCase();
@@ -456,7 +484,7 @@ ${data.restricted ? `        <p class="krb__restricted"><strong>Circulation rest
           <div class="krb__kie-main">
             <h3 class="krb__kie-headline">${esc(data.headline)}</h3>
             <p class="krb__kie-summary">${esc(data.summary)}</p>
-${(data.sections || []).map((sec) => `            <section class="krb__kie-sec"><h4>${esc(sec.title)}</h4>${(sec.paragraphs || []).map((t) => `<p>${esc(t)}</p>`).join('')}</section>`).join('\n')}
+${renderKieContent(data)}
 ${data.analysts && data.analysts.length ? `            <p class="krb__kie-by">${esc(data.analysts.join(' \u00b7 '))}</p>` : ''}
           </div>
           <aside class="krb__kie-side">

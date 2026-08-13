@@ -794,3 +794,27 @@
 @supports not (container-type: inline-size) {
   @media (max-width: 820px) { .krb__kie-grid { grid-template-columns: minmax(0, 1fr); } }
 }
+
+/* KIE exhibits: a wide table scrolls in its own region rather than forcing the
+   whole page sideways. */
+.krb__exhibit {
+  overflow-x: auto;
+  margin: 16px 0 20px;
+  border: 1px solid var(--krb-border);
+  border-radius: var(--krb-r-sm);
+}
+.krb__exhibit:focus-visible { outline: 2px solid var(--krb-red); outline-offset: 2px; }
+.krb__exhibit table { border-collapse: collapse; width: max-content; min-width: 100%; font-size: var(--krb-fs-xs); }
+.krb__exhibit th, .krb__exhibit td {
+  padding: 7px 11px; text-align: right; white-space: nowrap;
+  border-bottom: 1px solid var(--krb-border-soft);
+}
+.krb__exhibit thead th { background: var(--krb-surface); font-weight: 700; color: var(--krb-text); border-bottom: 2px solid var(--krb-red); }
+.krb__exhibit th[scope="row"] { text-align: left; font-weight: 600; color: var(--krb-text); }
+.krb__kie-h {
+  font-size: var(--krb-fs-sm);
+  font-weight: 800;
+  color: var(--krb-link);
+  margin: 20px 0 7px;
+}
+.krb__kie-main p + p { margin-top: 10px; }
