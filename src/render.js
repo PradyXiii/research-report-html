@@ -316,7 +316,7 @@ ${rec.holdingPeriod ? `          <p class="krb__holding">${esc(PAGE1.holding)} $
 
         <div class="krb__disclosures">
           <details class="krb__acc">
-            <summary>Rating Scale (Private Client Group)</summary>
+            <summary>Rating Scale (Private Client Group)<span class="krb__acc-icon" aria-hidden="true"></span></summary>
             <div class="krb__acc-body">
               <p class="krb__acc-lead">Definitions of ratings</p>
 ${renderRatingScale(data)}
@@ -324,14 +324,14 @@ ${renderRatingScale(data)}
           </details>
 
           <details class="krb__acc">
-            <summary>Research Team (Private Client Group)</summary>
+            <summary>Research Team (Private Client Group)<span class="krb__acc-icon" aria-hidden="true"></span></summary>
             <div class="krb__acc-body">
 ${renderTeams()}
             </div>
           </details>
 
           <details class="krb__acc">
-            <summary>Disclosure / Disclaimer</summary>
+            <summary>Disclosure / Disclaimer<span class="krb__acc-icon" aria-hidden="true"></span></summary>
             <div class="krb__acc-body">
 ${renderDisclosures()}
             </div>

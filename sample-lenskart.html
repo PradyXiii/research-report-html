@@ -8,120 +8,152 @@
   <meta name="description" content="Kotak Securities PCG Result Update on Lenskart Solutions. Rating ADD, CMP Rs.487, Fair Value Rs.560.">
   <style>
 /* ==========================================================================
-   Kotak Research Block (krb) — v3
+   Kotak Research Block (krb) — v4
    Embeddable research-report block for kotakneo.com.
 
-   Scope: this renders PAGE 1 of the Kotak PCG one-pager WORD FOR WORD, plus
-   the static boilerplate from pages 2-4 in collapsed accordions. Nothing is
-   derived, computed or reworded. If a figure or phrase is not in the PDF, it
-   is not on the page.
+   Two rules, kept strictly separate:
+
+   1. CONTENT is page 1 of the PDF, word for word. Nothing is computed,
+      inferred, reworded or added. If a figure or phrase is not in the PDF,
+      it is not on the page.
+   2. PRESENTATION is a modern, outline-led system in the brand palette.
+      Fidelity of wording does not mean imitating a Word document.
+
+   The visual language is OUTLINE-FIRST: structure is drawn with brand-coloured
+   strokes, rings and hairlines rather than heavy fills. Fills appear only
+   where they carry meaning. Depth comes from layered strokes plus one soft
+   shadow, so the block stays crisp at any size and in either theme.
 
    - Every selector is scoped under .krb. No global styles, no collisions.
    - No JavaScript. Accordions are native <details>.
-   - Fluid type and auto-fit grids, so it fits any column width. The three
-     conditional refinements use container queries (the block measures itself,
-     not the viewport), with an @supports viewport fallback.
+   - Fluid type + auto-fit grids; conditional refinements use container
+     queries (the block measures itself), with an @supports viewport fallback.
    - Light + dark: .krb[data-krb-theme] > site [data-theme]/.dark > OS.
 
    Contrast (measured, sRGB, WCAG 2.1)
    -----------------------------------
-   #fa1432 on #fff .......... 4.03:1  large/bold text and UI only
+   #fa1432 on #fff .......... 4.03:1  large/bold text, and strokes (needs 3:1)
    #e00f2b on #fff .......... 4.92:1  small red text
    #ff4d63 on #14161c ....... 5.59:1  small red text in dark
    #00005a on #fff .......... 18.3:1
-   white on #00005a ......... 18.3:1  the report-type band
    ========================================================================== */
 
 .krb {
   /* ---- brand ---------------------------------------------------------- */
   --krb-red: #fa1432;
   --krb-red-deep: #e00f2b;
-  --krb-red-ink: #e00f2b;        /* red TEXT under 18.66px */
+  --krb-red-ink: #e00f2b;
   --krb-navy: #00005a;
 
   /* ---- light ---------------------------------------------------------- */
   --krb-bg: #ffffff;
-  --krb-surface: #f7f8fb;
+  --krb-surface: #fbfcfe;
   --krb-surface-2: #ffffff;
-  --krb-tint-red: #fff3f5;
-  --krb-text: #14161d;
+  --krb-tint-red: #fff4f6;
+  --krb-tint-navy: #f2f4fc;
+  --krb-text: #12141b;
   --krb-text-muted: #545b69;
   --krb-text-faint: #6b7280;
-  --krb-border: #e4e7ef;
-  --krb-border-soft: #eef0f6;
+  --krb-border: #e2e6f0;
+  --krb-border-soft: #edf0f7;
+  --krb-line-red: #fa1432;         /* brand strokes */
+  --krb-line-navy: #00005a;
+  --krb-ring-red: rgba(250, 20, 50, .22);
+  --krb-ring-navy: rgba(0, 0, 90, .16);
   --krb-link: #00005a;
-  --krb-band-bg: #00005a;
   --krb-logo-plate: transparent;
-  --krb-shadow: 0 1px 2px rgba(12, 14, 20, .04), 0 14px 34px rgba(12, 14, 20, .08);
+  --krb-shadow: 0 1px 2px rgba(12, 14, 20, .04), 0 18px 44px rgba(12, 14, 20, .09);
 
   /* ---- scale ---------------------------------------------------------- */
-  --krb-r: 16px;
-  --krb-r-sm: 9px;
-  --krb-pad: clamp(18px, 3.2vw, 38px);
+  --krb-r: 22px;
+  --krb-r-md: 16px;
+  --krb-r-sm: 11px;
+  --krb-stroke: 1.5px;
+  --krb-pad: clamp(18px, 3.2vw, 40px);
+  --krb-gap: clamp(14px, 2vw, 22px);
 
-  --krb-fs-title: clamp(20px, 1.02rem + 1.5vw, 31px);
-  --krb-fs-band: clamp(16px, .88rem + .6vw, 21px);
-  --krb-fs-price: clamp(22px, 1.05rem + 1.5vw, 32px);
-  --krb-fs-h3: clamp(17px, .92rem + .55vw, 22px);
+  --krb-fs-title: clamp(23px, 1.05rem + 2.1vw, 40px);
+  --krb-fs-band: clamp(13px, .78rem + .35vw, 16px);
+  --krb-fs-price: clamp(28px, 1.15rem + 2.4vw, 44px);
+  --krb-fs-h3: clamp(17px, .92rem + .6vw, 23px);
   --krb-fs-body: clamp(15px, .9rem + .18vw, 17px);
   --krb-fs-sm: clamp(13px, .8rem + .12vw, 14.5px);
-  --krb-fs-xs: clamp(12px, .75rem + .08vw, 13px);
+  --krb-fs-xs: clamp(11.5px, .73rem + .08vw, 12.5px);
 
   --krb-font: inherit;
 
   container-type: inline-size;
   container-name: krb;
+  position: relative;
   font-family: var(--krb-font);
   font-size: var(--krb-fs-body);
   line-height: 1.62;
   color: var(--krb-text);
   background: var(--krb-bg);
-  border: 1px solid var(--krb-border);
-  border-top: 4px solid var(--krb-red);
+  border: var(--krb-stroke) solid var(--krb-border);
   border-radius: var(--krb-r);
   box-shadow: var(--krb-shadow);
   overflow: hidden;
   margin: 0 auto;
-  max-width: 1000px;
+  max-width: 1060px;
   text-align: left;
   -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+/* brand accent rule across the top: red into navy */
+.krb::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--krb-red) 0%, #b80d3f 52%, var(--krb-navy) 100%);
+  z-index: 2;
 }
 
 @media (prefers-color-scheme: dark) {
   .krb:not([data-krb-theme="light"]) {
-    --krb-bg: #0f1116;
-    --krb-surface: #161921;
-    --krb-surface-2: #14161c;
-    --krb-tint-red: #24121a;
-    --krb-text: #eceef4;
+    --krb-bg: #0e1015;
+    --krb-surface: #14171e;
+    --krb-surface-2: #12151b;
+    --krb-tint-red: #26121a;
+    --krb-tint-navy: #14172c;
+    --krb-text: #edeff5;
     --krb-text-muted: #a8aebc;
     --krb-text-faint: #949bab;
-    --krb-border: #262b36;
-    --krb-border-soft: #1e222b;
+    --krb-border: #272c38;
+    --krb-border-soft: #1f232c;
+    --krb-line-red: #fa1432;
+    --krb-line-navy: #7c8cff;      /* navy is invisible on dark -- lift it */
+    --krb-ring-red: rgba(250, 20, 50, .3);
+    --krb-ring-navy: rgba(124, 140, 255, .26);
     --krb-link: #9db0ff;
     --krb-red-ink: #ff4d63;
-    --krb-band-bg: #14166b;
-    --krb-logo-plate: #ffffff;   /* the logo's navy wordmark needs a light ground */
-    --krb-shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 14px 34px rgba(0, 0, 0, .5);
+    --krb-logo-plate: #ffffff;
+    --krb-shadow: 0 1px 2px rgba(0, 0, 0, .55), 0 18px 44px rgba(0, 0, 0, .5);
   }
 }
 [data-theme="dark"] .krb:not([data-krb-theme="light"]),
 .dark .krb:not([data-krb-theme="light"]),
 .krb[data-krb-theme="dark"] {
-  --krb-bg: #0f1116;
-  --krb-surface: #161921;
-  --krb-surface-2: #14161c;
-  --krb-tint-red: #24121a;
-  --krb-text: #eceef4;
+  --krb-bg: #0e1015;
+  --krb-surface: #14171e;
+  --krb-surface-2: #12151b;
+  --krb-tint-red: #26121a;
+  --krb-tint-navy: #14172c;
+  --krb-text: #edeff5;
   --krb-text-muted: #a8aebc;
   --krb-text-faint: #949bab;
-  --krb-border: #262b36;
-  --krb-border-soft: #1e222b;
+  --krb-border: #272c38;
+  --krb-border-soft: #1f232c;
+  --krb-line-red: #fa1432;
+  --krb-line-navy: #7c8cff;
+  --krb-ring-red: rgba(250, 20, 50, .3);
+  --krb-ring-navy: rgba(124, 140, 255, .26);
   --krb-link: #9db0ff;
   --krb-red-ink: #ff4d63;
-  --krb-band-bg: #14166b;
   --krb-logo-plate: #ffffff;
-  --krb-shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 14px 34px rgba(0, 0, 0, .5);
+  --krb-shadow: 0 1px 2px rgba(0, 0, 0, .55), 0 18px 44px rgba(0, 0, 0, .5);
 }
 
 .krb *, .krb *::before, .krb *::after { box-sizing: border-box; }
@@ -133,129 +165,190 @@
   color: var(--krb-link);
   text-decoration: underline;
   text-underline-offset: 2px;
-  overflow-wrap: anywhere;      /* long legal URLs must never force a scrollbar */
+  overflow-wrap: anywhere;
 }
 .krb a:hover { text-decoration-thickness: 2px; }
 .krb a:focus-visible, .krb summary:focus-visible {
   outline: 2px solid var(--krb-red);
   outline-offset: 3px;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 /* ==========================================================================
-   Header — logo + report date
+   Header — logo, and the report date in an outlined pill
    ========================================================================== */
 .krb__head {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px 20px;
-  padding: clamp(16px, 2.4vw, 24px) var(--krb-pad);
-  border-bottom: 1px solid var(--krb-border-soft);
+  gap: 14px 20px;
+  padding: clamp(20px, 2.8vw, 28px) var(--krb-pad) clamp(16px, 2.2vw, 22px);
 }
 .krb__logo {
-  width: clamp(122px, 15vw, 158px);
+  width: clamp(126px, 15vw, 164px);
   height: auto;
   background: var(--krb-logo-plate);
-  border-radius: 6px;
+  border-radius: 7px;
   padding: var(--krb-logo-pad, 0);
 }
 [data-theme="dark"] .krb:not([data-krb-theme="light"]) .krb__logo,
 .dark .krb:not([data-krb-theme="light"]) .krb__logo,
-.krb[data-krb-theme="dark"] .krb__logo { --krb-logo-pad: 6px 9px; }
+.krb[data-krb-theme="dark"] .krb__logo { --krb-logo-pad: 7px 10px; }
 @media (prefers-color-scheme: dark) {
-  .krb:not([data-krb-theme="light"]) .krb__logo { --krb-logo-pad: 6px 9px; }
+  .krb:not([data-krb-theme="light"]) .krb__logo { --krb-logo-pad: 7px 10px; }
 }
-.krb__dated { font-size: var(--krb-fs-sm); font-weight: 600; color: var(--krb-text-muted); }
+.krb__dated {
+  padding: 7px 15px;
+  border: var(--krb-stroke) solid var(--krb-border);
+  border-radius: 999px;
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--krb-text-muted);
+  white-space: nowrap;
+}
 
 /* ==========================================================================
-   Title + report-type band
+   Title — outlined rating chip inline, wording unchanged
    ========================================================================== */
 .krb__title {
-  padding: clamp(18px, 2.6vw, 26px) var(--krb-pad);
-  background: var(--krb-surface);
+  padding: 0 var(--krb-pad) clamp(18px, 2.4vw, 26px);
   font-size: var(--krb-fs-title);
   font-weight: 800;
-  line-height: 1.18;
-  letter-spacing: -.018em;
-  text-align: center;
-  color: var(--krb-red);          /* large text -> 4.03:1 is compliant */
+  line-height: 1.12;
+  letter-spacing: -.03em;
+  color: var(--krb-red);           /* large text -> 4.03:1 is compliant */
   text-wrap: balance;
 }
-.krb__title-rating { white-space: nowrap; }
+.krb__title-rating {
+  display: inline-block;
+  padding: .1em .46em .16em;
+  border: 2.5px solid var(--krb-line-red);
+  border-radius: .34em;
+  box-shadow: 0 0 0 4px var(--krb-ring-red);
+  color: var(--krb-red);
+  white-space: nowrap;
+  letter-spacing: -.01em;
+}
 
+/* ==========================================================================
+   Report-type band — outlined, not a filled slab
+   ========================================================================== */
 .krb__band {
-  padding: 11px var(--krb-pad);
-  background: var(--krb-band-bg);
-  color: #fff;
+  display: block;
+  margin: 0 var(--krb-pad) var(--krb-gap);
+  padding: 11px 18px;
+  border: var(--krb-stroke) solid var(--krb-line-navy);
+  border-radius: 999px;
+  background: var(--krb-tint-navy);
+  color: var(--krb-link);
   font-size: var(--krb-fs-band);
-  font-weight: 700;
-  letter-spacing: .02em;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
   text-align: center;
 }
 
 /* ==========================================================================
-   Price table — exactly the two cells printed on page 1
+   Price cells — outlined cards, figures as the hero
    ========================================================================== */
 .krb__prices {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-  gap: 1px;
-  background: var(--krb-border);
-  border-bottom: 1px solid var(--krb-border);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: var(--krb-gap);
+  padding: 0 var(--krb-pad);
 }
 .krb__price {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: clamp(15px, 2.2vw, 22px) var(--krb-pad);
-  background: var(--krb-bg);
-  text-align: center;
+  gap: 6px;
+  padding: clamp(18px, 2.4vw, 26px) clamp(18px, 2.4vw, 26px) clamp(18px, 2.4vw, 24px);
+  border: var(--krb-stroke) solid var(--krb-border);
+  border-radius: var(--krb-r-md);
+  background: var(--krb-surface-2);
+  overflow: hidden;
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
-.krb__price-label { font-size: var(--krb-fs-sm); font-weight: 600; color: var(--krb-text-muted); }
+/* a stroked accent on the leading edge rather than a filled header */
+.krb__price::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--krb-line-red);
+}
+.krb__price:hover { border-color: var(--krb-ring-red); box-shadow: 0 0 0 4px var(--krb-ring-red); }
+.krb__price-label {
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--krb-text-faint);
+}
 .krb__price-value {
   font-size: var(--krb-fs-price);
   font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -.02em;
+  line-height: 1.02;
+  letter-spacing: -.035em;
   color: var(--krb-red-ink);
-  font-variant-numeric: tabular-nums;
 }
 
 /* ==========================================================================
-   Body sections
+   Sections — outlined cards, stroked headings, ring bullets
    ========================================================================== */
-.krb__body { padding: var(--krb-pad); display: grid; gap: clamp(22px, 3vw, 30px); }
+.krb__body { padding: var(--krb-gap) var(--krb-pad) var(--krb-pad); display: grid; gap: var(--krb-gap); }
+
+.krb__section {
+  position: relative;
+  padding: clamp(20px, 2.6vw, 30px);
+  border: var(--krb-stroke) solid var(--krb-border);
+  border-radius: var(--krb-r-md);
+  background: var(--krb-surface-2);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.krb__section:hover { border-color: var(--krb-ring-red); box-shadow: 0 0 0 4px var(--krb-ring-red); }
+.krb__section[data-tone="positive"]:hover { border-color: var(--krb-ring-navy); box-shadow: 0 0 0 4px var(--krb-ring-navy); }
 
 .krb__section-title {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 7px 16px;
+  border: 2px solid var(--krb-line-red);
+  border-radius: 999px;
   font-size: var(--krb-fs-h3);
   font-weight: 800;
   letter-spacing: -.012em;
   color: var(--krb-red);
-  padding-bottom: 9px;
-  margin-bottom: 14px;
-  border-bottom: 2px solid var(--krb-red);
 }
-.krb__section[data-tone="positive"] .krb__section-title { border-bottom-color: var(--krb-navy); }
+.krb__section[data-tone="positive"] .krb__section-title {
+  border-color: var(--krb-line-navy);
+  color: var(--krb-link);
+}
 
-.krb__list { display: grid; gap: 12px; }
-.krb__list li { display: flex; gap: 12px; align-items: flex-start; }
+.krb__list { display: grid; gap: 13px; }
+.krb__list li { display: flex; gap: 14px; align-items: flex-start; }
+/* ring marker -- outline, not a dot */
 .krb__list li::before {
   content: "";
   flex: none;
-  width: 7px; height: 7px;
-  margin-top: .62em;
+  width: 9px; height: 9px;
+  margin-top: .58em;
   border-radius: 50%;
-  background: var(--krb-red);
+  border: 2.5px solid var(--krb-line-red);
 }
-.krb__section[data-tone="positive"] .krb__list li::before { background: var(--krb-link); }
+.krb__section[data-tone="positive"] .krb__list li::before { border-color: var(--krb-line-navy); }
 .krb__prose { display: grid; gap: 12px; }
 
 .krb__abbr {
+  padding: 15px 18px;
+  border: var(--krb-stroke) dashed var(--krb-border);
+  border-radius: var(--krb-r-sm);
   font-size: var(--krb-fs-sm);
-  line-height: 1.55;
+  line-height: 1.58;
   color: var(--krb-text-muted);
 }
 
@@ -263,51 +356,72 @@
    Footer — attribution + holding period
    ========================================================================== */
 .krb__foot {
-  padding: clamp(16px, 2.2vw, 22px) var(--krb-pad);
+  margin: 0 var(--krb-pad) var(--krb-pad);
+  padding: clamp(16px, 2.2vw, 22px);
+  border: var(--krb-stroke) solid var(--krb-ring-red);
+  border-radius: var(--krb-r-md);
   background: var(--krb-tint-red);
-  border-top: 1px solid var(--krb-border);
   display: grid;
-  gap: 10px;
+  gap: 12px;
   font-size: var(--krb-fs-sm);
   color: var(--krb-text-muted);
   line-height: 1.6;
 }
-.krb__holding { font-weight: 700; color: var(--krb-text); }
+.krb__holding {
+  justify-self: start;
+  padding: 6px 14px;
+  border: var(--krb-stroke) solid var(--krb-line-red);
+  border-radius: 999px;
+  font-weight: 700;
+  color: var(--krb-red-ink);
+  background: var(--krb-bg);
+}
 
 /* ==========================================================================
-   Disclosures — mobile-first: nothing here may overflow or crowd
+   Disclosures — outlined rows, mobile-first inside
    ========================================================================== */
-.krb__disclosures { border-top: 1px solid var(--krb-border); }
-.krb__acc { border-bottom: 1px solid var(--krb-border-soft); }
+.krb__disclosures { border-top: var(--krb-stroke) solid var(--krb-border); }
+.krb__acc { border-bottom: var(--krb-stroke) solid var(--krb-border-soft); }
 .krb__acc:last-child { border-bottom: 0; }
 .krb__acc > summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  padding: 16px var(--krb-pad);
-  min-height: 56px;
+  padding: 17px var(--krb-pad);
+  min-height: 58px;
   cursor: pointer;
   list-style: none;
   font-size: var(--krb-fs-sm);
-  font-weight: 700;
-  letter-spacing: .04em;
+  font-weight: 800;
+  letter-spacing: .07em;
   text-transform: uppercase;
   color: var(--krb-red-ink);
   background: var(--krb-surface-2);
+  transition: background .18s ease;
 }
 .krb__acc > summary::-webkit-details-marker { display: none; }
 .krb__acc > summary:hover { background: var(--krb-surface); }
-.krb__acc > summary::after {
-  content: "";
+/* outlined chevron button: a ring, with a real rotated chevron inside it */
+.krb__acc-icon {
   flex: none;
-  width: 9px; height: 9px;
+  position: relative;
+  width: 30px; height: 30px;
+  border: var(--krb-stroke) solid var(--krb-line-red);
+  border-radius: 50%;
+  transition: transform .22s ease, background .18s ease;
+}
+.krb__acc-icon::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 8px; height: 8px;
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
-  transform: rotate(45deg) translate(-2px, -2px);
-  transition: transform .2s ease;
+  transform: translate(-50%, -70%) rotate(45deg);
 }
-.krb__acc[open] > summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.krb__acc[open] .krb__acc-icon { transform: rotate(180deg); }
+.krb__acc > summary:hover .krb__acc-icon { background: var(--krb-ring-red); }
 
 .krb__acc-body {
   padding: 6px var(--krb-pad) var(--krb-pad);
@@ -316,66 +430,68 @@
   color: var(--krb-text-muted);
   display: grid;
   gap: 12px;
-  /* the disclaimer is dense legal prose with bare URLs in it -- these three
-     lines are what keep it readable and inside the viewport on a phone */
+  /* dense legal prose with bare URLs -- these three lines keep it readable
+     and inside the viewport on a phone */
   line-height: 1.68;
   overflow-wrap: anywhere;
   hyphens: auto;
 }
-.krb__acc-lead { font-weight: 700; color: var(--krb-text); }
+.krb__acc-lead { font-weight: 800; color: var(--krb-text); letter-spacing: .01em; }
 
 /* rating scale */
 .krb__scale { display: grid; gap: 0; }
 .krb__scale div {
   display: grid;
-  grid-template-columns: minmax(76px, max-content) 1fr;
-  gap: 4px 16px;
+  grid-template-columns: minmax(78px, max-content) 1fr;
+  gap: 4px 18px;
   align-items: start;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--krb-border-soft);
+  padding: 12px 0;
+  border-bottom: var(--krb-stroke) solid var(--krb-border-soft);
 }
 .krb__scale div:last-child { border-bottom: 0; }
 .krb__scale dt {
   font-weight: 800;
   color: var(--krb-text);
-  letter-spacing: .04em;
+  letter-spacing: .05em;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 .krb__scale dd { color: var(--krb-text-muted); }
 .krb__scale div[data-current="true"] {
-  background: var(--krb-tint-red);
+  padding: 14px 16px;
+  margin: 4px -2px;
+  border: var(--krb-stroke) solid var(--krb-line-red);
   border-radius: var(--krb-r-sm);
-  padding-inline: 12px;
-  margin-inline: -12px;
-  border-bottom-color: transparent;
+  background: var(--krb-tint-red);
 }
 .krb__scale div[data-current="true"] dt { color: var(--krb-red-ink); }
 .krb__scale-flag {
-  padding: 3px 9px;
+  padding: 3px 10px;
+  border: var(--krb-stroke) solid var(--krb-line-red);
   border-radius: 999px;
-  background: var(--krb-red-deep);
-  color: #fff;
+  color: var(--krb-red-ink);
   font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: .07em;
+  font-weight: 800;
+  letter-spacing: .09em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 /* research team */
-.krb__team { display: grid; gap: 22px; }
+.krb__team { display: grid; gap: 24px; }
 .krb__team-group > h4 {
+  display: inline-block;
+  padding: 6px 14px;
+  margin-bottom: 14px;
+  border: var(--krb-stroke) solid var(--krb-line-red);
+  border-radius: 999px;
   font-size: var(--krb-fs-xs);
   font-weight: 800;
   letter-spacing: .09em;
   text-transform: uppercase;
   color: var(--krb-red-ink);
-  padding-bottom: 8px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid var(--krb-border);
 }
 .krb__team-grid {
   display: grid;
@@ -385,11 +501,13 @@
 .krb__person {
   display: grid;
   gap: 3px;
-  padding: 13px 15px;
+  padding: 14px 16px;
+  border: var(--krb-stroke) solid var(--krb-border);
   border-radius: var(--krb-r-sm);
   background: var(--krb-surface);
-  border: 1px solid var(--krb-border-soft);
+  transition: border-color .18s ease;
 }
+.krb__person:hover { border-color: var(--krb-line-red); }
 .krb__person strong { color: var(--krb-text); font-weight: 700; }
 .krb__person span { color: var(--krb-text-muted); }
 .krb__person a {
@@ -398,9 +516,9 @@
 }
 
 .krb__risk {
-  padding: 14px 16px;
+  padding: 15px 17px;
+  border: 2px solid var(--krb-line-red);
   border-radius: var(--krb-r-sm);
-  border: 1px solid var(--krb-red);
   background: var(--krb-tint-red);
   color: var(--krb-text);
   font-weight: 600;
@@ -410,29 +528,25 @@
    Container queries — the block measures itself
    ========================================================================== */
 @container krb (max-width: 560px) {
-  .krb__head { justify-content: space-between; }
-  .krb__title { text-align: left; }
-  .krb__band { text-align: left; }
-  .krb__price { align-items: flex-start; text-align: left; }
+  .krb { --krb-r: 18px; }
+  .krb__band { letter-spacing: .1em; }
+  .krb__section-title { font-size: 1rem; padding: 6px 14px; }
 }
 @container krb (max-width: 430px) {
-  /* stack the rating code above its definition so neither gets squeezed */
-  .krb__scale div { grid-template-columns: 1fr; gap: 5px; }
-  .krb__scale div[data-current="true"] { padding-inline: 10px; margin-inline: -10px; }
-  .krb__person { padding: 11px 12px; }
+  .krb__scale div { grid-template-columns: 1fr; gap: 6px; }
+  .krb__person { padding: 12px 13px; }
+  .krb__dated { padding: 6px 12px; }
 }
 
-/* ==========================================================================
-   Fallback for engines without container queries (pre-2023)
-   ========================================================================== */
 @supports not (container-type: inline-size) {
   @media (max-width: 620px) {
-    .krb__title, .krb__band { text-align: left; }
-    .krb__price { align-items: flex-start; text-align: left; }
+    .krb { --krb-r: 18px; }
+    .krb__band { letter-spacing: .1em; }
+    .krb__section-title { font-size: 1rem; padding: 6px 14px; }
   }
   @media (max-width: 480px) {
-    .krb__scale div { grid-template-columns: 1fr; gap: 5px; }
-    .krb__person { padding: 11px 12px; }
+    .krb__scale div { grid-template-columns: 1fr; gap: 6px; }
+    .krb__person { padding: 12px 13px; }
   }
 }
 
@@ -447,12 +561,12 @@
   .krb {
     --krb-bg: #fff; --krb-surface: #fff; --krb-surface-2: #fff;
     --krb-text: #000; --krb-text-muted: #333; --krb-text-faint: #444;
-    --krb-tint-red: #fff; --krb-logo-plate: transparent;
-    box-shadow: none; border: 2px solid var(--krb-red); max-width: none;
+    --krb-tint-red: #fff; --krb-tint-navy: #fff; --krb-logo-plate: transparent;
+    box-shadow: none; max-width: none;
   }
   .krb__acc > summary::after { display: none; }
   .krb__acc-body { display: block !important; }
-  .krb__section, .krb__acc { break-inside: avoid; }
+  .krb__section, .krb__acc, .krb__price { break-inside: avoid; }
   .krb a { color: #000; text-decoration: none; }
 }
 
@@ -461,7 +575,7 @@
    ========================================================================== */
 .krb-page {
   margin: 0;
-  padding: clamp(14px, 4vw, 48px) clamp(10px, 4vw, 36px);
+  padding: clamp(14px, 4vw, 52px) clamp(10px, 4vw, 40px);
   background: #eef0f6;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -533,7 +647,7 @@
 
         <div class="krb__disclosures">
           <details class="krb__acc">
-            <summary>Rating Scale (Private Client Group)</summary>
+            <summary>Rating Scale (Private Client Group)<span class="krb__acc-icon" aria-hidden="true"></span></summary>
             <div class="krb__acc-body">
               <p class="krb__acc-lead">Definitions of ratings</p>
           <dl class="krb__scale">
@@ -552,7 +666,7 @@
           </details>
 
           <details class="krb__acc">
-            <summary>Research Team (Private Client Group)</summary>
+            <summary>Research Team (Private Client Group)<span class="krb__acc-icon" aria-hidden="true"></span></summary>
             <div class="krb__acc-body">
           <div class="krb__team">
             <div class="krb__team-group">
@@ -665,7 +779,7 @@
           </details>
 
           <details class="krb__acc">
-            <summary>Disclosure / Disclaimer</summary>
+            <summary>Disclosure / Disclaimer<span class="krb__acc-icon" aria-hidden="true"></span></summary>
             <div class="krb__acc-body">
           <p class="krb__risk">Investments in securities market are subject to market risks. Read all the related documents carefully before investing.</p>
           <p class="krb__risk">Registration granted by SEBI and certification from NISM in no way guarantee performance of the intermediary or provide any assurance of returns to investors.</p>
