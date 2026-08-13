@@ -15,8 +15,8 @@ npm test          # 34 contract + injection-safety tests (no browser)
 npm run audit     # WCAG AA contrast + structure audit in light AND dark
 ```
 
-Then open **`preview.html`** — it has light/dark/system switches and
-desktop/tablet/phone width presets, for sign-off without a device lab.
+Then open **`sample-lenskart.html`** — plain output, no toolbar. Theme follows
+your OS; sizing is whatever the container gives it.
 
 Render a single report:
 
@@ -24,6 +24,7 @@ Render a single report:
 node src/render.js data/lenskart-2026-05-21.json                 # HTML fragment
 node src/render.js data/lenskart-2026-05-21.json --inline-css    # self-contained fragment
 node src/render.js data/lenskart-2026-05-21.json --standalone    # full HTML page
+node src/render.js data/lenskart-2026-05-21.json --logo-url=https://cdn/logo.png
 ```
 
 ---
@@ -40,9 +41,9 @@ node src/render.js data/lenskart-2026-05-21.json --standalone    # full HTML pag
 | `template.html` | The same markup rendered with `{{placeholders}}` — the template as a document. |
 | `sample-lenskart.html` | Fully populated standalone page. Open it in a browser. |
 | `block-inline-css.html` | Fragment with CSS inlined — what Strapi would store as the HTML blob. |
-| `preview.html` | Reviewer tool with theme + viewport switches. |
 | `INTEGRATION.md` · `bot/` | The PDF → Strapi bot (see that doc). |
 | `tools/build.js` · `tools/test.js` · `tools/audit.js` | Build, test, a11y gate. |
+| `assets/kotak-neo-logo.png` | The logo, from page 1 of the PDF. Inlined by default. |
 
 `render.js` is the single source of truth. `template.html` is **generated**, so it
 can never drift from what actually ships.
@@ -129,88 +130,115 @@ external font requests.
 
 ## Design decisions
 
-### Layout
+### The block reproduces the PDF. It does not interpret it.
+
+This is the rule the whole template is built around: **every visible string on
+the block comes from page 1 of the PDF or is one of its constant printed
+labels.** Nothing is computed, inferred, reworded or added.
+
+That means the block deliberately does *not* show:
+
+| Not shown | Why |
+|---|---|
+| Potential upside % | Derived from CMP and fair value. The PDF never states it. |
+| A rating-scale gauge plotting that % | The report's CMP-to-fair-value gap and its rating band **need not agree** — a SELL or BUY can carry a gap outside the band. Drawing them together would imply a relationship the report does not claim. |
+| "as on \<date\>" beside CMP | The PDF prints `Current Market Price (CMP)` and nothing more. |
+| "DCF-based target", "12-month perspective" | Sub-labels that were invented, not printed. |
+| "Kotak PCG rating" | "Private Client Group" appears only in the page-2 headings (`Rating Scale`, `Research Team`). Page 1 never labels the rating that way. |
+| A PDF download button | Removed by request. `sourcePdf` is still carried in the JSON for the bot's own records. |
+| A repeated ticker chip | `(LENSKART)` is already in the title line. |
+
+The glossary and attribution are stored **byte-for-byte** as the PDF prints
+them — including `EPS-` with no space, the en dash before *Free Cash Flow*, and
+the missing space in `).Readers`. Those are the document's own typography, and
+silently correcting a published disclaimer is not the renderer's job.
+`npm test` asserts this.
+
+Which rating applies is shown by flagging that rating's row inside the verbatim
+page-2 rating scale — the PDF's own words, with no return figure attached to
+this report.
+
+### Structure — page 1, in order
 
 ```
-┌─────────────────────────────────────────────┐
-│  HERO   red → navy gradient, dark in BOTH   │  chips · company · ticker
-│         themes. Rating medallion, right.    │  rating + what it means
-├─────────────────────────────────────────────┤
-│  KPI    CMP  │  FAIR VALUE  │  UPSIDE       │  oversized figures
-├─────────────────────────────────────────────┤
-│  GAUGE  SELL │ REDUCE │ ADD │ BUY  ▲+15.0%  │  why it's an ADD
-├─────────────────────────────────────────────┤
-│  THESIS  Rationale (full width)             │
-│  ┌────────────────┬────────────────┐        │
-│  │  Positives     │  Negatives     │        │  bull / bear pair
-│  └────────────────┴────────────────┘        │
-├─────────────────────────────────────────────┤
-│  Abbreviations · PDF · attribution          │
-│  ▸ Rating scale  ▸ Team  ▸ Disclosures      │  native <details>
-└─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│  kotak neo logo                Dated: <date> │
+├──────────────────────────────────────────────┤
+│      <Stock> (<TICKER>) - <RATING>           │
+├──────────────────────────────────────────────┤
+│                <Report type>                 │
+├──────────────────────────┬───────────────────┤
+│ Current Market Price(CMP)│  Fair Value (FV)  │
+│         Rs.487           │      Rs.560       │
+├──────────────────────────┴───────────────────┤
+│  Rationale:  Positives:  Negatives:          │
+│  (glossary line)                             │
+├──────────────────────────────────────────────┤
+│  Attribution · Holding Period: <n> months    │
+├──────────────────────────────────────────────┤
+│  ▸ Rating Scale  ▸ Research Team             │
+│  ▸ Disclosure / Disclaimer                   │
+└──────────────────────────────────────────────┘
 ```
 
-**The gauge is the point.** It plots the computed upside on the PCG rating scale
-from page 2, so a reader sees *why* the call is an ADD rather than taking it on
-faith. It is omitted when there is no fair value (NR/RS) or the rating is
-non-directional (SUBSCRIBE/NA/NM), clamps an off-scale upside to the track end,
-and says so rather than hiding it.
+### The logo
+
+`assets/kotak-neo-logo.png` — lifted from page 1 of the source PDF, white
+background removed so it sits on any surface. **Inlined as a base64 data URI by
+default**, so the fragment Strapi stores has no external image dependency and
+cannot break when the page moves. Pass `--logo-url=<URL>` (or `logoUrl` in
+code) to reference a hosted copy instead.
+
+Committed in-repo, so it is stable for future use:
+
+```
+assets/kotak-neo-logo.png
+https://raw.githubusercontent.com/PradyXiii/research-report-html/<branch>/assets/kotak-neo-logo.png
+```
+
+In dark mode the logo gets a white plate — its `neo` wordmark is navy and would
+otherwise disappear.
 
 ### Brand colour, honestly applied
 
 | Token | Light | Dark | Used for |
 |---|---|---|---|
-| `--krb-red` | `#fa1432` | `#fa1432` | Hero, active gauge band, bullets, accents |
+| `--krb-red` | `#fa1432` | `#fa1432` | Top rule, title, section rules, bullets |
 | `--krb-red-ink` | `#e00f2b` | `#ff4d63` | Red **text below 18.66px** |
-| `--krb-red-deep` | `#e00f2b` | `#e00f2b` | White-on-red: rating value, PDF button |
-| `--krb-navy` | `#00005a` | `#00005a` | Hero ramp end, links, positive markers |
-| `--krb-text-faint` | `#6b7280` | `#949bab` | KPI labels, tick marks |
+| `--krb-navy` | `#00005a` | `#00005a` | Report-type band, links, positive markers |
 
-**Why red has three shades.** `#fa1432` on white measures **4.03:1** — compliant
-for large text (needs 3:1), not for small (needs 4.5:1). Exact brand red carries
-the hero, the active band and the accents; a one-shade-deeper `#e00f2b`
-(**4.92:1**) carries small red text and white-on-red. Dark mode lifts small red
-text to `#ff4d63` (**5.59:1**). Indistinguishable side by side; the compliance
-difference is not.
-
-The hero is **dark in both themes** — it reads as brand, not as chrome, and it
-means the most striking part of the block looks identical to every user.
+`#fa1432` on white measures **4.03:1** — compliant for large text (needs 3:1),
+not for small (needs 4.5:1). Exact brand red carries the title, rules and
+accents; `#e00f2b` (**4.92:1**) carries the price figures, accordion headings
+and other small red text. Dark mode lifts those to `#ff4d63` (**5.59:1**).
 
 ### Responsive without viewport breakpoints
 
 The block sits in a column whose width we do not control, so viewport media
 queries would measure the wrong thing. Layout is intrinsic — `clamp()` type,
-`auto-fit` grids — and the three refinements that *are* conditional use
-**container** queries, so the block measures itself. Verified with no horizontal
-overflow and no layout collisions at 390 / 560 / 820 / 1024 / 1280 px.
+`auto-fit` grids — and the conditional refinements use **container** queries so
+the block measures itself, with an `@supports` viewport fallback for pre-2023
+engines. No horizontal overflow at 390 / 560 / 820 / 1024 / 1280 px.
+
+The disclosures are the densest part on a phone, so they get explicit
+treatment: `overflow-wrap: anywhere` (the disclaimer contains bare URLs that
+would otherwise force a sideways scroll), a 1.68 line-height, and a container
+query that stacks each rating code above its definition instead of squeezing
+two columns into 320 px.
 
 ### The audit is a real gate
 
-`tools/audit.js` runs headless Chromium in both themes with every accordion open
-and fails the build on:
+`tools/audit.js` runs headless Chromium in both themes with every accordion
+open and fails the build on:
 
-- any text node under WCAG AA — **including text over gradients**, which it
-  checks against every colour stop rather than an average, stopping the ancestor
-  walk at the first opaque layer so it never measures a hidden background;
-- the floating gauge marker colliding with the legend or title, at five widths;
-- horizontal overflow, skipped heading levels, or pointer targets under 24 px.
+- any text node under WCAG AA — **including text over gradients**, checked
+  against every colour stop, stopping the ancestor walk at the first opaque
+  layer so it never measures a hidden background;
+- layout collisions and horizontal overflow at five widths;
+- skipped heading levels, or pointer targets under 24 px.
 
-It is verified against a negative control (a deliberately low-contrast build) so
-a passing run means something.
-
-### Report CMP vs the live ticker
-
-The report's CMP is a snapshot from the report date and will disagree with the
-live price on the page. It is always rendered as **"Rs.487 · as on 21 May 2026"**
-so the two can never look like a contradiction.
-
-### Potential upside
-
-Computed, never parsed: `(fairValue − cmp) / cmp`. For Lenskart that is **+15.0%**,
-consistent with the ADD band (5–15%) on page 2. The tile disappears when there is
-no fair value (NR / RS reports).
-
----
+It is verified against a negative control (a deliberately low-contrast build),
+so a passing run means something.
 
 ## Accessibility
 

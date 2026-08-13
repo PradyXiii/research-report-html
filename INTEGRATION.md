@@ -1,5 +1,17 @@
 # INTEGRATION.md — deploying the research one-pager bot
 
+
+> **Confirmed by the user (2026-08-13)**
+> - **Strapi is v5.** Version detection is still left on `auto`: it will resolve
+>   to v5 by itself, and nothing breaks if another environment differs. Pin
+>   `STRAPI_API_VERSION=v5` once you are settled to skip the probe.
+> - **Jamun is consumed by calling an API — a pull, not a webhook push.** The
+>   shipped default `TRIGGER_MODE=once` matches that: a scheduler invokes the
+>   bot, it asks Jamun what is new, processes it and exits. `poll` runs the same
+>   loop in-process; `webhook` remains available if Jamun ever pushes.
+>
+> Both remain configuration, not assumptions baked into code.
+
 How the Jamun PDF becomes an HTML block on kotakneo.com, and what an in-house
 engineer has to decide, configure and run to make that happen.
 
