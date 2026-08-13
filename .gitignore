@@ -9,3 +9,8 @@ node_modules/
 
 *.log
 .DS_Store
+
+# Bot runtime state: dead-letter records, published-report ledger, poll
+# cursors. Machine-local, environment-specific, and it can carry absolute
+# paths from wherever the bot ran. It must never be committed.
+bot/state/
