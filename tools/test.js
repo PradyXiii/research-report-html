@@ -68,7 +68,7 @@ t('allows a null fairValue (NR / RS reports)', () => {
   assert.ok(validate(d));
   const html = renderBlock(d);
   assert.ok(!/Fair Value \(FV\)/.test(html), 'Fair Value cell should be omitted');
-  assert.strictEqual((html.match(/class="krb__price"/g) || []).length, 1, 'only the CMP cell should remain');
+  assert.strictEqual((html.match(/class="krb__stat"/g) || []).length, 1, 'only the CMP cell should remain');
 });
 
 console.log('\ninjection safety (PDF text is untrusted input)');
@@ -137,7 +137,10 @@ t('renders all bullets from the source data', () => {
 t('price cells use the PDF labels verbatim', () => {
   assert.ok(html.includes('Current Market Price (CMP)'), 'CMP label');
   assert.ok(html.includes('Fair Value (FV)'), 'FV label');
-  assert.ok(html.includes('>Rs.487<') && html.includes('>Rs.560<'), 'figures as printed');
+  // the currency mark is its own span so it can be set smaller; the rendered
+  // text is still exactly "Rs.487" / "Rs.560"
+  assert.ok(/krb__cur">Rs\.<\/span>487/.test(html), 'CMP as printed');
+  assert.ok(/krb__cur">Rs\.<\/span>560/.test(html), 'FV as printed');
   assert.ok(!/as on /i.test(html), 'no qualifier the PDF does not print');
 });
 t('title line reproduces the PDF headline exactly', () => {

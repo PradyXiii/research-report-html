@@ -169,61 +169,64 @@ const PAGE1 = {
 function renderSection(section, index) {
   const tone = String(section.tone || 'neutral').toLowerCase();
   const id = esc(section.id || ('section-' + (index + 1)));
-  const items = (section.bullets || []).map((b) => `<li>${linkify(esc(b))}</li>`).join('\n              ');
-  const paras = (section.paragraphs || []).map((p) => `<p>${linkify(esc(p))}</p>`).join('\n              ');
-
-  // The PDF prints its section headings with a trailing colon.
+  const items = (section.bullets || []).map((b) => `<li>${linkify(esc(b))}</li>`).join('\n                ');
+  const paras = (section.paragraphs || []).map((p) => `<p>${linkify(esc(p))}</p>`).join('\n                ');
   const heading = /[:：]$/.test(section.title) ? section.title : section.title + ':';
 
-  return `          <section class="krb__section" data-tone="${esc(tone)}" aria-labelledby="krb-${id}">
-            <h3 class="krb__section-title" id="krb-${id}">${esc(heading)}</h3>
-${items ? `            <ul class="krb__list">\n              ${items}\n            </ul>` : ''}${paras ? `\n            <div class="krb__prose">\n              ${paras}\n            </div>` : ''}
-          </section>`;
+  // Label rail on the left, content on the right -- the label stacks above the
+  // content once the block is narrow.
+  return `            <section class="krb__section" data-tone="${esc(tone)}" aria-labelledby="krb-${id}">
+              <h3 class="krb__section-label" id="krb-${id}">${esc(heading)}</h3>
+              <div class="krb__section-content">
+${items ? `                <ul class="krb__list">\n                ${items}\n                </ul>` : ''}${paras ? `\n                <div class="krb__prose">\n                ${paras}\n                </div>` : ''}
+              </div>
+            </section>`;
 }
 
 function renderHead(data, options) {
   const src = logoSrc(options);
+  const bits = [data.report.type, data.report.period].filter(Boolean);
   return `        <header class="krb__head">
 ${src ? `          <img class="krb__logo" src="${src}" alt="Kotak Neo" width="360" height="80">` : ''}
-          <p class="krb__dated">${esc(PAGE1.dated)} <time datetime="${esc(data.publishedAt)}" itemprop="datePublished">${esc(formatDate(data.publishedAt))}</time></p>
+          <p class="krb__meta">
+            <span class="krb__type">${esc(bits.join(' \u00b7 '))}</span>
+            <span class="krb__dated">${esc(PAGE1.dated)} <time datetime="${esc(data.publishedAt)}" itemprop="datePublished">${esc(formatDate(data.publishedAt))}</time></span>
+          </p>
         </header>`;
 }
 
-/** "Lenskart Solutions (LENSKART) - ADD" -- the title line exactly as printed. */
+/**
+ * The headline, string-for-string as printed: "<Name> (<TICKER>) - <RATING>".
+ * Only the typography differs -- the ticker recedes, the rating carries the
+ * single accent colour.
+ */
 function renderTitle(data) {
   const rating = String(data.recommendation.rating).toUpperCase();
-  return `        <h2 class="krb__title" itemprop="headline">${esc(data.stock.name)} (${esc(data.stock.ticker)}) - <span class="krb__title-rating">${esc(rating)}</span></h2>`;
+  return `        <h2 class="krb__title" itemprop="headline">${esc(data.stock.name)} <span class="krb__title-ticker">(${esc(data.stock.ticker)})</span> - <span class="krb__title-rating">${esc(rating)}</span></h2>`;
 }
 
 function money(value, currency) {
   const mark = currency === 'INR' || !currency ? 'Rs.' : String(currency) + ' ';
-  return esc(mark + formatNumber(value));
+  return `<span class="krb__cur">${esc(mark)}</span>${esc(formatNumber(value))}`;
 }
 
-/** The two-cell price table from page 1. No derived figures. */
 function renderPrices(data) {
   const rec = data.recommendation;
   const cells = [
-    `          <div class="krb__price">
-            <span class="krb__price-label">${esc(PAGE1.cmp)}</span>
-            <span class="krb__price-value">${money(rec.cmp, rec.currency)}</span>
+    `          <div class="krb__stat">
+            <span class="krb__stat-label">${esc(PAGE1.cmp)}</span>
+            <span class="krb__stat-value">${money(rec.cmp, rec.currency)}</span>
           </div>`
   ];
   if (rec.fairValue !== null && rec.fairValue !== undefined) {
-    cells.push(`          <div class="krb__price">
-            <span class="krb__price-label">${esc(PAGE1.fv)}</span>
-            <span class="krb__price-value">${money(rec.fairValue, rec.currency)}</span>
+    cells.push(`          <div class="krb__stat">
+            <span class="krb__stat-label">${esc(PAGE1.fv)}</span>
+            <span class="krb__stat-value">${money(rec.fairValue, rec.currency)}</span>
           </div>`);
   }
-  return `        <div class="krb__prices">\n${cells.join('\n')}\n        </div>`;
+  return `        <div class="krb__stats">\n${cells.join('\n')}\n        </div>`;
 }
 
-/**
- * The rating scale, verbatim from page 2, with this report's own rating marked.
- * Deliberately NOT plotted against the CMP-to-fair-value gap: the two do not
- * have to agree, and showing them together would imply a relationship the
- * report does not claim.
- */
 function renderRatingScale(data) {
   const current = data ? String(data.recommendation.rating).toUpperCase() : null;
   const rows = boilerplate.ratingScale.map((r) => {
@@ -300,12 +303,12 @@ ${renderHead(data, opts)}
 
 ${renderTitle(data)}
 
-        <p class="krb__band">${esc(data.report.type)}</p>
-
 ${renderPrices(data)}
 
         <div class="krb__body">
+          <div class="krb__sections">
 ${sections}
+          </div>
 ${data.abbreviations ? `          <p class="krb__abbr">${esc(data.abbreviations)}</p>` : ''}
         </div>
 

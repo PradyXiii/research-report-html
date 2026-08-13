@@ -1,76 +1,62 @@
       <style>
 /* ==========================================================================
-   Kotak Research Block (krb) — v4
+   Kotak Research Block (krb) — v5
    Embeddable research-report block for kotakneo.com.
 
-   Two rules, kept strictly separate:
+   Two rules, strictly separate:
 
-   1. CONTENT is page 1 of the PDF, word for word. Nothing is computed,
-      inferred, reworded or added. If a figure or phrase is not in the PDF,
-      it is not on the page.
-   2. PRESENTATION is a modern, outline-led system in the brand palette.
-      Fidelity of wording does not mean imitating a Word document.
+   1. CONTENT is page 1 of the PDF, word for word. Nothing computed, inferred,
+      reworded or added.
+   2. LAYOUT AND PRESENTATION are free. The block is not a facsimile of the
+      PDF; it is a web page that happens to carry the same words.
 
-   The visual language is OUTLINE-FIRST: structure is drawn with brand-coloured
-   strokes, rings and hairlines rather than heavy fills. Fills appear only
-   where they carry meaning. Depth comes from layered strokes plus one soft
-   shadow, so the block stays crisp at any size and in either theme.
+   Design brief, drawn from the current benchmarks (Mercury, Linear, Vercel,
+   Anthropic, Ramp):
 
-   - Every selector is scoped under .krb. No global styles, no collisions.
-   - No JavaScript. Accordions are native <details>.
-   - Fluid type + auto-fit grids; conditional refinements use container
-     queries (the block measures itself), with an @supports viewport fallback.
-   - Light + dark: .krb[data-krb-theme] > site [data-theme]/.dark > OS.
+   - Whitespace and hairlines separate content. Not boxes. An outline around
+     every element is what made the previous pass read as dated.
+   - Typography carries the hierarchy: one large display line, small
+     uppercase letterspaced labels, a comfortable reading measure.
+   - "One thing can be loud, not two." The layout is quiet and conservative,
+     so the brand red can be used at full strength in a few decisive places:
+     the top rule, the rating, section labels, bullet marks.
+   - An editorial label rail: section name in a narrow left column, content in
+     the right. Collapses to stacked when the block is narrow.
+   - Dark mode is near-black and type-led, not a recoloured light theme.
 
    Contrast (measured, sRGB, WCAG 2.1)
    -----------------------------------
-   #fa1432 on #fff .......... 4.03:1  large/bold text, and strokes (needs 3:1)
+   #fa1432 on #fff .......... 4.03:1  large/bold text and rules only
    #e00f2b on #fff .......... 4.92:1  small red text
-   #ff4d63 on #14161c ....... 5.59:1  small red text in dark
-   #00005a on #fff .......... 18.3:1
+   #ff4d63 on #101216 ....... 5.59:1  small red text in dark
    ========================================================================== */
 
 .krb {
   /* ---- brand ---------------------------------------------------------- */
   --krb-red: #fa1432;
-  --krb-red-deep: #e00f2b;
-  --krb-red-ink: #e00f2b;
+  --krb-red-ink: #e00f2b;        /* red TEXT under 18.66px */
   --krb-navy: #00005a;
 
   /* ---- light ---------------------------------------------------------- */
   --krb-bg: #ffffff;
-  --krb-surface: #fbfcfe;
-  --krb-surface-2: #ffffff;
-  --krb-tint-red: #fff4f6;
-  --krb-tint-navy: #f2f4fc;
-  --krb-text: #12141b;
-  --krb-text-muted: #545b69;
-  --krb-text-faint: #6b7280;
-  --krb-border: #e2e6f0;
-  --krb-border-soft: #edf0f7;
-  --krb-line-red: #fa1432;         /* brand strokes */
-  --krb-line-navy: #00005a;
-  --krb-ring-red: rgba(250, 20, 50, .22);
-  --krb-ring-navy: rgba(0, 0, 90, .16);
+  --krb-text: #0c0e12;
+  --krb-muted: #6a7280;
+  --krb-line: #e9ebf0;
+  --krb-line-soft: #f1f3f6;
+  --krb-wash: #fafbfc;
   --krb-link: #00005a;
   --krb-logo-plate: transparent;
-  --krb-shadow: 0 1px 2px rgba(12, 14, 20, .04), 0 18px 44px rgba(12, 14, 20, .09);
+  --krb-shadow: 0 1px 2px rgba(10, 12, 18, .03), 0 24px 60px rgba(10, 12, 18, .07);
 
-  /* ---- scale ---------------------------------------------------------- */
-  --krb-r: 22px;
-  --krb-r-md: 16px;
-  --krb-r-sm: 11px;
-  --krb-stroke: 1.5px;
-  --krb-pad: clamp(18px, 3.2vw, 40px);
-  --krb-gap: clamp(14px, 2vw, 22px);
+  /* ---- rhythm --------------------------------------------------------- */
+  --krb-pad: clamp(22px, 5vw, 76px);
+  --krb-rail: clamp(112px, 15vw, 168px);
 
-  --krb-fs-title: clamp(23px, 1.05rem + 2.1vw, 40px);
-  --krb-fs-band: clamp(13px, .78rem + .35vw, 16px);
-  --krb-fs-price: clamp(28px, 1.15rem + 2.4vw, 44px);
-  --krb-fs-h3: clamp(17px, .92rem + .6vw, 23px);
-  --krb-fs-body: clamp(15px, .9rem + .18vw, 17px);
-  --krb-fs-sm: clamp(13px, .8rem + .12vw, 14.5px);
-  --krb-fs-xs: clamp(11.5px, .73rem + .08vw, 12.5px);
+  --krb-fs-display: clamp(30px, 1.1rem + 3.6vw, 58px);
+  --krb-fs-stat: clamp(32px, 1.1rem + 3.2vw, 52px);
+  --krb-fs-body: clamp(15.5px, .92rem + .2vw, 17.5px);
+  --krb-fs-sm: clamp(13.5px, .82rem + .12vw, 15px);
+  --krb-fs-label: clamp(11px, .7rem + .09vw, 12.5px);
 
   --krb-font: inherit;
 
@@ -79,73 +65,56 @@
   position: relative;
   font-family: var(--krb-font);
   font-size: var(--krb-fs-body);
-  line-height: 1.62;
+  line-height: 1.66;
   color: var(--krb-text);
   background: var(--krb-bg);
-  border: var(--krb-stroke) solid var(--krb-border);
-  border-radius: var(--krb-r);
+  border-radius: clamp(14px, 1.6vw, 20px);
   box-shadow: var(--krb-shadow);
   overflow: hidden;
   margin: 0 auto;
-  max-width: 1060px;
+  max-width: 1120px;
   text-align: left;
   -webkit-font-smoothing: antialiased;
   font-variant-numeric: tabular-nums;
 }
 
-/* brand accent rule across the top: red into navy */
+/* the single loud gesture: a full-bleed brand rule */
 .krb::before {
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
-  height: 5px;
-  background: linear-gradient(90deg, var(--krb-red) 0%, #b80d3f 52%, var(--krb-navy) 100%);
+  height: 3px;
+  background: var(--krb-red);
   z-index: 2;
 }
 
 @media (prefers-color-scheme: dark) {
   .krb:not([data-krb-theme="light"]) {
-    --krb-bg: #0e1015;
-    --krb-surface: #14171e;
-    --krb-surface-2: #12151b;
-    --krb-tint-red: #26121a;
-    --krb-tint-navy: #14172c;
-    --krb-text: #edeff5;
-    --krb-text-muted: #a8aebc;
-    --krb-text-faint: #949bab;
-    --krb-border: #272c38;
-    --krb-border-soft: #1f232c;
-    --krb-line-red: #fa1432;
-    --krb-line-navy: #7c8cff;      /* navy is invisible on dark -- lift it */
-    --krb-ring-red: rgba(250, 20, 50, .3);
-    --krb-ring-navy: rgba(124, 140, 255, .26);
+    --krb-bg: #0a0b0e;
+    --krb-text: #f2f3f6;
+    --krb-muted: #9199a6;
+    --krb-line: #1d2027;
+    --krb-line-soft: #16181d;
+    --krb-wash: #0e1014;
     --krb-link: #9db0ff;
     --krb-red-ink: #ff4d63;
     --krb-logo-plate: #ffffff;
-    --krb-shadow: 0 1px 2px rgba(0, 0, 0, .55), 0 18px 44px rgba(0, 0, 0, .5);
+    --krb-shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 24px 60px rgba(0, 0, 0, .5);
   }
 }
 [data-theme="dark"] .krb:not([data-krb-theme="light"]),
 .dark .krb:not([data-krb-theme="light"]),
 .krb[data-krb-theme="dark"] {
-  --krb-bg: #0e1015;
-  --krb-surface: #14171e;
-  --krb-surface-2: #12151b;
-  --krb-tint-red: #26121a;
-  --krb-tint-navy: #14172c;
-  --krb-text: #edeff5;
-  --krb-text-muted: #a8aebc;
-  --krb-text-faint: #949bab;
-  --krb-border: #272c38;
-  --krb-border-soft: #1f232c;
-  --krb-line-red: #fa1432;
-  --krb-line-navy: #7c8cff;
-  --krb-ring-red: rgba(250, 20, 50, .3);
-  --krb-ring-navy: rgba(124, 140, 255, .26);
+  --krb-bg: #0a0b0e;
+  --krb-text: #f2f3f6;
+  --krb-muted: #9199a6;
+  --krb-line: #1d2027;
+  --krb-line-soft: #16181d;
+  --krb-wash: #0e1014;
   --krb-link: #9db0ff;
   --krb-red-ink: #ff4d63;
   --krb-logo-plate: #ffffff;
-  --krb-shadow: 0 1px 2px rgba(0, 0, 0, .55), 0 18px 44px rgba(0, 0, 0, .5);
+  --krb-shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 24px 60px rgba(0, 0, 0, .5);
 }
 
 .krb *, .krb *::before, .krb *::after { box-sizing: border-box; }
@@ -156,389 +125,340 @@
 .krb a {
   color: var(--krb-link);
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
   overflow-wrap: anywhere;
 }
 .krb a:hover { text-decoration-thickness: 2px; }
 .krb a:focus-visible, .krb summary:focus-visible {
   outline: 2px solid var(--krb-red);
   outline-offset: 3px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 /* ==========================================================================
-   Header — logo, and the report date in an outlined pill
+   Header
    ========================================================================== */
 .krb__head {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 14px 20px;
-  padding: clamp(20px, 2.8vw, 28px) var(--krb-pad) clamp(16px, 2.2vw, 22px);
+  gap: 14px 28px;
+  padding: clamp(26px, 3.4vw, 44px) var(--krb-pad) 0;
 }
 .krb__logo {
-  width: clamp(126px, 15vw, 164px);
+  width: clamp(116px, 13vw, 150px);
   height: auto;
   background: var(--krb-logo-plate);
-  border-radius: 7px;
+  border-radius: 6px;
   padding: var(--krb-logo-pad, 0);
 }
 [data-theme="dark"] .krb:not([data-krb-theme="light"]) .krb__logo,
 .dark .krb:not([data-krb-theme="light"]) .krb__logo,
-.krb[data-krb-theme="dark"] .krb__logo { --krb-logo-pad: 7px 10px; }
+.krb[data-krb-theme="dark"] .krb__logo { --krb-logo-pad: 6px 9px; }
 @media (prefers-color-scheme: dark) {
-  .krb:not([data-krb-theme="light"]) .krb__logo { --krb-logo-pad: 7px 10px; }
+  .krb:not([data-krb-theme="light"]) .krb__logo { --krb-logo-pad: 6px 9px; }
 }
-.krb__dated {
-  padding: 7px 15px;
-  border: var(--krb-stroke) solid var(--krb-border);
-  border-radius: 999px;
-  font-size: var(--krb-fs-xs);
-  font-weight: 700;
-  letter-spacing: .06em;
+
+.krb__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 18px;
+  font-size: var(--krb-fs-label);
+  font-weight: 600;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--krb-text-muted);
-  white-space: nowrap;
+  color: var(--krb-muted);
+}
+.krb__type { display: inline-flex; align-items: center; gap: 9px; color: var(--krb-red-ink); }
+.krb__type::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--krb-red);
 }
 
 /* ==========================================================================
-   Title — outlined rating chip inline, wording unchanged
+   Headline — the whole hierarchy in one line
    ========================================================================== */
 .krb__title {
-  padding: 0 var(--krb-pad) clamp(18px, 2.4vw, 26px);
-  font-size: var(--krb-fs-title);
-  font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: -.03em;
-  color: var(--krb-red);           /* large text -> 4.03:1 is compliant */
+  padding: clamp(22px, 3vw, 40px) var(--krb-pad) clamp(26px, 3.4vw, 44px);
+  font-size: var(--krb-fs-display);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -.038em;
+  color: var(--krb-text);
   text-wrap: balance;
 }
-.krb__title-rating {
-  display: inline-block;
-  padding: .1em .46em .16em;
-  border: 2.5px solid var(--krb-line-red);
-  border-radius: .34em;
-  box-shadow: 0 0 0 4px var(--krb-ring-red);
-  color: var(--krb-red);
-  white-space: nowrap;
-  letter-spacing: -.01em;
+.krb__title-ticker {
+  font-weight: 500;
+  color: var(--krb-muted);
+  letter-spacing: -.02em;
 }
+.krb__title-rating { color: var(--krb-red); white-space: nowrap; }
 
 /* ==========================================================================
-   Report-type band — outlined, not a filled slab
+   Figures — set as display type, separated by space not boxes
    ========================================================================== */
-.krb__band {
-  display: block;
-  margin: 0 var(--krb-pad) var(--krb-gap);
-  padding: 11px 18px;
-  border: var(--krb-stroke) solid var(--krb-line-navy);
-  border-radius: 999px;
-  background: var(--krb-tint-navy);
-  color: var(--krb-link);
-  font-size: var(--krb-fs-band);
-  font-weight: 800;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  text-align: center;
-}
-
-/* ==========================================================================
-   Price cells — outlined cards, figures as the hero
-   ========================================================================== */
-.krb__prices {
+.krb__stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-  gap: var(--krb-gap);
-  padding: 0 var(--krb-pad);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: clamp(24px, 4vw, 64px);
+  padding: clamp(26px, 3vw, 38px) var(--krb-pad);
+  border-top: 1px solid var(--krb-line);
+  border-bottom: 1px solid var(--krb-line);
+  background: var(--krb-wash);
 }
-.krb__price {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: clamp(18px, 2.4vw, 26px) clamp(18px, 2.4vw, 26px) clamp(18px, 2.4vw, 24px);
-  border: var(--krb-stroke) solid var(--krb-border);
-  border-radius: var(--krb-r-md);
-  background: var(--krb-surface-2);
-  overflow: hidden;
-  transition: border-color .2s ease, box-shadow .2s ease;
-}
-/* a stroked accent on the leading edge rather than a filled header */
-.krb__price::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: var(--krb-line-red);
-}
-.krb__price:hover { border-color: var(--krb-ring-red); box-shadow: 0 0 0 4px var(--krb-ring-red); }
-.krb__price-label {
-  font-size: var(--krb-fs-xs);
-  font-weight: 700;
-  letter-spacing: .1em;
+.krb__stat { display: flex; flex-direction: column; gap: 10px; }
+.krb__stat-label {
+  font-size: var(--krb-fs-label);
+  font-weight: 600;
+  letter-spacing: .13em;
   text-transform: uppercase;
-  color: var(--krb-text-faint);
+  color: var(--krb-muted);
 }
-.krb__price-value {
-  font-size: var(--krb-fs-price);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -.035em;
-  color: var(--krb-red-ink);
+.krb__stat-value {
+  font-size: var(--krb-fs-stat);
+  font-weight: 600;
+  line-height: .98;
+  letter-spacing: -.04em;
+  color: var(--krb-text);
 }
+.krb__cur { font-size: .5em; font-weight: 500; color: var(--krb-muted); margin-right: .12em; letter-spacing: 0; }
 
 /* ==========================================================================
-   Sections — outlined cards, stroked headings, ring bullets
+   Body — editorial label rail
    ========================================================================== */
-.krb__body { padding: var(--krb-gap) var(--krb-pad) var(--krb-pad); display: grid; gap: var(--krb-gap); }
+.krb__body { padding: 0 var(--krb-pad); }
+.krb__sections { display: grid; }
 
 .krb__section {
-  position: relative;
-  padding: clamp(20px, 2.6vw, 30px);
-  border: var(--krb-stroke) solid var(--krb-border);
-  border-radius: var(--krb-r-md);
-  background: var(--krb-surface-2);
-  transition: border-color .2s ease, box-shadow .2s ease;
+  display: grid;
+  grid-template-columns: var(--krb-rail) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 48px);
+  padding: clamp(30px, 4vw, 52px) 0;
+  border-bottom: 1px solid var(--krb-line-soft);
 }
-.krb__section:hover { border-color: var(--krb-ring-red); box-shadow: 0 0 0 4px var(--krb-ring-red); }
-.krb__section[data-tone="positive"]:hover { border-color: var(--krb-ring-navy); box-shadow: 0 0 0 4px var(--krb-ring-navy); }
+.krb__section:last-child { border-bottom: 0; }
 
-.krb__section-title {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 18px;
-  padding: 7px 16px;
-  border: 2px solid var(--krb-line-red);
-  border-radius: 999px;
-  font-size: var(--krb-fs-h3);
-  font-weight: 800;
-  letter-spacing: -.012em;
-  color: var(--krb-red);
+.krb__section-label {
+  font-size: var(--krb-fs-label);
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--krb-red-ink);
+  line-height: 1.5;
+  padding-top: .35em;
 }
-.krb__section[data-tone="positive"] .krb__section-title {
-  border-color: var(--krb-line-navy);
-  color: var(--krb-link);
-}
+.krb__section[data-tone="positive"] .krb__section-label { color: var(--krb-link); }
 
-.krb__list { display: grid; gap: 13px; }
-.krb__list li { display: flex; gap: 14px; align-items: flex-start; }
-/* ring marker -- outline, not a dot */
+.krb__list { display: grid; gap: clamp(14px, 1.8vw, 20px); }
+.krb__list li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 0; }
+/* a fine rule, not a bullet */
 .krb__list li::before {
   content: "";
-  flex: none;
-  width: 9px; height: 9px;
-  margin-top: .58em;
-  border-radius: 50%;
-  border: 2.5px solid var(--krb-line-red);
+  width: 9px;
+  height: 2px;
+  margin-top: .82em;
+  background: var(--krb-red);
 }
-.krb__section[data-tone="positive"] .krb__list li::before { border-color: var(--krb-line-navy); }
-.krb__prose { display: grid; gap: 12px; }
+.krb__section[data-tone="positive"] .krb__list li::before { background: var(--krb-link); }
+.krb__prose { display: grid; gap: 14px; }
 
 .krb__abbr {
-  padding: 15px 18px;
-  border: var(--krb-stroke) dashed var(--krb-border);
-  border-radius: var(--krb-r-sm);
+  padding: clamp(24px, 3vw, 34px) 0;
   font-size: var(--krb-fs-sm);
-  line-height: 1.58;
-  color: var(--krb-text-muted);
+  line-height: 1.6;
+  color: var(--krb-muted);
+  border-top: 1px solid var(--krb-line-soft);
 }
 
 /* ==========================================================================
-   Footer — attribution + holding period
+   Footer
    ========================================================================== */
 .krb__foot {
-  margin: 0 var(--krb-pad) var(--krb-pad);
-  padding: clamp(16px, 2.2vw, 22px);
-  border: var(--krb-stroke) solid var(--krb-ring-red);
-  border-radius: var(--krb-r-md);
-  background: var(--krb-tint-red);
+  padding: clamp(24px, 3vw, 36px) var(--krb-pad);
+  border-top: 1px solid var(--krb-line);
+  background: var(--krb-wash);
   display: grid;
-  gap: 12px;
+  gap: 14px;
   font-size: var(--krb-fs-sm);
-  color: var(--krb-text-muted);
-  line-height: 1.6;
+  color: var(--krb-muted);
+  line-height: 1.62;
 }
 .krb__holding {
-  justify-self: start;
-  padding: 6px 14px;
-  border: var(--krb-stroke) solid var(--krb-line-red);
-  border-radius: 999px;
-  font-weight: 700;
-  color: var(--krb-red-ink);
-  background: var(--krb-bg);
+  color: var(--krb-text);
+  font-weight: 600;
+  letter-spacing: .02em;
 }
 
 /* ==========================================================================
-   Disclosures — outlined rows, mobile-first inside
+   Disclosures
    ========================================================================== */
-.krb__disclosures { border-top: var(--krb-stroke) solid var(--krb-border); }
-.krb__acc { border-bottom: var(--krb-stroke) solid var(--krb-border-soft); }
+.krb__disclosures { border-top: 1px solid var(--krb-line); }
+.krb__acc { border-bottom: 1px solid var(--krb-line-soft); }
 .krb__acc:last-child { border-bottom: 0; }
 .krb__acc > summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 17px var(--krb-pad);
+  gap: 16px;
+  padding: clamp(18px, 2.2vw, 24px) var(--krb-pad);
   min-height: 58px;
   cursor: pointer;
   list-style: none;
-  font-size: var(--krb-fs-sm);
-  font-weight: 800;
-  letter-spacing: .07em;
+  font-size: var(--krb-fs-label);
+  font-weight: 700;
+  letter-spacing: .13em;
   text-transform: uppercase;
-  color: var(--krb-red-ink);
-  background: var(--krb-surface-2);
-  transition: background .18s ease;
+  color: var(--krb-text);
+  transition: color .18s ease;
 }
 .krb__acc > summary::-webkit-details-marker { display: none; }
-.krb__acc > summary:hover { background: var(--krb-surface); }
-/* outlined chevron button: a ring, with a real rotated chevron inside it */
+.krb__acc > summary:hover { color: var(--krb-red-ink); }
+
 .krb__acc-icon {
   flex: none;
   position: relative;
-  width: 30px; height: 30px;
-  border: var(--krb-stroke) solid var(--krb-line-red);
-  border-radius: 50%;
-  transition: transform .22s ease, background .18s ease;
+  width: 20px; height: 20px;
+  transition: transform .24s ease;
+  color: var(--krb-muted);
 }
-.krb__acc-icon::before {
+.krb__acc-icon::before,
+.krb__acc-icon::after {
   content: "";
   position: absolute;
   top: 50%; left: 50%;
-  width: 8px; height: 8px;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: translate(-50%, -70%) rotate(45deg);
+  background: currentColor;
+  transition: opacity .2s ease;
 }
-.krb__acc[open] .krb__acc-icon { transform: rotate(180deg); }
-.krb__acc > summary:hover .krb__acc-icon { background: var(--krb-ring-red); }
+.krb__acc-icon::before { width: 13px; height: 1.5px; transform: translate(-50%, -50%); }
+.krb__acc-icon::after  { width: 1.5px; height: 13px; transform: translate(-50%, -50%); }
+.krb__acc[open] .krb__acc-icon { transform: rotate(90deg); color: var(--krb-red-ink); }
+.krb__acc[open] .krb__acc-icon::after { opacity: 0; }
+.krb__acc > summary:hover .krb__acc-icon { color: var(--krb-red-ink); }
 
 .krb__acc-body {
-  padding: 6px var(--krb-pad) var(--krb-pad);
-  background: var(--krb-surface-2);
+  padding: 0 var(--krb-pad) clamp(28px, 3.4vw, 44px);
   font-size: var(--krb-fs-sm);
-  color: var(--krb-text-muted);
+  color: var(--krb-muted);
   display: grid;
-  gap: 12px;
-  /* dense legal prose with bare URLs -- these three lines keep it readable
-     and inside the viewport on a phone */
-  line-height: 1.68;
+  gap: 14px;
+  /* dense legal prose with bare URLs -- these keep it readable and inside the
+     viewport on a phone */
+  line-height: 1.72;
   overflow-wrap: anywhere;
   hyphens: auto;
 }
-.krb__acc-lead { font-weight: 800; color: var(--krb-text); letter-spacing: .01em; }
+.krb__acc-lead {
+  font-size: var(--krb-fs-label);
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--krb-text);
+  padding-bottom: 4px;
+}
 
 /* rating scale */
-.krb__scale { display: grid; gap: 0; }
+.krb__scale { display: grid; }
 .krb__scale div {
   display: grid;
-  grid-template-columns: minmax(78px, max-content) 1fr;
-  gap: 4px 18px;
+  grid-template-columns: var(--krb-rail) minmax(0, 1fr);
+  gap: 6px clamp(16px, 2.4vw, 40px);
   align-items: start;
-  padding: 12px 0;
-  border-bottom: var(--krb-stroke) solid var(--krb-border-soft);
+  padding: 16px 0;
+  border-bottom: 1px solid var(--krb-line-soft);
 }
 .krb__scale div:last-child { border-bottom: 0; }
 .krb__scale dt {
-  font-weight: 800;
+  font-weight: 700;
   color: var(--krb-text);
-  letter-spacing: .05em;
+  letter-spacing: .08em;
+  font-size: var(--krb-fs-label);
+  text-transform: uppercase;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
+  padding-top: .2em;
 }
-.krb__scale dd { color: var(--krb-text-muted); }
-.krb__scale div[data-current="true"] {
-  padding: 14px 16px;
-  margin: 4px -2px;
-  border: var(--krb-stroke) solid var(--krb-line-red);
-  border-radius: var(--krb-r-sm);
-  background: var(--krb-tint-red);
-}
+.krb__scale dd { color: var(--krb-muted); }
 .krb__scale div[data-current="true"] dt { color: var(--krb-red-ink); }
+.krb__scale div[data-current="true"] dd { color: var(--krb-text); }
 .krb__scale-flag {
-  padding: 3px 10px;
-  border: var(--krb-stroke) solid var(--krb-line-red);
-  border-radius: 999px;
-  color: var(--krb-red-ink);
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: .09em;
-  text-transform: uppercase;
+  padding: 3px 8px;
+  /* white on #fa1432 is 4.03:1 -- below the 4.5:1 bar at this size. #e00f2b is
+     4.92:1, and contrast with white is background-independent, so one value
+     works in both themes. */
+  background: #e00f2b;
+  color: #fff;
+  border-radius: 3px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
   white-space: nowrap;
 }
 
 /* research team */
-.krb__team { display: grid; gap: 24px; }
+.krb__team { display: grid; gap: clamp(26px, 3vw, 38px); }
 .krb__team-group > h4 {
-  display: inline-block;
-  padding: 6px 14px;
-  margin-bottom: 14px;
-  border: var(--krb-stroke) solid var(--krb-line-red);
-  border-radius: 999px;
-  font-size: var(--krb-fs-xs);
-  font-weight: 800;
-  letter-spacing: .09em;
+  font-size: var(--krb-fs-label);
+  font-weight: 700;
+  letter-spacing: .13em;
   text-transform: uppercase;
   color: var(--krb-red-ink);
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--krb-line);
 }
 .krb__team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: clamp(16px, 2.4vw, 30px);
 }
-.krb__person {
-  display: grid;
-  gap: 3px;
-  padding: 14px 16px;
-  border: var(--krb-stroke) solid var(--krb-border);
-  border-radius: var(--krb-r-sm);
-  background: var(--krb-surface);
-  transition: border-color .18s ease;
-}
-.krb__person:hover { border-color: var(--krb-line-red); }
-.krb__person strong { color: var(--krb-text); font-weight: 700; }
-.krb__person span { color: var(--krb-text-muted); }
+.krb__person { display: grid; gap: 3px; }
+.krb__person strong { color: var(--krb-text); font-weight: 600; }
+.krb__person span { color: var(--krb-muted); }
 .krb__person a {
   display: inline-block;
-  padding-block: 3px;           /* lifts the hit area to >=24px (WCAG 2.2 SC 2.5.8) */
+  padding-block: 3px;          /* lifts the hit area to >=24px (WCAG 2.2 SC 2.5.8) */
+  text-decoration: none;
+  color: var(--krb-muted);
 }
+.krb__person a:hover { color: var(--krb-link); text-decoration: underline; }
 
 .krb__risk {
-  padding: 15px 17px;
-  border: 2px solid var(--krb-line-red);
-  border-radius: var(--krb-r-sm);
-  background: var(--krb-tint-red);
+  padding: 18px 0 18px 18px;
+  border-left: 2px solid var(--krb-red);
   color: var(--krb-text);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* ==========================================================================
    Container queries — the block measures itself
    ========================================================================== */
-@container krb (max-width: 560px) {
-  .krb { --krb-r: 18px; }
-  .krb__band { letter-spacing: .1em; }
-  .krb__section-title { font-size: 1rem; padding: 6px 14px; }
+@container krb (max-width: 720px) {
+  /* the label rail becomes a stacked heading */
+  .krb__section { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .krb__section-label { padding-top: 0; }
+  .krb__scale div { grid-template-columns: minmax(0, 1fr); gap: 8px; }
 }
-@container krb (max-width: 430px) {
-  .krb__scale div { grid-template-columns: 1fr; gap: 6px; }
-  .krb__person { padding: 12px 13px; }
-  .krb__dated { padding: 6px 12px; }
+@container krb (max-width: 440px) {
+  .krb__meta { gap: 4px 12px; letter-spacing: .1em; }
+  .krb__list li { grid-template-columns: 15px minmax(0, 1fr); }
 }
 
 @supports not (container-type: inline-size) {
-  @media (max-width: 620px) {
-    .krb { --krb-r: 18px; }
-    .krb__band { letter-spacing: .1em; }
-    .krb__section-title { font-size: 1rem; padding: 6px 14px; }
+  @media (max-width: 800px) {
+    .krb__section { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .krb__section-label { padding-top: 0; }
+    .krb__scale div { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   }
-  @media (max-width: 480px) {
-    .krb__scale div { grid-template-columns: 1fr; gap: 6px; }
-    .krb__person { padding: 12px 13px; }
+  @media (max-width: 500px) {
+    .krb__meta { gap: 4px 12px; letter-spacing: .1em; }
+    .krb__list li { grid-template-columns: 15px minmax(0, 1fr); }
   }
 }
 
@@ -551,14 +471,13 @@
 
 @media print {
   .krb {
-    --krb-bg: #fff; --krb-surface: #fff; --krb-surface-2: #fff;
-    --krb-text: #000; --krb-text-muted: #333; --krb-text-faint: #444;
-    --krb-tint-red: #fff; --krb-tint-navy: #fff; --krb-logo-plate: transparent;
+    --krb-bg: #fff; --krb-wash: #fff; --krb-text: #000; --krb-muted: #333;
+    --krb-logo-plate: transparent;
     box-shadow: none; max-width: none;
   }
-  .krb__acc > summary::after { display: none; }
+  .krb__acc-icon { display: none; }
   .krb__acc-body { display: block !important; }
-  .krb__section, .krb__acc, .krb__price { break-inside: avoid; }
+  .krb__section, .krb__acc { break-inside: avoid; }
   .krb a { color: #000; text-decoration: none; }
 }
 
@@ -567,66 +486,75 @@
    ========================================================================== */
 .krb-page {
   margin: 0;
-  padding: clamp(14px, 4vw, 52px) clamp(10px, 4vw, 40px);
-  background: #eef0f6;
+  padding: clamp(12px, 4vw, 56px) clamp(8px, 3vw, 40px);
+  background: #f4f5f8;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
-  .krb-page:not([data-krb-theme="light"]) { background: #08090c; }
+  .krb-page:not([data-krb-theme="light"]) { background: #06070a; }
 }
-[data-theme="dark"] .krb-page, .krb-page[data-krb-theme="dark"] { background: #08090c; }
+[data-theme="dark"] .krb-page, .krb-page[data-krb-theme="dark"] { background: #06070a; }
 
       </style>
       <article class="krb" data-krb-rating="ADD" itemscope itemtype="https://schema.org/Report">
         <header class="krb__head">
           <img class="krb__logo" src="data:image/png;base64,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" alt="Kotak Neo" width="360" height="80">
-          <p class="krb__dated">Dated: <time datetime="2026-05-21" itemprop="datePublished">21 May 2026</time></p>
+          <p class="krb__meta">
+            <span class="krb__type">Result Update · Q4FY26</span>
+            <span class="krb__dated">Dated: <time datetime="2026-05-21" itemprop="datePublished">21 May 2026</time></span>
+          </p>
         </header>
 
-        <h2 class="krb__title" itemprop="headline">Lenskart Solutions (LENSKART) - <span class="krb__title-rating">ADD</span></h2>
+        <h2 class="krb__title" itemprop="headline">Lenskart Solutions <span class="krb__title-ticker">(LENSKART)</span> - <span class="krb__title-rating">ADD</span></h2>
 
-        <p class="krb__band">Result Update</p>
-
-        <div class="krb__prices">
-          <div class="krb__price">
-            <span class="krb__price-label">Current Market Price (CMP)</span>
-            <span class="krb__price-value">Rs.487</span>
+        <div class="krb__stats">
+          <div class="krb__stat">
+            <span class="krb__stat-label">Current Market Price (CMP)</span>
+            <span class="krb__stat-value"><span class="krb__cur">Rs.</span>487</span>
           </div>
-          <div class="krb__price">
-            <span class="krb__price-label">Fair Value (FV)</span>
-            <span class="krb__price-value">Rs.560</span>
+          <div class="krb__stat">
+            <span class="krb__stat-label">Fair Value (FV)</span>
+            <span class="krb__stat-value"><span class="krb__cur">Rs.</span>560</span>
           </div>
         </div>
 
         <div class="krb__body">
-          <section class="krb__section" data-tone="neutral" aria-labelledby="krb-rationale">
-            <h3 class="krb__section-title" id="krb-rationale">Rationale:</h3>
-            <ul class="krb__list">
-              <li>Lenskart posted strong revenue growth of 41% yoy, driven by 44% yoy growth in the India business and 35% yoy growth in the international business.</li>
-              <li>India’s gross margin was flat yoy and EBITDA margin expanded 622 bps yoy, sharply ahead of estimates.</li>
-              <li>International gross margin/EBITDA margin increased 144/111 bps yoy and also beat estimates.</li>
-              <li>We upgrade FY27-28 EBITDA estimates by 5-6% as we bake in higher revenue growth and margin expansion.</li>
-              <li>This, coupled with the roll-forward, drives a revised DCF-based FV of Rs560 (Rs525 previously). Retain ADD.</li>
-            </ul>
-          </section>
-          <section class="krb__section" data-tone="positive" aria-labelledby="krb-positives">
-            <h3 class="krb__section-title" id="krb-positives">Positives:</h3>
-            <ul class="krb__list">
-              <li>Strong growth driven primarily by higher volumes in both India &amp; international.</li>
-              <li>Healthy margin improvement in both India and International businesses.</li>
-              <li>Net addition of 604 stores in FY26; long-term margin ambition of ~25%.</li>
-              <li>Balance sheet healthy with FCF generation.</li>
-              <li>We model revenue growth of 22%/21% for India and international businesses, respectively, over FY26-29.</li>
-              <li>We model revenue CAGR of 23% and a PAT CAGR of 48% over FY26-29.</li>
-            </ul>
-          </section>
-          <section class="krb__section" data-tone="negative" aria-labelledby="krb-negatives">
-            <h3 class="krb__section-title" id="krb-negatives">Negatives:</h3>
-            <ul class="krb__list">
-              <li>Raw material costs. The broader geopolitical environment has put pressure on cross-currency rates. This has flowed through to the cost of imports.</li>
-            </ul>
-          </section>
+          <div class="krb__sections">
+            <section class="krb__section" data-tone="neutral" aria-labelledby="krb-rationale">
+              <h3 class="krb__section-label" id="krb-rationale">Rationale:</h3>
+              <div class="krb__section-content">
+                <ul class="krb__list">
+                <li>Lenskart posted strong revenue growth of 41% yoy, driven by 44% yoy growth in the India business and 35% yoy growth in the international business.</li>
+                <li>India’s gross margin was flat yoy and EBITDA margin expanded 622 bps yoy, sharply ahead of estimates.</li>
+                <li>International gross margin/EBITDA margin increased 144/111 bps yoy and also beat estimates.</li>
+                <li>We upgrade FY27-28 EBITDA estimates by 5-6% as we bake in higher revenue growth and margin expansion.</li>
+                <li>This, coupled with the roll-forward, drives a revised DCF-based FV of Rs560 (Rs525 previously). Retain ADD.</li>
+                </ul>
+              </div>
+            </section>
+            <section class="krb__section" data-tone="positive" aria-labelledby="krb-positives">
+              <h3 class="krb__section-label" id="krb-positives">Positives:</h3>
+              <div class="krb__section-content">
+                <ul class="krb__list">
+                <li>Strong growth driven primarily by higher volumes in both India &amp; international.</li>
+                <li>Healthy margin improvement in both India and International businesses.</li>
+                <li>Net addition of 604 stores in FY26; long-term margin ambition of ~25%.</li>
+                <li>Balance sheet healthy with FCF generation.</li>
+                <li>We model revenue growth of 22%/21% for India and international businesses, respectively, over FY26-29.</li>
+                <li>We model revenue CAGR of 23% and a PAT CAGR of 48% over FY26-29.</li>
+                </ul>
+              </div>
+            </section>
+            <section class="krb__section" data-tone="negative" aria-labelledby="krb-negatives">
+              <h3 class="krb__section-label" id="krb-negatives">Negatives:</h3>
+              <div class="krb__section-content">
+                <ul class="krb__list">
+                <li>Raw material costs. The broader geopolitical environment has put pressure on cross-currency rates. This has flowed through to the cost of imports.</li>
+                </ul>
+              </div>
+            </section>
+          </div>
           <p class="krb__abbr">(EBITDA - Earnings Before Interest, Taxes, Depreciation, and Amortization, EPS- Earning Per Share, CAGR - Compound Annual Growth Rate, FCF – Free Cash Flow)</p>
         </div>
 
