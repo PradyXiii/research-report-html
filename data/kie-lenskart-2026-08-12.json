@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "1.0",
+  "format": "kie-full-report",
+  "reportId": "134493_1",
+  "publishedAt": "2026-08-12",
+  "stock": {
+    "name": "Lenskart Solutions",
+    "ticker": "LENSKART",
+    "sector": "Retailing"
+  },
+  "report": {
+    "type": "Result",
+    "template": "KIE Full Report"
+  },
+  "recommendation": {
+    "rating": "ADD",
+    "cmp": 586,
+    "fairValue": 615,
+    "currency": "INR",
+    "sectorView": "Cautious",
+    "benchmark": {
+      "name": "NIFTY-50",
+      "value": "24,436"
+    }
+  },
+  "restricted": "This report is not intended for circulation to retail clients.",
+  "headline": "International segment drives earnings outperformance",
+  "analysts": [
+    "Garima Mishra",
+    "Ishani Swain"
+  ],
+  "summary": "Lenskart posted strong revenue growth of 34% yoy, driven by 31% yoy growth in the India business and 38% yoy growth in the international business. India gross margin was up 74 bps yoy and EBITDA margin expanded 197 bps yoy. International gross margin/EBITDA margin increased 111/506 bps yoy. The company exceeded our pre-Ind AS EBITDA estimate by 9.2% and EPS estimate by 14%. We upgrade our FY2027-29 EPS estimates by 9-15%, as we bake in higher revenue growth and margin expansion for both segments. This drives a revised DCF-based FV of Rs615 (Rs560 earlier). Retain ADD.",
+  "sections": [
+    {
+      "id": "revenue",
+      "title": "Strong 34% yoy revenue growth, driven by India and international segments",
+      "paragraphs": [
+        "Lenskart’s revenue grew 34% yoy, with both the India and international businesses reporting strong growth. Segmentally, (1) India business revenue increased 31% yoy, led by a 23% yoy rise in eyewear units sold and remainder by an ASP increase, also demonstrated by healthy SSSG of 18% and (2) international business revenue rose 38% yoy, led by a 34% yoy rise in eyewear units sold. According to Lenskart, it will continue to focus on network expansion and improved merchandising to structurally drive future growth."
+      ]
+    },
+    {
+      "id": "margin",
+      "title": "Higher GM and operating leverage drive 374 bps yoy EBITDA margin expansion",
+      "paragraphs": [
+        "Lenskart reported overall gross margin of 70.3% in 1QFY27 (versus 68.7% in 1QFY26). The company managed to offset the currency headwind by increasing reliance on in-house manufacturing. Pre-Ind AS EBITDA margin was at 13.3%, registering a strong expansion of 374 bps yoy. Segmentally, (1) India business EBITDA margin expanded 197 bps yoy and pre-Ind AS EBITDA margin expanded 208 bps yoy and (2) international EBITDA margin increased 506 bps yoy and pre-Ind AS EBITDA margin expanded 620 bps yoy. EBITDA margin expansion was driven by gross margin expansion and operating leverage from marketing and other fixed expenses."
+      ]
+    },
+    {
+      "id": "stores",
+      "title": "Healthy store expansion, large opportunity ahead",
+      "paragraphs": [
+        "Other highlights include (1) India store count increasing to 2,725 from 2,609 stores in 4QFY26 and 2,137 stores in 1QFY26. Of its 2,725 stores, 1,067 stores were in metro cities and (2) international store count rising to 734 from 718 stores in 4QFY26 and 669 stores in 1QFY26. Stores were added across Japan, Southeast Asia and the Middle East. Lenskart is witnessing strong revenue ramp-up and SSSG in metro and non-metro stores in India. The company believes there is clear potential to add 10k+ stores in India across existing and new cities."
+      ]
+    },
+    {
+      "id": "retain",
+      "title": "Retain ADD with a revised FV of Rs615",
+      "paragraphs": [
+        "Lenskart is on a strong revenue growth trajectory, which is driving operating leverage. We account for stronger-than-expected 1Q performance, particularly in the international segment. We upgrade our FY2027-29 revenue estimates by ~3% and EPS estimates by 9-15%. This, coupled with a roll forward to September 2027, drives a revised DCF-based FV of Rs615. Retain ADD."
+      ]
+    }
+  ],
+  "panels": [
+    {
+      "title": "Stock data",
+      "rows": [
+        [
+          "CMP(Rs)/FV(Rs)/Rating",
+          "586/615/ADD"
+        ],
+        [
+          "52-week range (Rs) (high-low)",
+          "596-356"
+        ],
+        [
+          "Mcap (bn) (Rs/US$)",
+          "1,020/10.7"
+        ],
+        [
+          "ADTV-3M (mn) (Rs/US$)",
+          "3,720/39.0"
+        ]
+      ]
+    },
+    {
+      "title": "Shareholding pattern (%)",
+      "rows": [
+        [
+          "Promoters",
+          "50.9"
+        ],
+        [
+          "FPIs",
+          "17.6"
+        ],
+        [
+          "MFs",
+          "14.7"
+        ],
+        [
+          "BFIs",
+          "6.4"
+        ],
+        [
+          "Retail",
+          "1.3"
+        ],
+        [
+          "Others",
+          "9.1"
+        ]
+      ]
+    },
+    {
+      "title": "Price performance (%)",
+      "columns": [
+        "1M",
+        "3M",
+        "12M"
+      ],
+      "rows": [
+        [
+          "Absolute",
+          "8",
+          "23",
+          "0"
+        ],
+        [
+          "Rel. to Nifty",
+          "7",
+          "19",
+          "0"
+        ],
+        [
+          "Rel. to MSCI India",
+          "7",
+          "18",
+          "0"
+        ]
+      ]
+    },
+    {
+      "title": "Forecasts/Valuations",
+      "columns": [
+        "2026",
+        "2027E",
+        "2028E"
+      ],
+      "rows": [
+        [
+          "EPS (Rs)",
+          "3.0",
+          "5.5",
+          "7.4"
+        ],
+        [
+          "EPS growth (%)",
+          "65.7",
+          "85.9",
+          "33.4"
+        ],
+        [
+          "P/E (X)",
+          "196.8",
+          "105.9",
+          "79.3"
+        ],
+        [
+          "P/B (X)",
+          "11.6",
+          "10.5",
+          "9.3"
+        ],
+        [
+          "EV/EBITDA (X)",
+          "55.7",
+          "39.4",
+          "30.6"
+        ],
+        [
+          "RoE (%)",
+          "7.0",
+          "10.4",
+          "12.4"
+        ],
+        [
+          "Div. yield (%)",
+          "0.0",
+          "0.0",
+          "0.0"
+        ],
+        [
+          "Sales (Rs bn)",
+          "88",
+          "116",
+          "141"
+        ],
+        [
+          "EBITDA (Rs bn)",
+          "18",
+          "25",
+          "32"
+        ],
+        [
+          "Net profits (Rs bn)",
+          "5.2",
+          "9.6",
+          "13"
+        ]
+      ]
+    }
+  ],
+  "source": "Source: Bloomberg, Company data, Kotak Institutional Equities estimates",
+  "priceNote": "Prices in this report are based on the market close of August 12, 2026"
+}

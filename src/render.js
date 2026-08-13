@@ -132,25 +132,20 @@ function computeUpside(cmp, fairValue) {
 
 /* -------------------------------------------------------------------- logo */
 
-let LOGO_CACHE = null;
-
 /**
- * The Kotak Neo logo, lifted from page 1 of the source PDF and committed at
- * assets/kotak-neo-logo.png. Inlined as a data URI by default so the fragment
- * stays self-contained wherever Strapi injects it -- pass options.logoUrl to
- * reference a hosted copy instead.
+ * Typographic placeholder for the brand lockup. Set in CSS rather than shipped
+ * as an image, so it stays crisp at any size and recolours per template.
+ * Swap for the real asset when the brand file arrives: pass options.logoUrl.
  */
-function logoSrc(options) {
-  if (options && options.logoUrl) return escUrl(options.logoUrl);
-  if (LOGO_CACHE === null) {
-    try {
-      const file = path.join(__dirname, '..', 'assets', 'kotak-neo-logo.png');
-      LOGO_CACHE = 'data:image/png;base64,' + fs.readFileSync(file).toString('base64');
-    } catch (err) {
-      LOGO_CACHE = '';
-    }
-  }
-  return LOGO_CACHE;
+function renderWordmark(options, variant) {
+  const url = options && options.logoUrl ? escUrl(options.logoUrl) : '';
+  if (url) return `<img class="krb__logo" src="${url}" alt="Kotak Neo" width="360" height="80">`;
+  const pcg = variant === 'pcg'
+    ? '<span class="krb__wm-rule"></span><span class="krb__wm-pcg">Private<br>Client<br>Group</span>'
+    : '';
+  return `<span class="krb__wordmark" role="img" aria-label="Kotak Neo${variant === 'pcg' ? ' Private Client Group' : ''}">` +
+         `<span class="krb__wm-mark" aria-hidden="true"></span>` +
+         `<span class="krb__wm-name">kotak <b>neo</b></span>${pcg}</span>`;
 }
 
 /* ---------------------------------------------------------------- partials */
@@ -216,11 +211,9 @@ function renderHero(data, options) {
     { text: PAGE1.dated + ' ' + formatDate(data.publishedAt) }
   ].filter((c) => c.text);
 
-  const logo = logoSrc(options);
-
   return `        <header class="krb__hero">
           <div class="krb__hero-inner">
-${logo ? `            <img class="krb__logo" src="${logo}" alt="Kotak Neo" width="360" height="80">` : ''}
+            ${renderWordmark(options, 'neo')}
             <div class="krb__chips">
 ${chips.map((c) => `              <span class="krb__chip${c.lead ? ' krb__chip--lead' : ''}">${esc(c.text)}</span>`).join('\n')}
             </div>
@@ -263,7 +256,8 @@ function renderPrices(data) {
 }
 
 function renderRatingScale(data) {
-  const current = data ? String(data.recommendation.rating).toUpperCase() : null;
+  // A multi-stock table has no single rating, so nothing is marked current.
+  const current = data && data.recommendation ? String(data.recommendation.rating).toUpperCase() : null;
   const rows = boilerplate.ratingScale.map((r) => {
     const isCurrent = r.code === current;
     return `            <div${isCurrent ? ' data-current="true"' : ''}>` +
@@ -319,8 +313,174 @@ function renderJsonLd(data) {
 
 /* ------------------------------------------------------------------ block */
 
+/* ================================================================= variants */
+
+function shell(inner, data, opts, extraClass) {
+  const themeAttr = opts.theme ? ` data-krb-theme="${esc(opts.theme)}"` : '';
+  const css = opts.inlineCss
+    ? `      <style>\n${fs.readFileSync(path.join(__dirname, 'krb.css'), 'utf8')}\n      </style>\n`
+    : '';
+  const rating = data.recommendation ? esc(String(data.recommendation.rating).toUpperCase()) : '';
+  return `${css}      <article class="krb${extraClass ? ' ' + extraClass : ''}"${themeAttr}${rating ? ` data-krb-rating="${rating}"` : ''} itemscope itemtype="https://schema.org/Report">
+${inner}
+${opts.jsonLd === false || !data.stock ? '' : renderJsonLd(data)}
+      </article>`;
+}
+
+function disclosures(data) {
+  return `        <div class="krb__disclosures">
+          <details class="krb__acc">
+            <summary>Rating Scale (Private Client Group)</summary>
+            <div class="krb__acc-body"><p class="krb__acc-lead">Definitions of ratings</p>
+${renderRatingScale(data)}</div>
+          </details>
+          <details class="krb__acc">
+            <summary>Research Team (Private Client Group)</summary>
+            <div class="krb__acc-body">${renderTeams()}</div>
+          </details>
+          <details class="krb__acc">
+            <summary>Disclosure / Disclaimer</summary>
+            <div class="krb__acc-body">${renderDisclosures()}</div>
+          </details>
+        </div>`;
+}
+
+/* ---- Pick of the Week ---------------------------------------------------- */
+function renderPickOfWeek(data, opts) {
+  const rec = data.recommendation;
+  const rating = String(rec.rating).toUpperCase();
+  const band = boilerplate.ratingScale.find((r) => r.code === rating);
+  const cur = rec.currency === 'INR' || !rec.currency ? '\u20b9' : rec.currency + ' ';
+  const asOn = rec.cmpAsOn ? ` as on ${formatDate(rec.cmpAsOn)}` : '';
+  const inner = `        <header class="krb__hero krb__hero--potw">
+          <div class="krb__hero-inner">
+            ${renderWordmark(opts, 'neo')}
+            <div class="krb__chips"><span class="krb__chip krb__chip--lead">${esc(data.report.type)}</span></div>
+            <div class="krb__headrow">
+              <div class="krb__identity">
+                <h2 class="krb__title" itemprop="headline"><span class="krb__potw-rating">${esc(rating)}</span> &ndash; ${esc(data.stock.name)} (${esc(data.stock.ticker)})</h2>
+${rec.timePeriod ? `                <span class="krb__holding">Time Period: ${esc(rec.timePeriod)}</span>` : ''}
+              </div>
+              <div class="krb__verdict">
+                <span class="krb__verdict-label">Rating</span>
+                <span class="krb__verdict-value">${esc(rating)}</span>
+${band ? `                <span class="krb__verdict-note">${esc(band.text)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="krb__kpis">
+          <div class="krb__kpi"><span class="krb__kpi-label">CMP</span><span class="krb__kpi-value"><sup>${esc(cur)}</sup>${esc(formatNumber(rec.cmp))}</span>${asOn ? `<span class="krb__kpi-note">${esc(asOn.trim())}</span>` : ''}</div>
+          <div class="krb__kpi krb__kpi--hero"><span class="krb__kpi-label">Fair Value (FV)</span><span class="krb__kpi-value"><sup>${esc(cur)}</sup>${esc(formatNumber(rec.fairValue))}</span></div>
+        </div>
+
+        <div class="krb__body">
+${data.sections.map(renderSection).join('\n')}
+${data.abbreviations ? `          <p class="krb__note">${esc(data.abbreviations)}</p>` : ''}
+${rec.closing ? `          <p class="krb__closing">${esc(rec.closing)}</p>` : ''}
+        </div>
+${data.attribution ? `        <p class="krb__attribution">${linkify(esc(data.attribution))}</p>` : ''}
+${rec.holdingPeriod ? `        <p class="krb__foot-holding">Holding Period: ${esc(rec.holdingPeriod)}</p>` : ''}
+${disclosures(data)}`;
+  return shell(inner, data, opts, 'krb--potw');
+}
+
+/* ---- Stock Recommendations table ---------------------------------------- */
+function renderStockRecos(data, opts) {
+  const cols = data.columns || [];
+  const head = `              <tr><th scope="col" class="krb__t-name">Name of the Company</th><th scope="col">Reco</th>${cols.map((c) => `<th scope="col">${esc(c)}</th>`).join('')}</tr>`;
+  const body = (data.sectors || []).map((sec) => {
+    const rows = sec.rows.map((r) => {
+      const cells = (r.cells || []).map((c) => `<td>${esc(c)}</td>`).join('');
+      return `              <tr><th scope="row" class="krb__t-name">${esc(r.name)}</th><td><span class="krb__t-reco" data-reco="${esc(r.reco)}">${esc(r.reco)}</span></td>${cells}</tr>`;
+    }).join('\n');
+    return `              <tr class="krb__t-sector"><th scope="rowgroup" colspan="${cols.length + 2}">${esc(sec.name)}</th></tr>\n${rows}`;
+  }).join('\n');
+  const count = (data.sectors || []).reduce((n, s) => n + s.rows.length, 0);
+
+  const inner = `        <header class="krb__hero krb__hero--table">
+          <div class="krb__hero-inner">
+            ${renderWordmark(opts, 'pcg')}
+            <div class="krb__chips"><span class="krb__chip krb__chip--lead">${esc(data.report.type)}</span><span class="krb__chip">${esc(formatDate(data.publishedAt))}</span></div>
+            <h2 class="krb__title" itemprop="headline">${esc(data.report.type)}</h2>
+            <span class="krb__holding">${count} stocks &middot; ${(data.sectors || []).length} sectors</span>
+          </div>
+        </header>
+        <div class="krb__tablewrap" tabindex="0" role="region" aria-label="Stock recommendations table">
+          <table class="krb__table">
+            <thead>
+${head}
+            </thead>
+            <tbody>
+${body}
+            </tbody>
+          </table>
+        </div>
+${data.footnote ? `        <p class="krb__note krb__note--table">${esc(data.footnote)}</p>` : ''}
+${disclosures(data)}`;
+  return shell(inner, data, opts, 'krb--table');
+}
+
+/* ---- KIE full research report -------------------------------------------- */
+function renderKie(data, opts) {
+  const rec = data.recommendation;
+  const rating = String(rec.rating).toUpperCase();
+  const cur = '\u20b9';
+  const panel = (p) => {
+    const cols = p.columns ? `<tr><td></td>${p.columns.map((c) => `<th scope="col">${esc(c)}</th>`).join('')}</tr>` : '';
+    const rows = p.rows.map((r) => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map((v) => `<td>${esc(v)}</td>`).join('')}</tr>`).join('');
+    return `            <section class="krb__panel"><h4>${esc(p.title)}</h4><table>${cols}${rows}</table></section>`;
+  };
+  const inner = `        <header class="krb__hero krb__hero--kie">
+          <div class="krb__hero-inner">
+            ${renderWordmark(opts, 'neo')}
+            <div class="krb__headrow">
+              <div class="krb__identity">
+                <h2 class="krb__title" itemprop="headline">${esc(data.stock.name)} <span class="krb__kie-tic">(${esc(data.stock.ticker)})</span></h2>
+${data.stock.sector ? `                <span class="krb__holding">${esc(data.stock.sector)}</span>` : ''}
+              </div>
+              <div class="krb__verdict"><span class="krb__verdict-label">Rating</span><span class="krb__verdict-value">${esc(rating)}</span></div>
+            </div>
+            <dl class="krb__kie-meta">
+              <div><dt>CMP (${cur})</dt><dd>${esc(formatNumber(rec.cmp))}</dd></div>
+              <div><dt>Fair Value (${cur})</dt><dd>${esc(formatNumber(rec.fairValue))}</dd></div>
+${rec.sectorView ? `              <div><dt>Sector View</dt><dd>${esc(rec.sectorView)}</dd></div>` : ''}
+${rec.benchmark ? `              <div><dt>${esc(rec.benchmark.name)}</dt><dd>${esc(rec.benchmark.value)}</dd></div>` : ''}
+              <div><dt>Dated</dt><dd>${esc(formatDate(data.publishedAt))}</dd></div>
+            </dl>
+          </div>
+        </header>
+${data.restricted ? `        <p class="krb__restricted"><strong>Circulation restriction.</strong> ${esc(data.restricted)}</p>` : ''}
+        <div class="krb__kie-grid">
+          <div class="krb__kie-main">
+            <h3 class="krb__kie-headline">${esc(data.headline)}</h3>
+            <p class="krb__kie-summary">${esc(data.summary)}</p>
+${(data.sections || []).map((sec) => `            <section class="krb__kie-sec"><h4>${esc(sec.title)}</h4>${(sec.paragraphs || []).map((t) => `<p>${esc(t)}</p>`).join('')}</section>`).join('\n')}
+${data.analysts && data.analysts.length ? `            <p class="krb__kie-by">${esc(data.analysts.join(' \u00b7 '))}</p>` : ''}
+          </div>
+          <aside class="krb__kie-side">
+${(data.panels || []).map(panel).join('\n')}
+${data.source ? `            <p class="krb__kie-src">${esc(data.source)}</p>` : ''}
+${data.priceNote ? `            <p class="krb__kie-src">${esc(data.priceNote)}</p>` : ''}
+          </aside>
+        </div>
+${disclosures(data)}`;
+  return shell(inner, data, opts, 'krb--kie');
+}
+
+const VARIANTS = {
+  'pick-of-the-week': renderPickOfWeek,
+  'stock-recommendations': renderStockRecos,
+  'kie-full-report': renderKie
+};
+
 function renderBlock(data, options) {
   const opts = options || {};
+  // Format decides the template. An unknown format must never be rendered with
+  // whatever template happens to be first.
+  const variant = VARIANTS[data && data.format];
+  if (variant) return variant(data, opts);
   validate(data);
 
   const rating = String(data.recommendation.rating).toUpperCase();
@@ -380,9 +540,17 @@ ${opts.jsonLd === false ? '' : renderJsonLd(data)}
 
 function renderStandalone(data, options) {
   const opts = options || {};
+  // A multi-stock table has no single company or rating, so build the page
+  // title from whatever the format actually carries.
   const rec = data.recommendation;
-  const title = `${data.stock.name} (${data.stock.ticker}) - ${String(rec.rating).toUpperCase()} | ${data.report.type}`;
-  const desc = `Kotak Securities PCG ${data.report.type} on ${data.stock.name}. Rating ${String(rec.rating).toUpperCase()}, CMP Rs.${formatNumber(rec.cmp)}${rec.fairValue ? `, Fair Value Rs.${formatNumber(rec.fairValue)}` : ''}.`;
+  const stock = data.stock;
+  const rating = rec ? String(rec.rating).toUpperCase() : '';
+  const title = stock
+    ? `${stock.name} (${stock.ticker})${rating ? ' - ' + rating : ''} | ${data.report.type}`
+    : `${data.report.type} | Kotak Securities`;
+  const desc = stock
+    ? `Kotak Securities ${data.report.type} on ${stock.name}.${rating ? ' Rating ' + rating + ',' : ''} CMP ${formatNumber(rec.cmp)}${rec.fairValue ? `, Fair Value ${formatNumber(rec.fairValue)}` : ''}.`
+    : `Kotak Securities ${data.report.type}, ${formatDate(data.publishedAt)}.`;
   const block = renderBlock(data, Object.assign({}, opts, { inlineCss: false }));
 
   return `<!doctype html>

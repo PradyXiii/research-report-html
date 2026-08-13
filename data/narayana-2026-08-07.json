@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "format": "pick-of-the-week",
+  "reportId": "potw-narh-2026-08-10",
+  "publishedAt": "2026-08-07",
+  "stock": { "name": "Narayana Hrudayalaya", "ticker": "NARH" },
+  "report": { "type": "Pick of the Week", "template": "Pick of the Week" },
+  "recommendation": {
+    "rating": "ADD",
+    "cmp": 1884,
+    "cmpAsOn": "2026-08-07",
+    "fairValue": 2220,
+    "currency": "INR",
+    "timePeriod": "12 months",
+    "holdingPeriod": "12 months",
+    "closing": "Maintain ADD with FV Rs-2,220"
+  },
+  "sections": [
+    {
+      "id": "why-invest",
+      "title": "Why Invest?",
+      "tone": "neutral",
+      "bullets": [
+        "Steady Q1FY27 as a strong India hospital print was partially offset by higher losses in NHIC and lower overseas margins.",
+        "Primarily aided by further improvement in case/payor mix, we bake in 15%/14% India hospital sales/EBITDA CAGRs over FY26-29E.",
+        "Led by a continued ramp-up in the Camana Bay Hospital and lower losses in the insurance business and a better margin profile for PPG, we bake in a healthy ~22% overall EBITDA CAGR over FY26-29E.",
+        "While largely debt-funded foray in UK does raise eyebrows, NARH unable to repatriate cash generated in Cayman to its India entity without incurring tax liabilities.",
+        "Q1FY27 sales of ~Rs2680 cr (+78% yoy) were 2% ahead of our estimates.",
+        "India hospital revenues grew by 16% yoy in Q1FY27 to ~Rs1290 cr.",
+        "We expect NARH to report an India ARPOB CAGR of ~6% over FY26-29E, aided by a better surgical mix and ongoing payor mix changes.",
+        "Majority of NARH’s upcoming bed additions are in its core markets, thereby limiting execution risks.",
+        "Cayman hospitals growing at 15% yoy led by the Camana Bay hospital and insurance sales surging ~3X yoy."
+      ]
+    }
+  ],
+  "abbreviations": "(NHIC – Narayana Health Insurance Company | CAGR – Compound Annual Growth Rate | ARPOB – Average Revenue Per Occupied Bed | EBITDA – Earnings Before Interest, Taxes, Depreciation & Amortization)",
+  "attribution": "The content of this document has been derived from KIE research report. Kotak's PCG Research has summarized the report (Research Team: shrikant.chouhan@kotak.com).Readers who wish to access the complete report are kindly requested to contact their respective Relationship Manager. Further, the recipient of this material should take their own professional advice before investing."
+}

@@ -88,7 +88,7 @@ t('no unexpected tag reaches the output', () => {
   // complete injection check -- an escaped payload cannot match this regex.
   const ALLOWED = new Set(['article', 'header', 'section', 'div', 'p', 'h2', 'h3', 'h4',
     'span', 'time', 'ul', 'li', 'dl', 'dt', 'dd', 'a', 'strong', 'details', 'summary',
-    'sup', 'img', 'svg', 'circle', 'path', 'script', 'style']);
+    'sup', 'b', 'img', 'svg', 'circle', 'path', 'script', 'style']);
   const tags = new Set();
   evilHtml.replace(/<\/?([a-zA-Z][a-zA-Z0-9-]*)/g, (_, x) => tags.add(x.toLowerCase()));
   const bad = [...tags].filter((x) => !ALLOWED.has(x));
@@ -112,10 +112,19 @@ t('a hostile logoUrl is rejected rather than emitted', () => {
   const h = renderBlock(valid, { logoUrl: 'javascript:alert(1)' });
   assert.ok(!/src="javascript:/.test(h), 'javascript: URL must not reach src');
 });
-t('a valid logoUrl replaces the inlined data URI', () => {
-  const h = renderBlock(valid, { logoUrl: 'https://cdn.example/logo.png' });
-  assert.ok(/src="https:\/\/cdn.example\/logo.png"/.test(h));
-  assert.ok(!/data:image\/png/.test(h), 'should not also inline the logo');
+t('all four formats render without throwing', () => {
+  for (const f of ['narayana-2026-08-07', 'stock-recommendations-2026-08-11', 'kie-lenskart-2026-08-12']) {
+    const d = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', f + '.json'), 'utf8'));
+    const h = renderBlock(d);
+    assert.ok(h.length > 1000, f + ' rendered');
+    assert.ok(h.includes('krb__disclosures'), f + ' carries the disclosures');
+  }
+});
+t('an unknown format falls back to the one-pager validator, not a silent render', () => {
+  const d = clone(valid); d.format = 'not-a-real-format';
+  assert.doesNotThrow(() => renderBlock(d));   // valid one-pager data still renders
+  const bad = { format: 'not-a-real-format', schemaVersion: '1.0' };
+  assert.throws(() => renderBlock(bad), 'unknown format with junk data must be refused');
 });
 t('JSON-LD cannot break out of its script tag', () => {
   const d = clone(valid); d.stock.name = 'A</script><script>alert(1)</script>';
@@ -180,8 +189,13 @@ t('the ticker is not repeated outside the headline', () => {
   const outside = html.replace(/<h2 class="krb__title"[\s\S]*?<\/h2>/, '');
   assert.ok(!/>LENSKART</.test(outside), 'no redundant ticker chip');
 });
-t('the logo is inlined so the fragment is self-contained', () => {
-  assert.ok(/<img class="krb__logo" src="data:image\/png;base64,/.test(html));
+t('the brand lockup is typographic, so the fragment carries no image', () => {
+  assert.ok(/krb__wordmark/.test(html), 'wordmark rendered');
+  assert.ok(!/<img/.test(html), 'no image tag at all -- nothing to host or break');
+});
+t('a logoUrl still swaps in the real asset when one is supplied', () => {
+  const h = renderBlock(valid, { logoUrl: 'https://cdn.example/logo.png' });
+  assert.ok(/<img class="krb__logo" src="https:\/\/cdn.example\/logo.png"/.test(h));
 });
 t('rating scale marks this report without stating a return figure for it', () => {
   assert.ok(/data-current="true"[\s\S]*?<dt>ADD/.test(html), 'ADD row is flagged');

@@ -167,16 +167,48 @@
 }
 .krb__hero-inner { position: relative; z-index: 1; }
 
-/* Reversed to solid white -- the standard treatment for a logo sitting on a
-   saturated brand field. The wordmark's navy half would otherwise disappear
-   into the dark end of the gradient. */
-.krb__logo {
-  width: clamp(112px, 13vw, 148px);
-  height: auto;
-  display: block;
+/* Typographic brand lockup -- placeholder until the real asset lands. */
+.krb__wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: clamp(18px, 2.6vw, 30px);
-  filter: brightness(0) invert(1);
+  font-size: clamp(19px, 1rem + .9vw, 26px);
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1;
+  color: #fff;
 }
+.krb__wm-mark {
+  width: 1.32em; height: 1.32em;
+  flex: none;
+  border-radius: 50%;
+  background: #fff;
+  position: relative;
+}
+.krb__wm-mark::before {
+  content: "";
+  position: absolute;
+  inset: 22% 46% 22% 46%;
+  background: var(--krb-red);
+  transform: skewX(-14deg);
+}
+.krb__wm-name { font-weight: 800; }
+.krb__wm-name b { font-weight: 500; }
+.krb__wm-rule { width: 1px; align-self: stretch; background: currentColor; opacity: .45; margin-inline: 2px; }
+.krb__wm-pcg {
+  font-size: .43em;
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.14;
+  text-transform: none;
+  opacity: .92;
+}
+/* On a light surface the lockup inverts. */
+.krb__wordmark[data-on="light"] { color: var(--krb-navy); }
+.krb__wordmark[data-on="light"] .krb__wm-mark { background: var(--krb-navy); }
+
+.krb__logo { width: clamp(112px, 13vw, 148px); height: auto; display: block; margin-bottom: clamp(18px, 2.6vw, 30px); filter: brightness(0) invert(1); }
 .krb img { max-width: 100%; height: auto; }
 
 .krb__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(16px, 2.4vw, 26px); }
@@ -583,3 +615,182 @@
   .krb-page:not([data-krb-theme="light"]) { background: #07080b; }
 }
 [data-theme="dark"] .krb-page, .krb-page[data-krb-theme="dark"] { background: #07080b; }
+
+/* ==========================================================================
+   Template variants
+   Shared tokens, shared hero, shared disclosures. Only what genuinely differs
+   between the four Kotak formats is restated here.
+   ========================================================================== */
+
+/* ---- Pick of the Week ---------------------------------------------------- */
+.krb__hero--potw {
+  background:
+    radial-gradient(90% 130% at 88% 6%, rgba(255, 92, 120, .5) 0%, rgba(255, 92, 120, 0) 58%),
+    linear-gradient(135deg, #ff2440 0%, #fa1432 24%, #8f0b30 58%, #12124a 84%, var(--krb-navy-deep) 100%);
+}
+.krb__potw-rating {
+  display: inline-block;
+  padding: .04em .34em .1em;
+  border: 3px solid rgba(255, 255, 255, .85);
+  border-radius: .3em;
+  margin-right: .12em;
+}
+.krb__closing {
+  justify-self: start;
+  padding: 13px 22px;
+  border-radius: var(--krb-r-sm);
+  background: var(--krb-tint-red);
+  border: 1px solid var(--krb-red);
+  font-weight: 800;
+  color: var(--krb-red-ink);
+  font-size: var(--krb-fs-h3);
+  letter-spacing: -.01em;
+}
+.krb__foot-holding {
+  padding: 0 var(--krb-pad) var(--krb-pad);
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  color: var(--krb-text);
+}
+
+/* ---- Stock Recommendations table ---------------------------------------- */
+.krb__hero--table {
+  background: linear-gradient(135deg, #23234f 0%, var(--krb-navy) 46%, #05052e 100%);
+}
+.krb__tablewrap {
+  overflow-x: auto;                 /* 18 columns cannot fit a phone; scroll it */
+  -webkit-overflow-scrolling: touch;
+  border-block: 1px solid var(--krb-border);
+}
+.krb__tablewrap:focus-visible { outline: 2px solid var(--krb-red); outline-offset: -2px; }
+.krb__table { border-collapse: collapse; width: max-content; min-width: 100%; font-size: var(--krb-fs-xs); }
+.krb__table th, .krb__table td {
+  padding: 9px 12px;
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--krb-border-soft);
+}
+.krb__table thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--krb-surface);
+  color: var(--krb-text);
+  font-weight: 700;
+  text-align: right;
+  border-bottom: 2px solid var(--krb-red);
+}
+.krb__t-name {
+  position: sticky; left: 0; z-index: 1;
+  text-align: left !important;
+  background: var(--krb-bg);
+  font-weight: 600;
+  color: var(--krb-text);
+  min-width: 190px;
+}
+.krb__table thead .krb__t-name { z-index: 3; background: var(--krb-surface); }
+.krb__t-sector th {
+  position: sticky; left: 0;
+  text-align: left !important;
+  background: var(--krb-tint-red);
+  color: var(--krb-red-ink);
+  font-size: var(--krb-fs-xs);
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.krb__table tbody tr:hover td, .krb__table tbody tr:hover .krb__t-name { background: var(--krb-surface); }
+.krb__t-reco {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  font-size: 10.5px;
+  border: 1px solid currentColor;
+  color: var(--krb-text-muted);
+}
+.krb__t-reco[data-reco="BUY"], .krb__t-reco[data-reco="ADD"] { color: var(--krb-red-ink); }
+.krb__note--table { margin: var(--krb-pad); }
+
+/* ---- KIE full report ----------------------------------------------------- */
+.krb__hero--kie {
+  background: linear-gradient(135deg, #1d1d46 0%, var(--krb-navy) 52%, #05052e 100%);
+}
+.krb__kie-tic { font-weight: 500; opacity: .72; }
+.krb__kie-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 30px;
+  margin-top: clamp(18px, 2.4vw, 26px);
+  padding-top: clamp(16px, 2vw, 22px);
+  border-top: 1px solid rgba(255, 255, 255, .22);
+}
+.krb__kie-meta dt {
+  font-size: var(--krb-fs-xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .72);
+}
+.krb__kie-meta dd { font-size: var(--krb-fs-h3); font-weight: 800; color: #fff; letter-spacing: -.02em; }
+
+.krb__restricted {
+  margin: 0;
+  padding: 14px var(--krb-pad);
+  background: var(--krb-tint-red);
+  border-bottom: 1px solid var(--krb-border);
+  color: var(--krb-text);
+  font-size: var(--krb-fs-sm);
+}
+.krb__restricted strong { color: var(--krb-red-ink); }
+
+.krb__kie-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: clamp(24px, 3.4vw, 52px);
+  padding: var(--krb-pad);
+}
+.krb__kie-headline {
+  font-size: var(--krb-fs-h3);
+  font-weight: 800;
+  letter-spacing: -.018em;
+  color: var(--krb-red-ink);
+  margin-bottom: 12px;
+}
+.krb__kie-summary { font-weight: 600; margin-bottom: clamp(18px, 2.4vw, 26px); }
+.krb__kie-sec { margin-bottom: clamp(18px, 2.4vw, 26px); }
+.krb__kie-sec h4 {
+  font-size: var(--krb-fs-sm);
+  font-weight: 800;
+  color: var(--krb-link);
+  margin-bottom: 7px;
+}
+.krb__kie-sec p + p { margin-top: 10px; }
+.krb__kie-by {
+  padding-top: 14px;
+  border-top: 1px solid var(--krb-border);
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  color: var(--krb-text-muted);
+}
+.krb__kie-side { display: grid; gap: clamp(18px, 2.2vw, 24px); align-content: start; }
+.krb__panel h4 {
+  font-size: var(--krb-fs-xs);
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--krb-text);
+  padding-bottom: 7px;
+  margin-bottom: 8px;
+  border-bottom: 1.5px solid var(--krb-red);
+}
+.krb__panel table { width: 100%; border-collapse: collapse; font-size: var(--krb-fs-xs); }
+.krb__panel th, .krb__panel td { padding: 6px 4px; border-bottom: 1px solid var(--krb-border-soft); }
+.krb__panel th[scope="row"] { text-align: left; font-weight: 500; color: var(--krb-text-muted); }
+.krb__panel td, .krb__panel th[scope="col"] { text-align: right; font-weight: 700; color: var(--krb-text); }
+.krb__kie-src { font-size: 11px; color: var(--krb-text-faint); font-style: italic; }
+
+@container krb (max-width: 780px) {
+  .krb__kie-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@supports not (container-type: inline-size) {
+  @media (max-width: 820px) { .krb__kie-grid { grid-template-columns: minmax(0, 1fr); } }
+}

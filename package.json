@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "description": "HTML template + JSON contract for converting Kotak PCG research one-pager PDFs into an embeddable block on kotakneo.com, published via Strapi.",
   "private": true,
-  "engines": { "node": ">=16" },
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
     "build": "node tools/build.js",
     "render": "node src/render.js",
     "audit": "node tools/audit.js",
     "test": "node tools/test.js"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
 }
