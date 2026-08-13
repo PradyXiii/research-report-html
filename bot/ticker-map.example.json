@@ -1,0 +1,12 @@
+{
+  "_comment": [
+    "ticker -> the fields that page 1 of the PDF does not contain.",
+    "slug joins the rendered block to its recommendation page on kotakneo.com;",
+    "getting it wrong attaches the block to the wrong page, so it is looked up,",
+    "never guessed. A ticker that is missing here publishes with slug=null and a",
+    "warning -- the block still renders, only the cross-link is absent.",
+    "Point BOT_TICKER_MAP at your copy of this file."
+  ],
+  "LENSKART": { "slug": "lenskart-solutions-share-price", "isin": null },
+  "TITAN":    { "slug": "titan-company-share-price",      "isin": "INE280A01028" }
+}

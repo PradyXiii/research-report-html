@@ -1,0 +1,11 @@
+# /etc/logrotate.d/kotak-research-bot -- only needed when logging to a file
+# (with systemd, journald already handles rotation).
+/var/log/kotak-research-bot/*.log {
+    daily
+    rotate 90
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 0640 kotakbot kotakbot
+}

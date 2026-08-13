@@ -1,0 +1,26 @@
+# /etc/systemd/system/kotak-research-bot-alert@.service
+#
+# Fires when the bot exits non-zero. Deliberately dumb: it pulls the last log
+# lines and the newest dead-letter record and hands them to whatever the bank
+# already uses to page people (mail, an internal HTTP hook, an SNMP trap).
+# There is no external SaaS anywhere in this path.
+#
+#   systemctl cat kotak-research-bot-alert@kotak-research-bot.service
+
+[Unit]
+Description=Alert on failure of %i
+
+[Service]
+Type=oneshot
+User=kotakbot
+Group=kotakbot
+Environment=DEAD_LETTER_DIR=/var/lib/kotak-research-bot/dead-letter
+ExecStart=/bin/sh -c '\
+  { echo "UNIT %i FAILED on $(hostname) at $(date -Is)"; \
+    echo; echo "--- exit status ---"; \
+    systemctl show %i -p ExecMainStatus -p Result; \
+    echo; echo "--- last 60 log lines ---"; \
+    journalctl -u %i -n 60 --no-pager; \
+    echo; echo "--- newest dead-letter record ---"; \
+    ls -1t "$DEAD_LETTER_DIR"/*.json 2>/dev/null | head -1 | xargs -r cat; \
+  } | mail -s "[research-bot] %i failed on $(hostname)" research-ops@kotak.com'

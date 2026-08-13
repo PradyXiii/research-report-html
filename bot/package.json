@@ -8,7 +8,7 @@
   "main": "run.js",
   "scripts": {
     "start": "node run.js",
-    "test": "node --test test/",
+    "test": "node --test \"test/**/*.test.js\"",
     "dry-run": "node run.js --dry-run",
     "doctor": "node run.js --doctor"
   },

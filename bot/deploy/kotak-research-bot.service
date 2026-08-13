@@ -1,0 +1,60 @@
+# /etc/systemd/system/kotak-research-bot.service
+#
+# One-shot: fetch, extract, validate, render, publish, exit. Driven by the
+# timer below, so the schedule and the work are separate concerns and either
+# can be changed without touching the other.
+#
+#   install -d -o kotakbot -g kotakbot -m 0750 /var/lib/kotak-research-bot
+#   install -o root -g kotakbot -m 0640 bot.env /etc/kotak-research-bot/bot.env
+#   systemctl daemon-reload && systemctl enable --now kotak-research-bot.timer
+
+[Unit]
+Description=Kotak research one-pager: PDF -> HTML block -> CMS
+Documentation=file:///opt/kotak-research-bot/INTEGRATION.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=kotakbot
+Group=kotakbot
+WorkingDirectory=/opt/kotak-research-bot/bot
+EnvironmentFile=/etc/kotak-research-bot/bot.env
+ExecStart=/usr/bin/node run.js
+TimeoutStartSec=600
+
+# Exit codes are the interface. 0 ok. 2 = refused to publish (a human must
+# look). 3 = publish failed (retryable). 4 = config. 5 = already running.
+SuccessExitStatus=0
+OnFailure=kotak-research-bot-alert@%n.service
+
+# Journald picks up stdout/stderr. Set BOT_LOG_FORMAT=json for a log shipper.
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=kotak-research-bot
+
+# --- hardening: this process reads a PDF and writes to one CMS -------------
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectClock=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+RestrictRealtime=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/var/lib/kotak-research-bot
+# Add the spool directory too when TRIGGER_MODE=watch:
+#ReadWritePaths=/var/lib/kotak-research-bot /var/spool/jamun
+
+[Install]
+WantedBy=multi-user.target

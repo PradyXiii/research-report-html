@@ -1,0 +1,17 @@
+# /etc/systemd/system/kotak-research-bot.timer
+#
+# Replaces the existing 09:00 cron. RandomizedDelaySec spreads the load off the
+# exact minute; Persistent=true means a run missed because the box was down
+# happens on the next boot rather than being skipped silently.
+
+[Unit]
+Description=Run the Kotak research one-pager bot each weekday morning
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 09:00:00 Asia/Kolkata
+RandomizedDelaySec=120
+Persistent=true
+Unit=kotak-research-bot.service
+
+[Install]
+WantedBy=timers.target

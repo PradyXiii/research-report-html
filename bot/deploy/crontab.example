@@ -1,0 +1,16 @@
+# Fallback for a host without systemd timers (or where the change-control
+# process is easier for cron). Same binary, same exit codes.
+#
+#   crontab -u kotakbot -e
+#
+# Weekdays at 09:00 IST. Set CRON_TZ so the schedule does not drift with the
+# system timezone.
+CRON_TZ=Asia/Kolkata
+MAILTO=research-ops@kotak.com
+
+0 9 * * 1-5 . /etc/kotak-research-bot/bot.env; cd /opt/kotak-research-bot/bot && /usr/bin/node run.js >> /var/log/kotak-research-bot/run.log 2>&1
+
+# Exit codes reach cron's MAILTO automatically: anything non-zero is mailed
+# along with whatever the run printed. If a richer alert is wanted, wrap the
+# command:
+#   ... || /usr/local/bin/notify-research-ops "$?"
