@@ -61,7 +61,10 @@
 
       // Page 1 only: pages 2+ are the standard boilerplate, and feeding them in
       // makes the team contact block look like orphaned bullets.
-      var res = B.extract.extractFromLines(pages.page1Lines, { filename: f.name });
+      // Each format has its own parser -- the detected format picks it.
+      var res = det.id === 'pick-of-the-week'
+        ? B.formats.extractPickOfWeek(pages.page1Lines, { filename: f.name })
+        : B.extract.extractFromLines(pages.page1Lines, { filename: f.name });
       var data = res.report;
       var errs = res.errors || [];
       var warns = res.warnings || [];

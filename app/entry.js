@@ -30,7 +30,8 @@ if (!Uint8Array.prototype.__kotakIncludes) {
 const { detectFormat } = require('../bot/detect.js');
 const { renderBlock, renderStandalone, validate } = require('../src/render.js');
 const extract = require('../bot/extract.js');
-module.exports = { detectFormat, renderBlock, renderStandalone, validate, extract };
+const formats = require('../bot/extract-formats.js');
+module.exports = { detectFormat, renderBlock, renderStandalone, validate, extract, formats };
 
 /* Browser-side helper: pdf.js -> the same line shape pdftext.js produces, so
    extractFromLines runs unmodified. */
