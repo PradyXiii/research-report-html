@@ -122,7 +122,18 @@ function extractPickOfWeek(lines, meta) {
       // label rather than the first colon.
       timePeriod: timeL ? ((/Time\s*Period\s*:\s*([^|]+)/i.exec(timeL.t) || [])[1] || '').trim() : null,
       holdingPeriod: holdL ? ((/Holding\s*Period\s*:\s*([^|]+)/i.exec(holdL.t) || [])[1] || '').trim() : null,
-      closing: closeL ? closeL.t : null
+      closing: (function () {
+        if (!closeL) return null;
+        let t = closeL.t;
+        // The closing reads "Maintain ADD with" and stops: the fair value that
+        // finishes the sentence is drawn inside the arrow graphic, so it never
+        // reaches the text layer. Complete it from the fair value printed
+        // elsewhere on the same page rather than publishing a dangling phrase.
+        if (/\b(with|of|at|to)$/i.test(t) && fv) {
+          t += ' FV Rs' + fv.toLocaleString('en-IN');
+        }
+        return t;
+      })()
     },
     sections: [{ id: 'why-invest', title: 'Why Invest?', tone: 'neutral', bullets: items }],
     abbreviations: gloss,
@@ -269,3 +280,84 @@ function extractKieReport(pages, meta) {
 }
 
 module.exports.extractKieReport = extractKieReport;
+
+/* -------------------------------------------------- Stock Recommendations */
+
+const RECO_COLUMNS = [
+  'Price as on (Rs)', 'Price as on latest Report (Rs)', 'Latest Price target (Rs)',
+  'Upside/(Downside) (%)', 'Latest Report Date', 'Mkt Cap (Rs Cr)',
+  'EPS FY27E (Rs)', 'EPS FY28E (Rs)', 'EPS gth FY27E (%)', 'EPS gth FY28E (%)',
+  'PE FY27E (x)', 'PE FY28E (x)', 'RoE FY27E (%)', 'RoE FY28E (%)',
+  'EV/EBITDA FY27E (x)', 'EV/EBITDA FY28E (x)'
+];
+
+const RECO_ROW_RE = new RegExp('^(.+?)\\s+(' + RATINGS.join('|') + ')\\s+(.+)$');
+const RECO_NOISE = /^(Kotak Neo|Stock Recommendations|Name of the Company|Reco|\d{1,2} Aug|\(Rs\)|For Private Circulation|Source|Note|UST |, \d{4}$)/i;
+
+/**
+ * The multi-stock recommendations table. Every row is one printed line -- the
+ * company name, then the rating, then sixteen numeric cells -- so rows split
+ * cleanly on the rating token. Sector names are the lines carrying no digits.
+ */
+function extractStockRecos(pages, meta) {
+  const errors = [], warnings = [];
+  const sectors = [];
+  let current = null, dateIso = null;
+
+  for (const pg of (pages || [])) {
+    for (const l of (pg.lines || [])) {
+      const t = (l.text || '').trim();
+      if (!t) continue;
+
+      if (!dateIso) {
+        const d = toIso(t);
+        if (d && /^[A-Z]{3,}/.test(t)) dateIso = d;
+      }
+      if (RECO_NOISE.test(t)) continue;
+
+      const m = RECO_ROW_RE.exec(t);
+      if (m) {
+        const cells = m[3].trim().split(/\s+/);
+        if (cells.length >= 8 && /^[\d(]/.test(cells[0])) {
+          if (!current) { current = { name: 'Other', rows: [] }; sectors.push(current); }
+          current.rows.push({
+            name: m[1].trim(),
+            reco: m[2].toUpperCase(),
+            cells: cells.slice(0, RECO_COLUMNS.length)
+          });
+          continue;
+        }
+      }
+      // A short line with no figures in it is a sector heading.
+      if (!/\d/.test(t) && t.length > 2 && t.length < 46) {
+        current = { name: t, rows: [] };
+        sectors.push(current);
+      }
+    }
+  }
+
+  const withRows = sectors.filter((s) => s.rows.length);
+  const total = withRows.reduce((n, s) => n + s.rows.length, 0);
+  if (!total) {
+    errors.push({ code: 'NO_ROWS', field: 'sectors',
+      message: 'No recommendation rows could be read. Each row should be "<Company> <RATING> <figures>".' });
+    return { ok: false, report: null, errors, warnings };
+  }
+  if (!dateIso) warnings.push({ code: 'NO_DATE', field: 'publishedAt',
+    message: 'No report date found; using none.' });
+
+  const report = {
+    schemaVersion: '1.0',
+    format: 'stock-recommendations',
+    reportId: (meta && meta.reportId) || `stock-reco-${dateIso || 'undated'}`,
+    publishedAt: dateIso,
+    report: { type: 'Stock Recommendations', template: 'Stock Recommendations' },
+    columns: RECO_COLUMNS,
+    sectors: withRows,
+    footnote: '^ Reco and price target are as of the latest report date shown for each stock.',
+    circulation: 'For Private Circulation'
+  };
+  return { ok: true, report, errors, warnings };
+}
+
+module.exports.extractStockRecos = extractStockRecos;

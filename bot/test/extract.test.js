@@ -194,10 +194,16 @@ test('bullets under an unrecognisable heading are an error, not silently dropped
   assert.match(r.errors.find((e) => e.code === 'ORPHAN_BULLETS').message, /not inside any section/);
 });
 
-test('a filename the pattern does not fit blocks publication (no reportId to de-duplicate on)', () => {
-  const r = run(null, { filename: 'todays-report.pdf' });
-  assert.equal(r.ok, false);
-  assert.ok(codes(r.errors).includes('REPORT_ID_MISSING'));
+test('a filename the pattern does not fit still publishes, using a derived id', () => {
+  // Files from kotakneo.com/uploads (and anything a human renamed) carry no id
+  // or type. Page 1 states both, so refusing them was over-strict; what matters
+  // is that the id is STABLE, so a re-run updates rather than duplicates.
+  const res = extractFromLines(lenskartLines, { filename: 'some report.pdf' });
+  assert.ok(res.ok, 'should publish');
+  assert.ok(res.report.reportId, 'an id was derived');
+  const again = extractFromLines(lenskartLines, { filename: 'renamed again.pdf' });
+  assert.strictEqual(again.report.reportId, res.report.reportId,
+    'the derived id must not change between runs, or re-runs would duplicate');
 });
 
 /* ----------------------------------------------------- cross-checks */

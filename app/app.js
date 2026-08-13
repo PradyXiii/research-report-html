@@ -65,10 +65,17 @@
       var res;
       if (det.id === 'pick-of-the-week') res = B.formats.extractPickOfWeek(pages.page1Lines, { filename: f.name });
       else if (det.id === 'kie-full-report') res = B.formats.extractKieReport(pages.pages, { filename: f.name });
+      else if (det.id === 'stock-recommendations') res = B.formats.extractStockRecos(pages.pages, { filename: f.name });
       else res = B.extract.extractFromLines(pages.page1Lines, { filename: f.name });
       var data = res.report;
       var errs = res.errors || [];
-      var warns = res.warnings || [];
+      // These concern the publishing pipeline, not the document: in a browser
+      // there is no filename convention, no schedule and no source URL. Showing
+      // them here trains people to ignore warnings that do matter.
+      var PIPELINE_ONLY = ['FILENAME', 'REPORT_STALE', 'NO_SOURCE_URL', 'SLUG_UNKNOWN'];
+      var warns = (res.warnings || []).filter(function (w) {
+        return PIPELINE_ONLY.indexOf(w.code) === -1;
+      });
       if (!res.ok) errs = errs.length ? errs : [{ message: 'Extraction did not complete.' }];
 
       if (errs.length) {

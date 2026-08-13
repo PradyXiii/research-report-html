@@ -66,7 +66,7 @@ const IMPLEMENTED = new Set(['one-pager', 'pick-of-the-week', 'stock-recommendat
  * these two sets apart is deliberate: it lets the converter say precisely which
  * half is missing instead of failing with a misleading parser error.
  */
-const EXTRACTABLE = new Set(['one-pager', 'pick-of-the-week', 'kie-full-report']);
+const EXTRACTABLE = new Set(['one-pager', 'pick-of-the-week', 'kie-full-report', 'stock-recommendations']);
 
 /**
  * @param {string} page1Text  text of page 1 (detection never needs more)

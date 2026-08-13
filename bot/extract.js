@@ -76,7 +76,8 @@ const NOT_APPLICABLE_RE = /^(?:n\.?\s?a\.?|not\s*rated|nr|not\s*applicable|[-\u2
 const ARTIFACT_RE = /^[\s`'"~^\u00B4\u2018\u2019\u201C\u201D\u00B7._=|\\/\u2013\u2014]*$/;
 const TITLE_RE = /^(?<name>[^()]{2,80}?)\s*\(\s*(?<ticker>[A-Za-z0-9&.\-\s]{1,24}?)\s*\)\s*[-\u2013\u2014:|]\s*(?<rating>[A-Za-z]{2,10})\s*$/;
 const TITLE_NO_RATING_RE = /^(?<name>[^()]{2,80}?)\s*\(\s*(?<ticker>[A-Za-z0-9&.\-\s]{1,24}?)\s*\)\s*$/;
-const GLOSSARY_HIT_RE = /\b[A-Z][A-Za-z0-9&/]{1,9}\s*[-\u2013\u2014]\s*[A-Z]/g;
+// Both separators occur in the wild: "EBITDA - Earnings..." and "CAGR: Compounded...".
+const GLOSSARY_HIT_RE = /\b[A-Z][A-Za-z0-9&/]{1,9}\s*[-\u2013\u2014:]\s*[A-Z]/g;
 
 /* ------------------------------------------------------------------- utils */
 
@@ -716,7 +717,9 @@ function extractFromLines(lines, opts) {
   if (!reportType) {
     dg.error('REPORT_TYPE_MISSING', 'report.type',
       'No report type in the filename and none could be corroborated on page 1. report.type is mandatory.');
-  } else if (bandIdx === -1) {
+  } else if (bandIdx === -1 && meta.type) {
+    // Only a filename-sourced type can be unconfirmed. One read off page 1 is
+    // self-evidently on page 1.
     dg.warn('REPORT_TYPE_UNCONFIRMED', 'report.type',
       `Report type "${reportType}" comes from the filename but does not appear anywhere on page 1.`);
   }
