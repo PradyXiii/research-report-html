@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Amber Enterprises (AMBER) - BUY | Company Update</title>
+  <meta name="description" content="Kotak Securities Company Update on Amber Enterprises. Rating BUY, CMP 7,441, Fair Value 8,710.">
+  <style>
+/* ==========================================================================
+   Kotak Research Block (krb) — v2
+   Embeddable research-report block for kotakneo.com.
+
+   Design notes
+   ------------
+   Number-first hierarchy: the figures are the interface, labels support them.
+   A dramatic red->navy hero carries the brand; the body stays calm so the
+   content is readable. Depth comes from layered surfaces and one soft glow,
+   not from borders everywhere.
+
+   Rules that hold the whole thing together:
+   - Every selector is scoped under .krb. No global styles, no collisions.
+   - No JavaScript. Accordions are native <details>.
+   - Responsive by construction (fluid type, auto-fit grids). The block sits in
+     a column of unknown width, so it measures ITSELF with container queries.
+   - Light + dark, resolved as: .krb[data-krb-theme] > site [data-theme]/.dark
+     > prefers-color-scheme.
+   - The hero is deliberately dark in BOTH themes. It reads as brand, not chrome.
+
+   Contrast (measured, sRGB, WCAG 2.1)
+   -----------------------------------
+   #fa1432 on #fff .......... 4.03:1  large/bold text and UI only
+   #e00f2b on #fff .......... 4.92:1  small red text, and white-on-red pills
+   #ff4d63 on #14161c ....... 5.59:1  small red text in dark
+   #00005a on #fff .......... 18.3:1
+   white on hero gradient ... 6.5:1+  (darkest point of the ramp is #fa1432
+                                       at 4.03:1, so hero body text sits on a
+                                       black-tinted scrim, never bare red)
+   ========================================================================== */
+
+.krb {
+  /* ---- brand ---------------------------------------------------------- */
+  --krb-red: #fa1432;
+  --krb-red-deep: #e00f2b;      /* white text on red -> 4.92:1              */
+  --krb-red-ink: #e00f2b;       /* red TEXT under 18.66px                   */
+  --krb-navy: #00005a;
+  --krb-navy-deep: #05052e;
+
+  /* ---- light surfaces -------------------------------------------------- */
+  --krb-bg: #ffffff;
+  --krb-surface: #f7f8fc;
+  --krb-surface-2: #ffffff;
+  --krb-raised: #ffffff;
+  --krb-tint-red: #fff2f4;
+  --krb-tint-blue: #f1f3fb;
+  --krb-text: #14161d;
+  --krb-text-muted: #596070;
+  --krb-text-faint: #6b7280;   /* 4.83:1 on white */
+  --krb-border: #e6e9f2;
+  --krb-border-soft: #eff1f7;
+  --krb-link: #00005a;
+  --krb-shadow-sm: 0 1px 2px rgba(10, 12, 20, .05);
+  --krb-shadow: 0 2px 4px rgba(10, 12, 20, .04), 0 12px 28px rgba(10, 12, 20, .07);
+  --krb-shadow-lg: 0 4px 8px rgba(10, 12, 20, .06), 0 24px 56px rgba(10, 12, 20, .12);
+
+  /* ---- scale ----------------------------------------------------------- */
+  --krb-r: 20px;
+  --krb-r-md: 14px;
+  --krb-r-sm: 10px;
+  --krb-pad: clamp(18px, 3.4vw, 40px);
+  --krb-gap: clamp(12px, 1.8vw, 20px);
+
+  --krb-fs-display: clamp(28px, 1.2rem + 3.4vw, 52px);
+  --krb-fs-kpi: clamp(30px, 1.3rem + 3vw, 46px);
+  --krb-fs-h3: clamp(18px, .95rem + .7vw, 24px);
+  --krb-fs-body: clamp(15px, .9rem + .18vw, 17px);
+  --krb-fs-sm: clamp(13px, .8rem + .1vw, 14.5px);
+  --krb-fs-xs: clamp(11.5px, .72rem + .06vw, 12.5px);
+
+  --krb-font: inherit;          /* picks up the host page's brand typeface */
+
+  container-type: inline-size;
+  container-name: krb;
+  position: relative;
+  isolation: isolate;
+  font-family: var(--krb-font);
+  font-size: var(--krb-fs-body);
+  line-height: 1.62;
+  color: var(--krb-text);
+  background: var(--krb-bg);
+  border-radius: var(--krb-r);
+  box-shadow: var(--krb-shadow-lg);
+  overflow: hidden;
+  margin: 0 auto;
+  max-width: 1160px;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- dark ------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .krb:not([data-krb-theme="light"]) {
+    --krb-bg: #0d0f14;
+    --krb-surface: #14171f;
+    --krb-surface-2: #14161c;
+    --krb-raised: #191d26;
+    --krb-tint-red: #24121a;
+    --krb-tint-blue: #131629;
+    --krb-text: #eceef4;
+    --krb-text-muted: #a3aab9;
+    --krb-text-faint: #949bab;   /* 6.43:1 on the dark surface */
+    --krb-border: #262b36;
+    --krb-border-soft: #1e222b;
+    --krb-link: #9db0ff;
+    --krb-red-ink: #ff4d63;
+    --krb-shadow-sm: 0 1px 2px rgba(0, 0, 0, .5);
+    --krb-shadow: 0 2px 4px rgba(0, 0, 0, .45), 0 12px 28px rgba(0, 0, 0, .4);
+    --krb-shadow-lg: 0 4px 8px rgba(0, 0, 0, .5), 0 24px 56px rgba(0, 0, 0, .55);
+  }
+}
+[data-theme="dark"] .krb:not([data-krb-theme="light"]),
+.dark .krb:not([data-krb-theme="light"]),
+.krb[data-krb-theme="dark"] {
+  --krb-bg: #0d0f14;
+  --krb-surface: #14171f;
+  --krb-surface-2: #14161c;
+  --krb-raised: #191d26;
+  --krb-tint-red: #24121a;
+  --krb-tint-blue: #131629;
+  --krb-text: #eceef4;
+  --krb-text-muted: #a3aab9;
+  --krb-text-faint: #949bab;   /* 6.43:1 on the dark surface */
+  --krb-border: #262b36;
+  --krb-border-soft: #1e222b;
+  --krb-link: #9db0ff;
+  --krb-red-ink: #ff4d63;
+  --krb-shadow-sm: 0 1px 2px rgba(0, 0, 0, .5);
+  --krb-shadow: 0 2px 4px rgba(0, 0, 0, .45), 0 12px 28px rgba(0, 0, 0, .4);
+  --krb-shadow-lg: 0 4px 8px rgba(0, 0, 0, .5), 0 24px 56px rgba(0, 0, 0, .55);
+}
+
+.krb *, .krb *::before, .krb *::after { box-sizing: border-box; }
+.krb :where(p, ul, ol, li, h2, h3, h4, dl, dd, dt, figure) { margin: 0; padding: 0; }
+.krb :where(ul, ol) { list-style: none; }
+
+.krb a { color: var(--krb-link); text-decoration: underline; text-underline-offset: 2px; }
+.krb a:hover { text-decoration-thickness: 2px; }
+.krb a:focus-visible, .krb summary:focus-visible {
+  outline: 2px solid var(--krb-red);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   HERO — red -> navy ramp, dark in both themes
+   ========================================================================== */
+.krb__hero {
+  position: relative;
+  padding: clamp(26px, 4.4vw, 52px) var(--krb-pad) clamp(30px, 4.4vw, 50px);
+  background:
+    radial-gradient(90% 130% at 88% 6%, rgba(255, 92, 120, .55) 0%, rgba(255, 92, 120, 0) 58%),
+    linear-gradient(135deg, #ff2440 0%, #fa1432 26%, #a80d2b 56%, #2c0a45 82%, var(--krb-navy-deep) 100%);
+  color: #fff;
+  overflow: hidden;
+}
+/* fine grain keeps the large gradient from banding on wide screens */
+.krb__hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+.krb__hero-inner { position: relative; z-index: 1; }
+
+/* Typographic brand lockup -- placeholder until the real asset lands. */
+.krb__wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: clamp(18px, 2.6vw, 30px);
+  font-size: clamp(19px, 1rem + .9vw, 26px);
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1;
+  color: #fff;
+}
+.krb__wm-mark {
+  width: 1.32em; height: 1.32em;
+  flex: none;
+  border-radius: 50%;
+  background: #fff;
+  position: relative;
+}
+.krb__wm-mark::before {
+  content: "";
+  position: absolute;
+  inset: 22% 46% 22% 46%;
+  background: var(--krb-red);
+  transform: skewX(-14deg);
+}
+.krb__wm-name { font-weight: 800; }
+.krb__wm-name b { font-weight: 500; }
+.krb__wm-rule { width: 1px; align-self: stretch; background: currentColor; opacity: .45; margin-inline: 2px; }
+.krb__wm-pcg {
+  font-size: .43em;
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.14;
+  text-transform: none;
+  opacity: .92;
+}
+/* On a light surface the lockup inverts. */
+.krb__wordmark[data-on="light"] { color: var(--krb-navy); }
+.krb__wordmark[data-on="light"] .krb__wm-mark { background: var(--krb-navy); }
+
+.krb__logo { width: clamp(112px, 13vw, 148px); height: auto; display: block; margin-bottom: clamp(18px, 2.6vw, 30px); filter: brightness(0) invert(1); }
+.krb img { max-width: 100%; height: auto; }
+
+.krb__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(16px, 2.4vw, 26px); }
+.krb__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .085em;
+  text-transform: uppercase;
+  /* black scrim, never bare red -> white text reaches 6.5:1 */
+  background: rgba(0, 0, 0, .3);
+  border: 1px solid rgba(255, 255, 255, .26);
+  color: #fff;
+  white-space: nowrap;
+}
+.krb__chip--lead { background: #fff; border-color: #fff; color: var(--krb-red-deep); }
+
+.krb__headrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(18px, 3vw, 40px);
+}
+.krb__identity { min-width: min(100%, 260px); flex: 1 1 340px; }
+
+.krb__title {
+  font-size: var(--krb-fs-display);
+  font-weight: 800;
+  line-height: 1.03;
+  letter-spacing: -.032em;
+  color: #fff;
+  text-wrap: balance;
+}
+.krb__holding {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 5px 12px 5px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, .3);
+  border: 1px solid rgba(255, 255, 255, .2);
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: #fff;
+}
+.krb__holding::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* rating medallion */
+.krb__verdict {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 16px 22px 18px;
+  border-radius: var(--krb-r-md);
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+  min-width: min(100%, 250px);
+  max-width: 340px;
+}
+.krb__verdict-label {
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #6b7183;
+}
+.krb__verdict-value {
+  font-size: clamp(30px, 1.1rem + 2.4vw, 42px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--krb-red-deep);
+}
+.krb__verdict-note { font-size: var(--krb-fs-xs); color: #4d5364; font-weight: 600; line-height: 1.45; }
+
+/* ==========================================================================
+   KPI STRIP — the numbers are the interface
+   ========================================================================== */
+.krb__kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: var(--krb-gap);
+  padding: var(--krb-gap) var(--krb-pad) 0;
+  margin-top: calc(clamp(20px, 3vw, 34px) * -1);
+  position: relative;
+  z-index: 2;
+}
+.krb__kpi {
+  position: relative;
+  padding: clamp(16px, 2.2vw, 24px);
+  border-radius: var(--krb-r-md);
+  background: var(--krb-raised);
+  border: 1px solid var(--krb-border);
+  box-shadow: var(--krb-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow: hidden;
+}
+.krb__kpi--hero { border-color: color-mix(in srgb, var(--krb-red) 40%, var(--krb-border)); }
+.krb__kpi--hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--krb-red), #ff6a4d);
+}
+.krb__kpi-label {
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--krb-text-faint);
+}
+.krb__kpi-value {
+  font-size: var(--krb-fs-kpi);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  color: var(--krb-text);
+}
+.krb__kpi-value sup { font-size: .5em; font-weight: 700; letter-spacing: 0; vertical-align: .55em; margin-right: 2px; }
+.krb__kpi--hero .krb__kpi-value { color: var(--krb-red-ink); }
+.krb__kpi-note { font-size: var(--krb-fs-xs); color: var(--krb-text-muted); }
+
+/* ==========================================================================
+   CONTENT CARDS
+   ========================================================================== */
+.krb__body { padding: var(--krb-gap) var(--krb-pad) var(--krb-pad); display: grid; gap: var(--krb-gap); }
+
+.krb__split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--krb-gap);
+  align-items: stretch;
+}
+
+.krb__card {
+  padding: clamp(20px, 2.6vw, 30px);
+  border-radius: var(--krb-r-md);
+  background: var(--krb-surface-2);
+  border: 1px solid var(--krb-border);
+  box-shadow: var(--krb-shadow-sm);
+  transition: box-shadow .22s ease, transform .22s ease;
+}
+.krb__card:hover { box-shadow: var(--krb-shadow); transform: translateY(-2px); }
+.krb__card--thesis {
+  background:
+    linear-gradient(180deg, var(--krb-tint-red) 0%, var(--krb-surface-2) 42%);
+  border-color: color-mix(in srgb, var(--krb-red) 22%, var(--krb-border));
+}
+
+.krb__card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.krb__icon {
+  flex: none;
+  width: 38px; height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--krb-tint-red);
+  color: var(--krb-red-ink);
+}
+.krb__icon svg { width: 20px; height: 20px; display: block; }
+.krb__card[data-tone="positive"] .krb__icon { background: var(--krb-tint-blue); color: var(--krb-link); }
+.krb__card-title {
+  font-size: var(--krb-fs-h3);
+  font-weight: 800;
+  letter-spacing: -.018em;
+  color: var(--krb-text);
+}
+.krb__count {
+  margin-left: auto;
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--krb-surface);
+  border: 1px solid var(--krb-border);
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  color: var(--krb-text-faint);
+}
+
+.krb__list { display: grid; gap: 14px; }
+.krb__list li { display: flex; gap: 12px; align-items: flex-start; line-height: 1.6; }
+.krb__list li::before {
+  content: "";
+  flex: none;
+  width: 7px; height: 7px;
+  margin-top: .62em;
+  border-radius: 50%;
+  background: var(--krb-red);
+}
+.krb__card[data-tone="positive"] .krb__list li::before { background: var(--krb-link); }
+.krb__prose { display: grid; gap: 12px; }
+
+.krb__note {
+  padding: 14px 16px;
+  border-radius: var(--krb-r-sm);
+  background: var(--krb-surface);
+  border: 1px dashed var(--krb-border);
+  font-size: var(--krb-fs-sm);
+  color: var(--krb-text-muted);
+}
+
+/* ==========================================================================
+   ATTRIBUTION + DISCLOSURES
+   ========================================================================== */
+.krb__attribution {
+  padding: 16px var(--krb-pad);
+  background: var(--krb-surface);
+  border-top: 1px solid var(--krb-border);
+  font-size: var(--krb-fs-sm);
+  color: var(--krb-text-muted);
+}
+
+.krb__disclosures { border-top: 1px solid var(--krb-border); }
+.krb__acc { border-bottom: 1px solid var(--krb-border-soft); }
+.krb__acc:last-child { border-bottom: 0; }
+.krb__acc > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 17px var(--krb-pad);
+  min-height: 56px;
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--krb-red-ink);
+  background: var(--krb-surface-2);
+  transition: background .18s ease;
+}
+.krb__acc > summary::-webkit-details-marker { display: none; }
+.krb__acc > summary:hover { background: var(--krb-surface); }
+.krb__acc > summary::after {
+  content: "";
+  flex: none;
+  width: 9px; height: 9px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform .2s ease;
+}
+.krb__acc[open] > summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.krb__acc-body {
+  padding: 4px var(--krb-pad) var(--krb-pad);
+  background: var(--krb-surface-2);
+  font-size: var(--krb-fs-sm);
+  color: var(--krb-text-muted);
+  display: grid;
+  gap: 11px;
+}
+.krb__acc-body p { line-height: 1.65; }
+.krb__acc-lead { font-weight: 800; color: var(--krb-text); }
+
+/* the disclaimer is dense legal prose carrying bare URLs -- without these it
+   forces a sideways scroll on a phone */
+.krb__acc-body { overflow-wrap: anywhere; hyphens: auto; }
+.krb a { overflow-wrap: anywhere; }
+
+.krb__scale { display: grid; gap: 10px; }
+.krb__scale div {
+  display: grid;
+  grid-template-columns: minmax(78px, max-content) 1fr;
+  gap: 6px 16px;
+  align-items: start;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--krb-border-soft);
+}
+.krb__scale div:last-child { border-bottom: 0; padding-bottom: 0; }
+.krb__scale dt { font-weight: 800; color: var(--krb-text); letter-spacing: .05em; }
+.krb__scale dd { color: var(--krb-text-muted); }
+.krb__scale div[data-current="true"] {
+  background: var(--krb-tint-red);
+  border-radius: var(--krb-r-sm);
+  padding: 12px;
+  margin: 0 -12px;
+  border-bottom-color: transparent;
+}
+.krb__scale div[data-current="true"] dt { color: var(--krb-red-ink); }
+.krb__scale-flag {
+  margin-left: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  /* white on #fa1432 is 4.03:1 -- under the bar at this size. #e00f2b is
+     4.92:1, and contrast with white is background-independent. */
+  background: #e00f2b;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.krb__scale dt { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+
+.krb__team { display: grid; gap: 22px; }
+.krb__team-group > h4 {
+  font-size: var(--krb-fs-xs);
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--krb-red-ink);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--krb-border);
+}
+.krb__team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 16px;
+}
+.krb__person {
+  display: grid;
+  gap: 2px;
+  padding: 13px 15px;
+  border-radius: var(--krb-r-sm);
+  background: var(--krb-surface);
+  border: 1px solid var(--krb-border-soft);
+}
+.krb__person strong { color: var(--krb-text); font-weight: 700; }
+.krb__person span { color: var(--krb-text-muted); }
+.krb__person a {
+  word-break: break-word;
+  display: inline-block;
+  padding-block: 3px;         /* lifts the hit area to >=24px (WCAG 2.2 SC 2.5.8) */
+}
+
+.krb__risk {
+  padding: 14px 16px;
+  border-radius: var(--krb-r-sm);
+  border: 1px solid var(--krb-red);
+  background: var(--krb-tint-red);
+  color: var(--krb-text);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Container queries — the block measures itself, not the viewport
+   ========================================================================== */
+@container krb (max-width: 720px) {
+  .krb__headrow { align-items: flex-start; }
+  .krb__verdict { width: 100%; flex-direction: row; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .krb__verdict-label { order: 1; width: 100%; }
+  .krb__verdict-value { order: 2; }
+  .krb__verdict-note { order: 3; }
+}
+@container krb (max-width: 560px) {
+  .krb__kpis { margin-top: 0; padding-top: var(--krb-gap); }
+}
+@container krb (max-width: 400px) {
+  .krb__scale div { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* ==========================================================================
+   Motion + print
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .krb *, .krb *::before, .krb *::after { transition: none !important; animation: none !important; }
+}
+
+@media print {
+  .krb {
+    --krb-bg: #fff; --krb-surface: #fff; --krb-surface-2: #fff; --krb-raised: #fff;
+    --krb-text: #000; --krb-text-muted: #333; --krb-text-faint: #444;
+    --krb-tint-red: #fff; --krb-tint-blue: #fff;
+    box-shadow: none; border: 2px solid var(--krb-red); max-width: none;
+  }
+  .krb__hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .krb__acc > summary::after { display: none; }
+  .krb__acc-body { display: block !important; }
+  .krb__card, .krb__acc { break-inside: avoid; }
+  .krb__card:hover { transform: none; box-shadow: none; }
+  .krb a { color: #000; text-decoration: none; }
+}
+
+/* ==========================================================================
+   Optional standalone-page wrapper (inert when embedded)
+   ========================================================================== */
+.krb-page {
+  margin: 0;
+  padding: clamp(16px, 4vw, 56px) clamp(12px, 4vw, 40px);
+  background: #eef0f6;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  .krb-page:not([data-krb-theme="light"]) { background: #07080b; }
+}
+[data-theme="dark"] .krb-page, .krb-page[data-krb-theme="dark"] { background: #07080b; }
+
+/* ==========================================================================
+   Template variants
+   Shared tokens, shared hero, shared disclosures. Only what genuinely differs
+   between the four Kotak formats is restated here.
+   ========================================================================== */
+
+/* ---- Pick of the Week ---------------------------------------------------- */
+.krb__hero--potw {
+  background:
+    radial-gradient(90% 130% at 88% 6%, rgba(255, 92, 120, .5) 0%, rgba(255, 92, 120, 0) 58%),
+    linear-gradient(135deg, #ff2440 0%, #fa1432 24%, #8f0b30 58%, #12124a 84%, var(--krb-navy-deep) 100%);
+}
+.krb__potw-rating {
+  display: inline-block;
+  padding: .04em .34em .1em;
+  border: 3px solid rgba(255, 255, 255, .85);
+  border-radius: .3em;
+  margin-right: .12em;
+}
+.krb__closing {
+  justify-self: start;
+  padding: 13px 22px;
+  border-radius: var(--krb-r-sm);
+  background: var(--krb-tint-red);
+  border: 1px solid var(--krb-red);
+  font-weight: 800;
+  color: var(--krb-red-ink);
+  font-size: var(--krb-fs-h3);
+  letter-spacing: -.01em;
+}
+.krb__foot-holding {
+  padding: 0 var(--krb-pad) var(--krb-pad);
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  color: var(--krb-text);
+}
+
+/* ---- Stock Recommendations table ---------------------------------------- */
+.krb__hero--table {
+  background: linear-gradient(135deg, #23234f 0%, var(--krb-navy) 46%, #05052e 100%);
+}
+.krb__tablewrap {
+  overflow-x: auto;                 /* 18 columns cannot fit a phone; scroll it */
+  -webkit-overflow-scrolling: touch;
+  border-block: 1px solid var(--krb-border);
+}
+.krb__tablewrap:focus-visible { outline: 2px solid var(--krb-red); outline-offset: -2px; }
+.krb__table { border-collapse: collapse; width: max-content; min-width: 100%; font-size: var(--krb-fs-xs); }
+.krb__table th, .krb__table td {
+  padding: 9px 12px;
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--krb-border-soft);
+}
+.krb__table thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--krb-surface);
+  color: var(--krb-text);
+  font-weight: 700;
+  text-align: right;
+  border-bottom: 2px solid var(--krb-red);
+}
+.krb__t-name {
+  position: sticky; left: 0; z-index: 1;
+  text-align: left !important;
+  background: var(--krb-bg);
+  font-weight: 600;
+  color: var(--krb-text);
+  min-width: 190px;
+}
+.krb__table thead .krb__t-name { z-index: 3; background: var(--krb-surface); }
+.krb__t-sector th {
+  position: sticky; left: 0;
+  text-align: left !important;
+  background: var(--krb-tint-red);
+  color: var(--krb-red-ink);
+  font-size: var(--krb-fs-xs);
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.krb__table tbody tr:hover td, .krb__table tbody tr:hover .krb__t-name { background: var(--krb-surface); }
+.krb__t-reco {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  font-size: 10.5px;
+  border: 1px solid currentColor;
+  color: var(--krb-text-muted);
+}
+.krb__t-reco[data-reco="BUY"], .krb__t-reco[data-reco="ADD"] { color: var(--krb-red-ink); }
+.krb__note--table { margin: var(--krb-pad); }
+
+/* ---- KIE full report ----------------------------------------------------- */
+.krb__hero--kie {
+  background: linear-gradient(135deg, #1d1d46 0%, var(--krb-navy) 52%, #05052e 100%);
+}
+.krb__kie-tic { font-weight: 500; opacity: .72; }
+.krb__kie-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 30px;
+  margin-top: clamp(18px, 2.4vw, 26px);
+  padding-top: clamp(16px, 2vw, 22px);
+  border-top: 1px solid rgba(255, 255, 255, .22);
+}
+.krb__kie-meta dt {
+  font-size: var(--krb-fs-xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .72);
+}
+.krb__kie-meta dd { font-size: var(--krb-fs-h3); font-weight: 800; color: #fff; letter-spacing: -.02em; }
+
+.krb__restricted {
+  margin: 0;
+  padding: 14px var(--krb-pad);
+  background: var(--krb-tint-red);
+  border-bottom: 1px solid var(--krb-border);
+  color: var(--krb-text);
+  font-size: var(--krb-fs-sm);
+}
+.krb__restricted strong { color: var(--krb-red-ink); }
+
+.krb__kie-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: clamp(24px, 3.4vw, 52px);
+  padding: var(--krb-pad);
+}
+.krb__kie-headline {
+  font-size: var(--krb-fs-h3);
+  font-weight: 800;
+  letter-spacing: -.018em;
+  color: var(--krb-red-ink);
+  margin-bottom: 12px;
+}
+.krb__kie-summary { font-weight: 600; margin-bottom: clamp(18px, 2.4vw, 26px); }
+.krb__kie-sec { margin-bottom: clamp(18px, 2.4vw, 26px); }
+.krb__kie-sec h4 {
+  font-size: var(--krb-fs-sm);
+  font-weight: 800;
+  color: var(--krb-link);
+  margin-bottom: 7px;
+}
+.krb__kie-sec p + p { margin-top: 10px; }
+.krb__kie-by {
+  padding-top: 14px;
+  border-top: 1px solid var(--krb-border);
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  color: var(--krb-text-muted);
+}
+.krb__kie-side { display: grid; gap: clamp(18px, 2.2vw, 24px); align-content: start; }
+.krb__panel h4 {
+  font-size: var(--krb-fs-xs);
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--krb-text);
+  padding-bottom: 7px;
+  margin-bottom: 8px;
+  border-bottom: 1.5px solid var(--krb-red);
+}
+.krb__panel table { width: 100%; border-collapse: collapse; font-size: var(--krb-fs-xs); }
+.krb__panel th, .krb__panel td { padding: 6px 4px; border-bottom: 1px solid var(--krb-border-soft); }
+.krb__panel th[scope="row"] { text-align: left; font-weight: 500; color: var(--krb-text-muted); }
+.krb__panel td, .krb__panel th[scope="col"] { text-align: right; font-weight: 700; color: var(--krb-text); }
+.krb__kie-src { font-size: 11px; color: var(--krb-text-faint); font-style: italic; }
+
+@container krb (max-width: 780px) {
+  .krb__kie-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@supports not (container-type: inline-size) {
+  @media (max-width: 820px) { .krb__kie-grid { grid-template-columns: minmax(0, 1fr); } }
+}
+
+/* KIE exhibits: a wide table scrolls in its own region rather than forcing the
+   whole page sideways. */
+.krb__exhibit {
+  overflow-x: auto;
+  margin: 16px 0 20px;
+  border: 1px solid var(--krb-border);
+  border-radius: var(--krb-r-sm);
+}
+.krb__exhibit:focus-visible { outline: 2px solid var(--krb-red); outline-offset: 2px; }
+.krb__exhibit table { border-collapse: collapse; width: max-content; min-width: 100%; font-size: var(--krb-fs-xs); }
+.krb__exhibit th, .krb__exhibit td {
+  padding: 7px 11px; text-align: right; white-space: nowrap;
+  border-bottom: 1px solid var(--krb-border-soft);
+}
+.krb__exhibit thead th { background: var(--krb-surface); font-weight: 700; color: var(--krb-text); border-bottom: 2px solid var(--krb-red); }
+.krb__exhibit th[scope="row"] { text-align: left; font-weight: 600; color: var(--krb-text); }
+.krb__kie-h {
+  font-size: var(--krb-fs-sm);
+  font-weight: 800;
+  color: var(--krb-link);
+  margin: 20px 0 7px;
+}
+.krb__kie-main p + p { margin-top: 10px; }
+
+  </style>
+</head>
+<body class="krb-page">
+      <article class="krb" data-krb-rating="BUY" itemscope itemtype="https://schema.org/Report">
+        <header class="krb__hero">
+          <div class="krb__hero-inner">
+            <span class="krb__wordmark" role="img" aria-label="Kotak Neo"><span class="krb__wm-mark" aria-hidden="true"></span><span class="krb__wm-name">kotak <b>neo</b></span></span>
+            <div class="krb__chips">
+              <span class="krb__chip krb__chip--lead">Company Update</span>
+              <span class="krb__chip">Dated: 31 July 2026</span>
+            </div>
+            <div class="krb__headrow">
+              <div class="krb__identity">
+                <h2 class="krb__title" itemprop="headline">Amber Enterprises (AMBER)</h2>
+                <span class="krb__holding">Holding Period: 12 months</span>
+              </div>
+              <div class="krb__verdict">
+                <span class="krb__verdict-label">Rating</span>
+                <span class="krb__verdict-value">BUY</span>
+                <span class="krb__verdict-note">We expect the stock to deliver more than 15% returns over the next 12 months</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="krb__kpis">
+          <div class="krb__kpi">
+            <span class="krb__kpi-label">Current Market Price (CMP)</span>
+            <span class="krb__kpi-value"><sup>Rs.</sup>7,441</span>
+          </div>
+          <div class="krb__kpi krb__kpi--hero">
+            <span class="krb__kpi-label">Fair Value (FV)</span>
+            <span class="krb__kpi-value"><sup>Rs.</sup>8,710</span>
+          </div>
+        </div>
+
+        <div class="krb__body">
+          <section class="krb__card krb__card--thesis" data-tone="neutral" aria-labelledby="krb-rationale">
+            <div class="krb__card-head">
+              <span class="krb__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+              <h3 class="krb__card-title" id="krb-rationale">Rationale:</h3>
+              <span class="krb__count">6</span>
+            </div>
+            <ul class="krb__list">
+              <li>Amber has entered into a manufacturing collaboration with OPPO India to manufacture mobile phones.</li>
+              <li>Under this arrangement, Amber will manufacture phones for the OPPO, OnePlus and Realme brands in India.</li>
+              <li>Amber will be undertaking manufacturing at Oppo’s existing manufacturing facility on sub-lease basis target to manufacture 0.8-09 cr /1.3-1.5 cr smartphones in FY28/FY29.</li>
+              <li>Amber now boasts one of most diversified electronics portfolios spanning: consumer-facing segments, industrial products and backward integration into components.</li>
+              <li>Scaling volumes in line with guidance and backward integration into components will be key long-term triggers.</li>
+              <li>We revise our earnings by 8%/15% for FY2028/29 and FV to Rs8,710.</li>
+            </ul>
+          </section>
+          <div class="krb__split">
+          <section class="krb__card" data-tone="positive" aria-labelledby="krb-positives">
+            <div class="krb__card-head">
+              <span class="krb__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 13.5 9 18.5 20 6.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <h3 class="krb__card-title" id="krb-positives">Positives:</h3>
+              <span class="krb__count">3</span>
+            </div>
+            <ul class="krb__list">
+              <li>Amber&#39;s entry into mobile manufacturing further diversifies its revenues away from the seasonal RAC business.</li>
+              <li>OPPO&#39;s brands (OPPO, Realme and OnePlus) collectively accounted for a 25.6% share in CY25 (~3.9 cr units).</li>
+              <li>We expect revenues to see a CAGR of 45% over FY26-29E.</li>
+            </ul>
+          </section>
+          <section class="krb__card" data-tone="negative" aria-labelledby="krb-negatives">
+            <div class="krb__card-head">
+              <span class="krb__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 8v5m0 3.5v.2M10.3 3.9 2.6 17.2A2 2 0 0 0 4.3 20.2h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <h3 class="krb__card-title" id="krb-negatives">Negatives:</h3>
+              <span class="krb__count">1</span>
+            </div>
+            <ul class="krb__list">
+              <li>Amber’s return ratios (RoE/RoCE) was in single-digit in FY26.</li>
+            </ul>
+          </section>
+          </div>
+
+        </div>
+
+        <p class="krb__attribution">The content of this document has been derived from KIE research report. Kotak&#39;s PCG Research has summarized the report (Research Team: shrikant.chouhan@kotak.com).Readers who wish to access the complete report are kindly requested to contact their respective Relationship Manager. Further, the recipient of this material should take their own professional advice before investing.</p>
+
+        <div class="krb__disclosures">
+          <details class="krb__acc">
+            <summary>Rating Scale (Private Client Group)</summary>
+            <div class="krb__acc-body">
+              <p class="krb__acc-lead">Definitions of ratings</p>
+          <dl class="krb__scale">
+            <div data-current="true"><dt>BUY<span class="krb__scale-flag">This report</span></dt><dd>We expect the stock to deliver more than 15% returns over the next 12 months</dd></div>
+            <div><dt>ADD</dt><dd>We expect the stock to deliver 5% - 15% returns over the next 12 months</dd></div>
+            <div><dt>REDUCE</dt><dd>We expect the stock to deliver -5% - +5% returns over the next 12 months</dd></div>
+            <div><dt>SELL</dt><dd>We expect the stock to deliver &lt; -5% returns over the next 12 months</dd></div>
+            <div><dt>NR</dt><dd><strong>Not Rated.</strong> Kotak Securities is not assigning any rating or price target to the stock. The report has been prepared for information purposes only.</dd></div>
+            <div><dt>SUBSCRIBE</dt><dd>We advise investor to subscribe to the IPO.</dd></div>
+            <div><dt>RS</dt><dd><strong>Rating Suspended.</strong> Kotak Securities has suspended the investment rating and price target for this stock, either because there is not a sufficient fundamental basis for determining, or there are legal, regulatory or policy constraints around publishing, an investment rating or target. The previous investment rating and price target, if any, are no longer in effect for this stock and should not be relied upon.</dd></div>
+            <div><dt>NA</dt><dd><strong>Not Available or Not Applicable.</strong> The information is not available for display or is not applicable</dd></div>
+            <div><dt>NM</dt><dd><strong>Not Meaningful.</strong> The information is not meaningful and is therefore excluded.</dd></div>
+            <div><dt>NOTE</dt><dd>Our target prices are with a 12-month perspective. Returns stated in the rating scale are our internal benchmark.</dd></div>
+          </dl>
+            </div>
+          </details>
+
+          <details class="krb__acc">
+            <summary>Research Team (Private Client Group)</summary>
+            <div class="krb__acc-body">
+          <div class="krb__team">
+            <div class="krb__team-group">
+              <h4>Fundamental Research Team (Private Client Group)</h4>
+              <div class="krb__team-grid">
+                <div class="krb__person">
+                  <strong>Shrikant Chouhan</strong>
+                  <span>Head of Research</span>
+                  <a href="mailto:shrikant.chouhan@kotak.com">shrikant.chouhan@kotak.com</a>
+                  <a href="tel:+912262185408">+91 22 6218 5408</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Arun Agarwal</strong>
+                  <span>Auto &amp; Auto Ancillary, Building Material, Cement, Consumer Durable</span>
+                  <a href="mailto:arun.agarwal@kotak.com">arun.agarwal@kotak.com</a>
+                  <a href="tel:+912262186443">+91 22 6218 6443</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Amit Agarwal, CFA</strong>
+                  <span>Transportation, Paints, FMCG</span>
+                  <a href="mailto:agarwal.amit@kotak.com">agarwal.amit@kotak.com</a>
+                  <a href="tel:+912262186439">+91 22 6218 6439</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Rini Mehta</strong>
+                  <span>Research Analyst</span>
+                  <a href="mailto:rini.mehta@kotak.com">rini.mehta@kotak.com</a>
+                  <a href="tel:+912262186433">+91 22 6218 6433</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Sumit Pokharna</strong>
+                  <span>Oil and Gas, Information Tech</span>
+                  <a href="mailto:sumit.pokharna@kotak.com">sumit.pokharna@kotak.com</a>
+                  <a href="tel:+912262186438">+91 22 6218 6438</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Veer Trivedi</strong>
+                  <span>BFSI</span>
+                  <a href="mailto:veer.trivedi@kotak.com">veer.trivedi@kotak.com</a>
+                  <a href="tel:+912262186432">+91 22 6218 6432</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Pankaj Kumar</strong>
+                  <span>Construction, Capital Goods &amp; Midcaps</span>
+                  <a href="mailto:pankajr.kumar@kotak.com">pankajr.kumar@kotak.com</a>
+                  <a href="tel:+912262185498">+91 22 6218 5498</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Amarjeet Maurya</strong>
+                  <span>Internet Software &amp; Services</span>
+                  <a href="mailto:amarjeet.maurya@kotak.com">amarjeet.maurya@kotak.com</a>
+                  <a href="tel:+912262186427">+91 22 6218 6427</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Gaurav Bhandari</strong>
+                  <span>Research Analyst</span>
+                  <a href="mailto:bhandari.gaurav@Kotak.com">bhandari.gaurav@Kotak.com</a>
+                  <a href="tel:+912262186440">+91 22 6218 6440</a>
+                </div>
+              </div>
+            </div>
+            <div class="krb__team-group">
+              <h4>Technical Research Team (Private Client Group)</h4>
+              <div class="krb__team-grid">
+                <div class="krb__person">
+                  <strong>Shrikant Chouhan</strong>
+                  
+                  <a href="mailto:shrikant.chouhan@kotak.com">shrikant.chouhan@kotak.com</a>
+                  <a href="tel:+912262185408">+91 22 6218 5408</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Amol Athawale</strong>
+                  
+                  <a href="mailto:amol.athawale@kotak.com">amol.athawale@kotak.com</a>
+                  <a href="tel:+912066203350">+91 20 6620 3350</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Sayed Haider</strong>
+                  
+                  <a href="mailto:sayed.haider@kotak.com">sayed.haider@kotak.com</a>
+                  <a href="tel:+912262185458">+91 22 62185458</a>
+                </div>
+              </div>
+            </div>
+            <div class="krb__team-group">
+              <h4>Derivatives Research Team (Private Client Group)</h4>
+              <div class="krb__team-grid">
+                <div class="krb__person">
+                  <strong>Sahaj Agrawal</strong>
+                  
+                  <a href="mailto:sahaj.agrawal@kotak.com">sahaj.agrawal@kotak.com</a>
+                  <a href="tel:+917966041701">+91 79 66041701</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Prasenjit Biswas, CMT, CFTe</strong>
+                  
+                  <a href="mailto:prasenjit.biswas@kotak.com">prasenjit.biswas@kotak.com</a>
+                  <a href="tel:+913366388331">+91 33 6638 8331</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Karan Kulkarni</strong>
+                  
+                  <a href="mailto:karan.kulkarni@kotak.com">karan.kulkarni@kotak.com</a>
+                  <a href="tel:+912066203350">+91 20 66203350</a>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+          </details>
+
+          <details class="krb__acc">
+            <summary>Disclosure / Disclaimer</summary>
+            <div class="krb__acc-body">
+          <p class="krb__risk">Investments in securities market are subject to market risks. Read all the related documents carefully before investing.</p>
+          <p class="krb__risk">Registration granted by SEBI and certification from NISM in no way guarantee performance of the intermediary or provide any assurance of returns to investors.</p>
+          <p>Kotak Securities Limited established in 1994, is a subsidiary of Kotak Mahindra Bank Limited. Kotak Securities is one of India’s largest brokerage and distribution house. Kotak Securities Limited is a corporate trading and clearing member of BSE Limited (BSE), National Stock Exchange of India Limited (NSE), Metropolitan Stock Exchange of India Limited (MSE), National Commodity and Derivatives Exchange (NCDEX) and Multi Commodity Exchange (MCX). Our businesses include stock broking, services rendered in connection with distribution of primary market issues and financial products like mutual funds and fixed deposits, depository services and Portfolio Management.</p>
+          <p>Kotak Securities Limited is also a depository participant with National Securities Depository Limited (NSDL) and Central Depository Services (India) Limited (CDSL). Kotak Securities Limited is also registered with Insurance Regulatory and Development Authority as Corporate Agent for Kotak Mahindra Life Insurance Company Limited and Kotak Mahindra General Insurance Company Limited and is also a Mutual Fund Advisor registered with Association of Mutual Funds in India (AMFI). We are registered as a Research Analyst under SEBI (Research Analyst) Regulations, 2014.</p>
+          <p>We hereby declare that our activities were neither suspended nor we have defaulted with any stock exchange authority with whom we are registered in last five years. However SEBI, Exchanges, Clearing Corporations and Depositories etc have conducted the routine inspection and based on their observations have issued advise/warning/show cause notices/deficiency letters/ or levied penalty or imposed charges for certain deviations observed in inspections or in normal course of business, as a Stock Broker / Depository Participant/Portfolio Manager. We have not been debarred from doing business by any Stock Exchange / SEBI or any other authorities; nor has our certificate of registration been cancelled by SEBI at any point of time.</p>
+          <p>We offer our research services to clients as well as our prospects.</p>
+          <p>This document is not for public distribution and has been furnished to you solely for your information and must not be reproduced or redistributed to any other person. Persons into whose possession this document may come are required to observe these restrictions.</p>
+          <p>This material is for the personal information of the authorized recipient, and we are not soliciting any action based upon it. This report is not to be construed as an offer to sell or the solicitation of an offer to buy any security in any jurisdiction where such an offer or solicitation would be illegal. It is for the general information of clients of Kotak Securities Ltd. It does not constitute a personal recommendation or take into account the particular investment objectives, financial situations, or needs of individual clients. We have reviewed the report, and in so far as it includes current or historical information, it is believed to be reliable though its accuracy or completeness cannot be guaranteed. Neither Kotak Securities Limited, nor any person connected with it, accepts any liability arising from the use of this document. The recipients of this material should rely on their own investigations and take their own professional advice. Price and value of the investments referred to in this material may go up or down. Past performance is not a guide for future performance. Certain transactions -including those involving futures, options and other derivatives as well as non-investment grade securities - involve substantial risk and are not suitable for all investors. Reports based on technical analysis centers on studying charts of a stock’s price movement and trading volume, as opposed to focusing on a company’s fundamentals and as such, may not match with a report on a company’s fundamentals.</p>
+          <p>Opinions expressed are our current opinions as of the date appearing on this material only. While we endeavor to update on a reasonable basis the information discussed in this material, there may be regulatory, compliance or other reasons that prevent us from doing so. Prospective investors and others are cautioned that any forward-looking statements are not predictions and may be subject to change without notice. Our proprietary trading and investment businesses may make investment decisions that are inconsistent with the recommendations expressed herein.</p>
+          <p>Kotak Securities Limited has two independent equity research groups: Institutional Equities and Private Client Group. This report has been prepared by the Private Client Group.</p>
+          <p>We and our affiliates/associates, officers, directors, and employees, Research Analyst(including relatives) worldwide may: (a) from time to time, have long or short positions in, and buy or sell the securities thereof, of company (ies) mentioned herein or (b) be engaged in any other transaction involving such securities and earn brokerage or other compensation or act as a market maker in the financial instruments of the subject company/company (ies) discussed herein or act as advisor or lender / borrower to such company (ies) or have other potential/material conflict of interest with respect to any recommendation and related information and opinions at the time of publication of Research Report or at the time of public appearance. Kotak Securities Limited (KSL) may have proprietary long/short position in the above mentioned scrip(s) and therefore may be considered as interested. The views provided herein are general in nature and does not consider risk appetite or investment objective of particular investor; readers are requested to take independent professional advice before investing. This should not be construed as invitation or solicitation to do business with KSL. Kotak Securities Limited is also a Portfolio Manager. Portfolio Management Team (PMS) takes its investment decisions independent of the PCG research and accordingly PMS may have positions contrary to the PCG research recommendation. Kotak Securities Limited does not provide any promise or assurance of favourable view for a particular industry or sector or business group in any manner. The investor is requested to take into consideration all the risk factors including their financial condition, suitability to risk return profile and take professional advice before investing.</p>
+          <p>The analyst for this report certifies that all of the views expressed in this report accurately reflect his or her personal views about the subject company or companies and its or their securities, and no part of his or her compensation was, is or will be, directly or indirectly related to specific recommendations or views expressed in this report.</p>
+          <p>No part of this material may be duplicated in any form and/or redistributed without Kotak Securities’ prior written consent. Details of Associates are available on www.kotak.com</p>
+          <p>1. “Note that the research analysts contributing to the research report may not be registered/qualified as research analysts with FINRA; and 2. Such research analysts may not be associated persons of Kotak Mahindra Inc and therefore, may not be subject to NASD Rule 2711 restrictions on communications with a subject company, public appearances and trading securities held by a research analyst account</p>
+          <p>Any U.S. recipients of the research who wish to effect transactions in any security covered by the report should do so with or through Kotak Mahindra Inc. (Member FINRA/SIPC) and (ii) any transactions in the securities covered by the research by U.S. recipients must be effected only through Kotak Mahindra Inc. (Member FINRA/SIPC) at 369 Lexington Avenue 28th Floor NY NY 10017 USA (Tel:+1 212-600-8850).</p>
+          <p>Kotak Securities Limited and its non US affiliates may, to the extent permissible under applicable laws, have acted on or used this research to the extent that it relates to non US issuers, prior to or immediately following its publication. This material should not be construed as an offer to sell or the solicitation of an offer to buy any security in any jurisdiction where such an offer or solicitation would be illegal. This research report and its respective contents do not constitute an offer or invitation to purchase or subscribe for any securities or solicitation of any investments or investment services. Accordingly, any brokerage and investment services including the products and services described are not available to or intended for Canadian persons or US persons.”</p>
+          <p>Research Analyst has served as an officer, director or employee of subject company(ies): No</p>
+          <p>We or our associates may have received compensation from the subject company(ies) in the past 12 months. We or our associates have managed or co-managed public offering of securities for the subject company(ies) in the past 12 months: No</p>
+          <p>We or our associates may have received compensation for investment banking or merchant banking or brokerage services from the subject company(ies) in the past 12 months. We or our associates may have received any compensation for products or services other than investment banking or merchant banking or brokerage services from the subject company(ies) in the past 12 months. We or our associates may have received compensation or other benefits from the subject company(ies) or third party in connection with the research report. Our associates may have financial interest in the subject company(ies).</p>
+          <p>Research Analyst or his/her relative’s financial interest in the subject company(ies): No</p>
+          <p>Kotak Securities Limited has financial interest in the subject company(ies) at the end of the week immediately preceding the date of publication of Research Report: Yes</p>
+          <p>“However, Kotak Securities Prop/Arbitrage team could have exposure/financial interest to the subject company/companies during the ongoing month.” “Nature of financial interest is holding of equity shares and/or derivatives of the subject company.”</p>
+          <p>Our associates may have actual/beneficial ownership of 1% or more securities of the subject company(ies) at the end of the month immediately preceding the date of publication of Research Report.</p>
+          <p>Research Analyst or his/her relatives has actual/beneficial ownership of 1% or more securities of the subject company(ies) at the end of the month immediately preceding the date of publication of Research Report: No.</p>
+          <p>Kotak Securities Limited has actual/beneficial ownership of 1% or more securities of the subject company(ies) at the end of the month immediately preceding the date of publication of Research Report: No</p>
+          <p>By referring to any particular sector, Kotak Securities Limited does not provide any promise or assurance of favourable view for a particular industry or sector or business group in any manner. The investor is requested to take into consideration all the risk factors including their financial condition, suitability to risk return profile and take professional advice before investing. Such representations are not indicative of future results.</p>
+          <p>Subject company(ies) may have been client during twelve months preceding the date of distribution of the research report.</p>
+          <p>“A graph of daily closing prices of securities is available at <a href="https://www.nseindia.com/ChartApp/install/charts/mainpage.jsp" target="_blank" rel="noopener noreferrer">https://www.nseindia.com/ChartApp/install/charts/mainpage.jsp</a> and <a href="http://economictimes.indiatimes.com/markets/stocks/stock-quotes" target="_blank" rel="noopener noreferrer">http://economictimes.indiatimes.com/markets/stocks/stock-quotes</a>. (Choose a company from the list on the browser and select the “three years” icon in the price chart).”</p>
+          <p>Our research should not be considered as an advertisement or advice, professional or otherwise. The investor is requested to take into consideration all the risk factors including their financial condition, suitability to risk return profile and the like and take professional advice before investing.</p>
+          <p>“Investments in securities market are subject to market risks, read all the related documents carefully before investing. This information is purely backed by KSL research analyst based on research recommendation. Registration granted by SEBI, Enlistment as RA and certification from NISM in no way guarantee performance of the intermediary or provide any assurance of returns to investors. Any views and/or opinions stated are personal. Please do thorough research or consult your financial manager/advisor before making an investment.</p>
+          <p>Registered Address: 27 BKC, C 27, G Block, Bandra Kurla Complex, Bandra (E), Mumbai 400051. SEBI Registration No. INZ000200137 (Member of NSE, BSE, MSE, MCX &amp; NCDEX), Member Id: NSE-08081; BSE-673; MSE-1024; MCX-56285; NCDEX-1262. Research Analyst: INH000000586; BSE Enlistment No: 5035 for compliance T&amp;C and disclaimers, Visit <a href="https://bit.ly/longdisc" target="_blank" rel="noopener noreferrer">https://bit.ly/longdisc</a> ”</p>
+          <p>“General Terms and Conditions for Usage of AI/ML in Research Services. These Terms and Conditions (“T&amp;C’s”) govern the use of research services provided by Kotak Securities Limited (“KSL”), where Artificial Intelligence (AI) and Machine Learning (ML) technologies are used as part of the research presentation and related services. By accessing or using such services, you acknowledge and agree to the following: 1. Purpose of AI/ML Usage KSL employs AI/ML based tools for limited purposes such as • Audio and video generation using AI-created voices, avatars, and formats; • Enhancing accessibility and presentation of research insights; • Facilitating efficiency in dissemination of market related content and research content. The AI/ML tools are used only as a medium of presentation and/or dissemination and do not alter the substance of research prepared by KSL. 2. Extent of Usage The specific scope and manner of AI/ML usage in research services is set out in the AI Disclaimer published along with the relevant research content and is also published on the website under the disclaimers section. Users are advised to carefully review such disclaimers for detailed information on the extent and limitations of AI/ML usage as may be updated by KSL from time to time in the disclaimer section <a href="https://www.kotakneo.com/disclaimer/" target="_blank" rel="noopener noreferrer">https://www.kotakneo.com/disclaimer/</a>. 3. Ownership of Research Content The underlying research, market views, data, analysis, and opinions remain solely those of KSL. AI/ML is not used to create independent investment recommendations. 4. Accuracy and Limitations While KSL takes reasonable care to ensure the accuracy of its research content: • AI/ML outputs may not always reflect complete, precise, or contextually appropriate information; • KSL makes no warranties, express or implied, as to the reliability, accuracy, or fitness of AI/ML generated presentations. 5. No Confidential Information Input KSL does not upload, disclose, or process any client specific, confidential, or proprietary information through AI/ML platforms. All content generated through AI/ML is limited to publicly available information, market data, and internally developed research compliant with SEBI regulations. 6. Investor Responsibility Clients and viewers shall not rely solely on AI generated content for making any investment or trading decisions. The AI/ML generated presentations, output and dissemination are only for informational and illustrative purposes. Investors are further advised to consult their financial advisor before making any investment or trading decisions. 7. No Liability KSL shall not be responsible for or liable for any losses, damages, or claims arising directly or indirectly from reliance on AI/ML generated presentations or any output produced by the AI/ML. KSL shall not be liable for any loss, damage, or harm, whether direct, indirect, incidental, special, consequential, or punitive, arising from: • reliance on any AI-generated information; • business, financial, or investment decisions made based on such outputs; or • any inaccuracies, errors, or omissions in the responses. 8. Amendments KSL reserves the right to modify, update, or withdraw these T&amp;C’s or its usage of AL/ML technologies at its sole discretion, subject to compliance with applicable laws and regulations”</p>
+          <p>Disclaimer: <a href="https://bit.ly/DisclaimerKSLResearch" target="_blank" rel="noopener noreferrer">https://bit.ly/DisclaimerKSLResearch</a></p>
+          <p>Derivatives are a sophisticated investment device. The investor is requested to take into consideration all the risk factors before actually trading in derivative contracts.</p>
+          <p>Compliance Officer Details: Mr. Hiren Thakkar. Call: 022 - 4285 8484, or Email: ks.compliance@kotak.com.</p>
+          <p>Kotak Securities Limited. Registered Office: 27 BKC, C 27, G Block, Bandra Kurla Complex, Bandra (E), Mumbai 400051. CIN: U99999MH1994PLC134051, Telephone No.: +22 43360000, Fax No.: +22 67132430. Website: www.kotak.com / www.kotakneo.com. Correspondence Address: Infinity IT Park, Bldg. No 21, Opp. Film City Road, A K Vaidya Marg, Malad (East), Mumbai 400097. Telephone No: 42856825. SEBI Registration No: INZ000200137 (Member of NSE, BSE, MSE, MCX &amp; NCDEX), AMFI ARN 0164, PMS INP000000258 and Research Analyst INH000000586. NSDL/CDSL: IN-DP-629-2021.</p>
+          <p>“In case you require any clarification or have any query/concern, kindly write to us at Service.securities@kotak.com. For grievances write to KS.escalation@kotak.com and find Grievances Escalation matrix in the link below.” <a href="https://www.kotakneo.com/disclaimer/" target="_blank" rel="noopener noreferrer">https://www.kotakneo.com/disclaimer/</a></p>
+            </div>
+          </details>
+        </div>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Report","headline":"Amber Enterprises (AMBER) - BUY","datePublished":"2026-07-31","inLanguage":"en-IN","about":{"@type":"Corporation","name":"Amber Enterprises","tickerSymbol":"AMBER"},"publisher":{"@type":"Organization","name":"Kotak Securities Limited","url":"https://www.kotakneo.com"},"genre":"Company Update"}</script>
+      </article>
+</body>
+</html>

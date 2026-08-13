@@ -14,12 +14,19 @@ const RATINGS = ['BUY', 'ADD', 'REDUCE', 'SELL', 'NR', 'SUBSCRIBE', 'RS', 'NA', 
 const MONTHS = { january:1, february:2, march:3, april:4, may:5, june:6, july:7,
                  august:8, september:9, october:10, november:11, december:12 };
 
+/** Handles both printed orders: "12 August 2026" and "August 12, 2026". */
 function toIso(s) {
-  const m = /(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/.exec(String(s || ''));
-  if (!m) return null;
-  const mo = MONTHS[m[2].toLowerCase()];
-  if (!mo) return null;
-  return `${m[3]}-${String(mo).padStart(2, '0')}-${String(Number(m[1])).padStart(2, '0')}`;
+  const str = String(s || '');
+  let d, mo, y;
+  let m = /(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/.exec(str);
+  if (m) { d = Number(m[1]); mo = MONTHS[m[2].toLowerCase()]; y = m[3]; }
+  else {
+    m = /([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})/.exec(str);
+    if (!m) return null;
+    mo = MONTHS[m[1].toLowerCase()]; d = Number(m[2]); y = m[3];
+  }
+  if (!mo || !d) return null;
+  return `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }
 
 function num(s) {
@@ -129,3 +136,136 @@ function extractPickOfWeek(lines, meta) {
 }
 
 module.exports = { extractPickOfWeek, toIso, num, bullets, RATINGS };
+
+/* --------------------------------------------------------------- KIE report */
+
+/** How many numeric cells make a line a table row rather than prose. */
+const TABLE_MIN_NUMS = 4;
+
+function numericTokens(t) {
+  return (String(t).match(/(?:^|\s)\(?-?[\d,]+(?:\.\d+)?\)?%?(?=\s|$)/g) || []).length;
+}
+
+/**
+ * The full Kotak Institutional Equities note. Content runs over the first pages
+ * as prose interleaved with exhibit tables; the last pages are the standard
+ * disclaimers and are dropped.
+ *
+ * pdftext merges text items that share a baseline, so a table ROW arrives as a
+ * single line. That is what makes exhibits recoverable without ruled lines:
+ * a line carrying several numeric cells is a row, and consecutive rows are one
+ * table.
+ */
+function extractKieReport(pages, meta) {
+  const errors = [], warnings = [];
+  const all = pages || [];
+  if (!all.length) {
+    errors.push({ code: 'NO_PAGES', field: 'document', message: 'No pages could be read.' });
+    return { ok: false, report: null, errors, warnings };
+  }
+
+  const p1 = (all[0].lines || []).map((l) => Object.assign({}, l, { t: (l.text || '').trim() }));
+  const find = (re) => p1.find((l) => re.test(l.t));
+  const grab = (re) => { const l = find(re); return l ? (re.exec(l.t) || [])[1] : null; };
+
+  // The company, ticker and rating are printed on ONE line.
+  const TITLE_RE = /^(.+?)\s*\(([A-Z0-9&.-]{2,12})\)\s*(BUY|ADD|REDUCE|SELL|NR|SUBSCRIBE|RS|NA|NM)?\s*$/;
+  const titleL = p1.find((l) => TITLE_RE.test(l.t) && !/^\d/.test(l.t));
+  const cmp = grab(/CMP\s*\(₹\)\s*:\s*([\d,]+)/i) || grab(/CMP\s*\(Rs\)\s*:\s*([\d,]+)/i);
+  const fv = grab(/Fair\s*Value\s*\(₹\)\s*:\s*([\d,]+)/i) || grab(/Fair\s*Value\s*\(Rs\)\s*:\s*([\d,]+)/i);
+  const titleM = titleL ? TITLE_RE.exec(titleL.t) : null;
+  const ratingL = (titleM && titleM[3])
+    ? { t: titleM[3] }
+    : p1.find((l) => RATINGS.includes(l.t.toUpperCase()));
+  // The date sits at the end of the shared meta line, not on its own.
+  const dateHit = p1.map((l) => (/([A-Z][a-z]+\s+\d{1,2},\s*\d{4})/.exec(l.t) || [])[1]).find(Boolean);
+  const dateL = dateHit ? { t: dateHit } : null;
+
+  if (!titleL) errors.push({ code: 'TITLE_NOT_FOUND', field: 'stock',
+    message: 'Could not find the "<Company> (<TICKER>)" headline on page 1.' });
+  if (!ratingL) errors.push({ code: 'RATING_NOT_FOUND', field: 'recommendation.rating',
+    message: 'No rating found on page 1.' });
+  if (!cmp) errors.push({ code: 'CMP_NOT_FOUND', field: 'recommendation.cmp',
+    message: 'Could not read CMP from page 1.' });
+  if (errors.length) return { ok: false, report: null, errors, warnings };
+
+  const tm = titleM;
+  const iso = dateL ? toIso(dateL.t.replace(',', '')) : null;
+
+  /* ---- body: prose and exhibits, in document order ---- */
+  const bodySize = p1.length ? p1.reduce((a, l) => a + (l.height || 0), 0) / p1.length : 12;
+  const SKIP = /^(India Research|KOTAK INSTITUTIONAL EQUITIES|Refer to the disclosures|This report is not intended|\d{1,2}|RESULT)$/i;
+  const content = [];
+  const contentPages = all.filter((pg) => {
+    const txt = (pg.lines || []).map((l) => l.text).join(' ');
+    return !/DISCLAIMERS, DISCLOSURES & LEGAL/i.test(txt);
+  });
+
+  for (const pg of contentPages) {
+    let table = null, para = null;
+    for (const l of (pg.lines || [])) {
+      const t = (l.text || '').trim();
+      if (!t || SKIP.test(t)) continue;
+      if (t === titleL.t || (dateL && t === dateL.t)) continue;
+
+      if (numericTokens(t) >= TABLE_MIN_NUMS) {
+        para = null;
+        const cells = t.split(/\s{2,}|\t/).map((c) => c.trim()).filter(Boolean);
+        const row = cells.length > 1 ? cells : t.split(/\s+/);
+        if (!table) { table = { kind: 'table', rows: [] }; content.push(table); }
+        table.rows.push(row);
+        continue;
+      }
+      table = null;
+      const isHead = (l.height || 0) > bodySize * 1.08 && t.length < 150 && !/[.]$/.test(t);
+      if (isHead) { para = null; content.push({ kind: 'head', text: t, page: pg.number }); continue; }
+      // Prose is laid out one visual line at a time; join it back into
+      // paragraphs, breaking only at a heading or a table.
+      if (para) para.text += ' ' + t;
+      else { para = { kind: 'para', text: t, page: pg.number }; content.push(para); }
+    }
+  }
+  if (!content.length) {
+    errors.push({ code: 'NO_CONTENT', field: 'content', message: 'No body content could be read.' });
+    return { ok: false, report: null, errors, warnings };
+  }
+
+  // The first long paragraph after the headline is the summary.
+  const headIdx = content.findIndex((c) => c.kind === 'head' && c.text.length > 25);
+  const headline = headIdx >= 0 ? content[headIdx].text : null;
+  const sumIdx = content.findIndex((c, i) => i > headIdx && c.kind === 'para' && c.text.length > 180);
+  const summary = sumIdx >= 0 ? content[sumIdx].text : null;
+  const body = content.filter((_, i) => i !== headIdx && i !== sumIdx);
+
+  if (!headline) warnings.push({ code: 'NO_HEADLINE', field: 'headline',
+    message: 'No headline identified; the report renders without one.' });
+
+  const report = {
+    schemaVersion: '1.0',
+    format: 'kie-full-report',
+    reportId: (meta && meta.reportId) || `kie-${tm[2].toLowerCase()}-${iso || 'undated'}`,
+    publishedAt: iso,
+    stock: { name: tm[1].trim(), ticker: tm[2].trim().toUpperCase(),
+             sector: (find(/^(Retailing|Automobiles|Banks|[A-Z][a-z]+(?: [A-Z&][a-z]+)*)$/) || {}).t || null },
+    report: { type: 'Result', template: 'KIE Full Report' },
+    recommendation: {
+      rating: ratingL.t.toUpperCase(),
+      cmp: num(cmp), fairValue: num(fv), currency: 'INR',
+      sectorView: grab(/Sector\s*View\s*:\s*(\w+)/i),
+      benchmark: (function () { const v = grab(/NIFTY-50\s*:\s*([\d,]+)/i); return v ? { name: 'NIFTY-50', value: v } : null; })()
+    },
+    restricted: p1.some((l) => /not intended for circulation to retail clients/i.test(l.t))
+      ? 'This report is not intended for circulation to retail clients.' : null,
+    headline: headline,
+    summary: summary,
+    content: body,
+    panels: []
+  };
+  if (!report.publishedAt) {
+    warnings.push({ code: 'NO_DATE', field: 'publishedAt', message: 'No report date found on page 1.' });
+    report.publishedAt = (meta && meta.publishedAt) || null;
+  }
+  return { ok: true, report, errors, warnings };
+}
+
+module.exports.extractKieReport = extractKieReport;

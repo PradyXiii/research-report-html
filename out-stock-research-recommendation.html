@@ -1,0 +1,1229 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Lenskart Solutions (LENSKART) - ADD | Result</title>
+  <meta name="description" content="Kotak Securities Result on Lenskart Solutions. Rating ADD, CMP 586, Fair Value 615.">
+  <style>
+/* ==========================================================================
+   Kotak Research Block (krb) — v2
+   Embeddable research-report block for kotakneo.com.
+
+   Design notes
+   ------------
+   Number-first hierarchy: the figures are the interface, labels support them.
+   A dramatic red->navy hero carries the brand; the body stays calm so the
+   content is readable. Depth comes from layered surfaces and one soft glow,
+   not from borders everywhere.
+
+   Rules that hold the whole thing together:
+   - Every selector is scoped under .krb. No global styles, no collisions.
+   - No JavaScript. Accordions are native <details>.
+   - Responsive by construction (fluid type, auto-fit grids). The block sits in
+     a column of unknown width, so it measures ITSELF with container queries.
+   - Light + dark, resolved as: .krb[data-krb-theme] > site [data-theme]/.dark
+     > prefers-color-scheme.
+   - The hero is deliberately dark in BOTH themes. It reads as brand, not chrome.
+
+   Contrast (measured, sRGB, WCAG 2.1)
+   -----------------------------------
+   #fa1432 on #fff .......... 4.03:1  large/bold text and UI only
+   #e00f2b on #fff .......... 4.92:1  small red text, and white-on-red pills
+   #ff4d63 on #14161c ....... 5.59:1  small red text in dark
+   #00005a on #fff .......... 18.3:1
+   white on hero gradient ... 6.5:1+  (darkest point of the ramp is #fa1432
+                                       at 4.03:1, so hero body text sits on a
+                                       black-tinted scrim, never bare red)
+   ========================================================================== */
+
+.krb {
+  /* ---- brand ---------------------------------------------------------- */
+  --krb-red: #fa1432;
+  --krb-red-deep: #e00f2b;      /* white text on red -> 4.92:1              */
+  --krb-red-ink: #e00f2b;       /* red TEXT under 18.66px                   */
+  --krb-navy: #00005a;
+  --krb-navy-deep: #05052e;
+
+  /* ---- light surfaces -------------------------------------------------- */
+  --krb-bg: #ffffff;
+  --krb-surface: #f7f8fc;
+  --krb-surface-2: #ffffff;
+  --krb-raised: #ffffff;
+  --krb-tint-red: #fff2f4;
+  --krb-tint-blue: #f1f3fb;
+  --krb-text: #14161d;
+  --krb-text-muted: #596070;
+  --krb-text-faint: #6b7280;   /* 4.83:1 on white */
+  --krb-border: #e6e9f2;
+  --krb-border-soft: #eff1f7;
+  --krb-link: #00005a;
+  --krb-shadow-sm: 0 1px 2px rgba(10, 12, 20, .05);
+  --krb-shadow: 0 2px 4px rgba(10, 12, 20, .04), 0 12px 28px rgba(10, 12, 20, .07);
+  --krb-shadow-lg: 0 4px 8px rgba(10, 12, 20, .06), 0 24px 56px rgba(10, 12, 20, .12);
+
+  /* ---- scale ----------------------------------------------------------- */
+  --krb-r: 20px;
+  --krb-r-md: 14px;
+  --krb-r-sm: 10px;
+  --krb-pad: clamp(18px, 3.4vw, 40px);
+  --krb-gap: clamp(12px, 1.8vw, 20px);
+
+  --krb-fs-display: clamp(28px, 1.2rem + 3.4vw, 52px);
+  --krb-fs-kpi: clamp(30px, 1.3rem + 3vw, 46px);
+  --krb-fs-h3: clamp(18px, .95rem + .7vw, 24px);
+  --krb-fs-body: clamp(15px, .9rem + .18vw, 17px);
+  --krb-fs-sm: clamp(13px, .8rem + .1vw, 14.5px);
+  --krb-fs-xs: clamp(11.5px, .72rem + .06vw, 12.5px);
+
+  --krb-font: inherit;          /* picks up the host page's brand typeface */
+
+  container-type: inline-size;
+  container-name: krb;
+  position: relative;
+  isolation: isolate;
+  font-family: var(--krb-font);
+  font-size: var(--krb-fs-body);
+  line-height: 1.62;
+  color: var(--krb-text);
+  background: var(--krb-bg);
+  border-radius: var(--krb-r);
+  box-shadow: var(--krb-shadow-lg);
+  overflow: hidden;
+  margin: 0 auto;
+  max-width: 1160px;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- dark ------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .krb:not([data-krb-theme="light"]) {
+    --krb-bg: #0d0f14;
+    --krb-surface: #14171f;
+    --krb-surface-2: #14161c;
+    --krb-raised: #191d26;
+    --krb-tint-red: #24121a;
+    --krb-tint-blue: #131629;
+    --krb-text: #eceef4;
+    --krb-text-muted: #a3aab9;
+    --krb-text-faint: #949bab;   /* 6.43:1 on the dark surface */
+    --krb-border: #262b36;
+    --krb-border-soft: #1e222b;
+    --krb-link: #9db0ff;
+    --krb-red-ink: #ff4d63;
+    --krb-shadow-sm: 0 1px 2px rgba(0, 0, 0, .5);
+    --krb-shadow: 0 2px 4px rgba(0, 0, 0, .45), 0 12px 28px rgba(0, 0, 0, .4);
+    --krb-shadow-lg: 0 4px 8px rgba(0, 0, 0, .5), 0 24px 56px rgba(0, 0, 0, .55);
+  }
+}
+[data-theme="dark"] .krb:not([data-krb-theme="light"]),
+.dark .krb:not([data-krb-theme="light"]),
+.krb[data-krb-theme="dark"] {
+  --krb-bg: #0d0f14;
+  --krb-surface: #14171f;
+  --krb-surface-2: #14161c;
+  --krb-raised: #191d26;
+  --krb-tint-red: #24121a;
+  --krb-tint-blue: #131629;
+  --krb-text: #eceef4;
+  --krb-text-muted: #a3aab9;
+  --krb-text-faint: #949bab;   /* 6.43:1 on the dark surface */
+  --krb-border: #262b36;
+  --krb-border-soft: #1e222b;
+  --krb-link: #9db0ff;
+  --krb-red-ink: #ff4d63;
+  --krb-shadow-sm: 0 1px 2px rgba(0, 0, 0, .5);
+  --krb-shadow: 0 2px 4px rgba(0, 0, 0, .45), 0 12px 28px rgba(0, 0, 0, .4);
+  --krb-shadow-lg: 0 4px 8px rgba(0, 0, 0, .5), 0 24px 56px rgba(0, 0, 0, .55);
+}
+
+.krb *, .krb *::before, .krb *::after { box-sizing: border-box; }
+.krb :where(p, ul, ol, li, h2, h3, h4, dl, dd, dt, figure) { margin: 0; padding: 0; }
+.krb :where(ul, ol) { list-style: none; }
+
+.krb a { color: var(--krb-link); text-decoration: underline; text-underline-offset: 2px; }
+.krb a:hover { text-decoration-thickness: 2px; }
+.krb a:focus-visible, .krb summary:focus-visible {
+  outline: 2px solid var(--krb-red);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   HERO — red -> navy ramp, dark in both themes
+   ========================================================================== */
+.krb__hero {
+  position: relative;
+  padding: clamp(26px, 4.4vw, 52px) var(--krb-pad) clamp(30px, 4.4vw, 50px);
+  background:
+    radial-gradient(90% 130% at 88% 6%, rgba(255, 92, 120, .55) 0%, rgba(255, 92, 120, 0) 58%),
+    linear-gradient(135deg, #ff2440 0%, #fa1432 26%, #a80d2b 56%, #2c0a45 82%, var(--krb-navy-deep) 100%);
+  color: #fff;
+  overflow: hidden;
+}
+/* fine grain keeps the large gradient from banding on wide screens */
+.krb__hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+.krb__hero-inner { position: relative; z-index: 1; }
+
+/* Typographic brand lockup -- placeholder until the real asset lands. */
+.krb__wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: clamp(18px, 2.6vw, 30px);
+  font-size: clamp(19px, 1rem + .9vw, 26px);
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1;
+  color: #fff;
+}
+.krb__wm-mark {
+  width: 1.32em; height: 1.32em;
+  flex: none;
+  border-radius: 50%;
+  background: #fff;
+  position: relative;
+}
+.krb__wm-mark::before {
+  content: "";
+  position: absolute;
+  inset: 22% 46% 22% 46%;
+  background: var(--krb-red);
+  transform: skewX(-14deg);
+}
+.krb__wm-name { font-weight: 800; }
+.krb__wm-name b { font-weight: 500; }
+.krb__wm-rule { width: 1px; align-self: stretch; background: currentColor; opacity: .45; margin-inline: 2px; }
+.krb__wm-pcg {
+  font-size: .43em;
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.14;
+  text-transform: none;
+  opacity: .92;
+}
+/* On a light surface the lockup inverts. */
+.krb__wordmark[data-on="light"] { color: var(--krb-navy); }
+.krb__wordmark[data-on="light"] .krb__wm-mark { background: var(--krb-navy); }
+
+.krb__logo { width: clamp(112px, 13vw, 148px); height: auto; display: block; margin-bottom: clamp(18px, 2.6vw, 30px); filter: brightness(0) invert(1); }
+.krb img { max-width: 100%; height: auto; }
+
+.krb__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(16px, 2.4vw, 26px); }
+.krb__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .085em;
+  text-transform: uppercase;
+  /* black scrim, never bare red -> white text reaches 6.5:1 */
+  background: rgba(0, 0, 0, .3);
+  border: 1px solid rgba(255, 255, 255, .26);
+  color: #fff;
+  white-space: nowrap;
+}
+.krb__chip--lead { background: #fff; border-color: #fff; color: var(--krb-red-deep); }
+
+.krb__headrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(18px, 3vw, 40px);
+}
+.krb__identity { min-width: min(100%, 260px); flex: 1 1 340px; }
+
+.krb__title {
+  font-size: var(--krb-fs-display);
+  font-weight: 800;
+  line-height: 1.03;
+  letter-spacing: -.032em;
+  color: #fff;
+  text-wrap: balance;
+}
+.krb__holding {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 5px 12px 5px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, .3);
+  border: 1px solid rgba(255, 255, 255, .2);
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: #fff;
+}
+.krb__holding::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* rating medallion */
+.krb__verdict {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 16px 22px 18px;
+  border-radius: var(--krb-r-md);
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+  min-width: min(100%, 250px);
+  max-width: 340px;
+}
+.krb__verdict-label {
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #6b7183;
+}
+.krb__verdict-value {
+  font-size: clamp(30px, 1.1rem + 2.4vw, 42px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--krb-red-deep);
+}
+.krb__verdict-note { font-size: var(--krb-fs-xs); color: #4d5364; font-weight: 600; line-height: 1.45; }
+
+/* ==========================================================================
+   KPI STRIP — the numbers are the interface
+   ========================================================================== */
+.krb__kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: var(--krb-gap);
+  padding: var(--krb-gap) var(--krb-pad) 0;
+  margin-top: calc(clamp(20px, 3vw, 34px) * -1);
+  position: relative;
+  z-index: 2;
+}
+.krb__kpi {
+  position: relative;
+  padding: clamp(16px, 2.2vw, 24px);
+  border-radius: var(--krb-r-md);
+  background: var(--krb-raised);
+  border: 1px solid var(--krb-border);
+  box-shadow: var(--krb-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow: hidden;
+}
+.krb__kpi--hero { border-color: color-mix(in srgb, var(--krb-red) 40%, var(--krb-border)); }
+.krb__kpi--hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--krb-red), #ff6a4d);
+}
+.krb__kpi-label {
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--krb-text-faint);
+}
+.krb__kpi-value {
+  font-size: var(--krb-fs-kpi);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  color: var(--krb-text);
+}
+.krb__kpi-value sup { font-size: .5em; font-weight: 700; letter-spacing: 0; vertical-align: .55em; margin-right: 2px; }
+.krb__kpi--hero .krb__kpi-value { color: var(--krb-red-ink); }
+.krb__kpi-note { font-size: var(--krb-fs-xs); color: var(--krb-text-muted); }
+
+/* ==========================================================================
+   CONTENT CARDS
+   ========================================================================== */
+.krb__body { padding: var(--krb-gap) var(--krb-pad) var(--krb-pad); display: grid; gap: var(--krb-gap); }
+
+.krb__split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--krb-gap);
+  align-items: stretch;
+}
+
+.krb__card {
+  padding: clamp(20px, 2.6vw, 30px);
+  border-radius: var(--krb-r-md);
+  background: var(--krb-surface-2);
+  border: 1px solid var(--krb-border);
+  box-shadow: var(--krb-shadow-sm);
+  transition: box-shadow .22s ease, transform .22s ease;
+}
+.krb__card:hover { box-shadow: var(--krb-shadow); transform: translateY(-2px); }
+.krb__card--thesis {
+  background:
+    linear-gradient(180deg, var(--krb-tint-red) 0%, var(--krb-surface-2) 42%);
+  border-color: color-mix(in srgb, var(--krb-red) 22%, var(--krb-border));
+}
+
+.krb__card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.krb__icon {
+  flex: none;
+  width: 38px; height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--krb-tint-red);
+  color: var(--krb-red-ink);
+}
+.krb__icon svg { width: 20px; height: 20px; display: block; }
+.krb__card[data-tone="positive"] .krb__icon { background: var(--krb-tint-blue); color: var(--krb-link); }
+.krb__card-title {
+  font-size: var(--krb-fs-h3);
+  font-weight: 800;
+  letter-spacing: -.018em;
+  color: var(--krb-text);
+}
+.krb__count {
+  margin-left: auto;
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--krb-surface);
+  border: 1px solid var(--krb-border);
+  font-size: var(--krb-fs-xs);
+  font-weight: 700;
+  color: var(--krb-text-faint);
+}
+
+.krb__list { display: grid; gap: 14px; }
+.krb__list li { display: flex; gap: 12px; align-items: flex-start; line-height: 1.6; }
+.krb__list li::before {
+  content: "";
+  flex: none;
+  width: 7px; height: 7px;
+  margin-top: .62em;
+  border-radius: 50%;
+  background: var(--krb-red);
+}
+.krb__card[data-tone="positive"] .krb__list li::before { background: var(--krb-link); }
+.krb__prose { display: grid; gap: 12px; }
+
+.krb__note {
+  padding: 14px 16px;
+  border-radius: var(--krb-r-sm);
+  background: var(--krb-surface);
+  border: 1px dashed var(--krb-border);
+  font-size: var(--krb-fs-sm);
+  color: var(--krb-text-muted);
+}
+
+/* ==========================================================================
+   ATTRIBUTION + DISCLOSURES
+   ========================================================================== */
+.krb__attribution {
+  padding: 16px var(--krb-pad);
+  background: var(--krb-surface);
+  border-top: 1px solid var(--krb-border);
+  font-size: var(--krb-fs-sm);
+  color: var(--krb-text-muted);
+}
+
+.krb__disclosures { border-top: 1px solid var(--krb-border); }
+.krb__acc { border-bottom: 1px solid var(--krb-border-soft); }
+.krb__acc:last-child { border-bottom: 0; }
+.krb__acc > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 17px var(--krb-pad);
+  min-height: 56px;
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--krb-red-ink);
+  background: var(--krb-surface-2);
+  transition: background .18s ease;
+}
+.krb__acc > summary::-webkit-details-marker { display: none; }
+.krb__acc > summary:hover { background: var(--krb-surface); }
+.krb__acc > summary::after {
+  content: "";
+  flex: none;
+  width: 9px; height: 9px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform .2s ease;
+}
+.krb__acc[open] > summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.krb__acc-body {
+  padding: 4px var(--krb-pad) var(--krb-pad);
+  background: var(--krb-surface-2);
+  font-size: var(--krb-fs-sm);
+  color: var(--krb-text-muted);
+  display: grid;
+  gap: 11px;
+}
+.krb__acc-body p { line-height: 1.65; }
+.krb__acc-lead { font-weight: 800; color: var(--krb-text); }
+
+/* the disclaimer is dense legal prose carrying bare URLs -- without these it
+   forces a sideways scroll on a phone */
+.krb__acc-body { overflow-wrap: anywhere; hyphens: auto; }
+.krb a { overflow-wrap: anywhere; }
+
+.krb__scale { display: grid; gap: 10px; }
+.krb__scale div {
+  display: grid;
+  grid-template-columns: minmax(78px, max-content) 1fr;
+  gap: 6px 16px;
+  align-items: start;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--krb-border-soft);
+}
+.krb__scale div:last-child { border-bottom: 0; padding-bottom: 0; }
+.krb__scale dt { font-weight: 800; color: var(--krb-text); letter-spacing: .05em; }
+.krb__scale dd { color: var(--krb-text-muted); }
+.krb__scale div[data-current="true"] {
+  background: var(--krb-tint-red);
+  border-radius: var(--krb-r-sm);
+  padding: 12px;
+  margin: 0 -12px;
+  border-bottom-color: transparent;
+}
+.krb__scale div[data-current="true"] dt { color: var(--krb-red-ink); }
+.krb__scale-flag {
+  margin-left: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  /* white on #fa1432 is 4.03:1 -- under the bar at this size. #e00f2b is
+     4.92:1, and contrast with white is background-independent. */
+  background: #e00f2b;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.krb__scale dt { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+
+.krb__team { display: grid; gap: 22px; }
+.krb__team-group > h4 {
+  font-size: var(--krb-fs-xs);
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--krb-red-ink);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--krb-border);
+}
+.krb__team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 16px;
+}
+.krb__person {
+  display: grid;
+  gap: 2px;
+  padding: 13px 15px;
+  border-radius: var(--krb-r-sm);
+  background: var(--krb-surface);
+  border: 1px solid var(--krb-border-soft);
+}
+.krb__person strong { color: var(--krb-text); font-weight: 700; }
+.krb__person span { color: var(--krb-text-muted); }
+.krb__person a {
+  word-break: break-word;
+  display: inline-block;
+  padding-block: 3px;         /* lifts the hit area to >=24px (WCAG 2.2 SC 2.5.8) */
+}
+
+.krb__risk {
+  padding: 14px 16px;
+  border-radius: var(--krb-r-sm);
+  border: 1px solid var(--krb-red);
+  background: var(--krb-tint-red);
+  color: var(--krb-text);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Container queries — the block measures itself, not the viewport
+   ========================================================================== */
+@container krb (max-width: 720px) {
+  .krb__headrow { align-items: flex-start; }
+  .krb__verdict { width: 100%; flex-direction: row; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .krb__verdict-label { order: 1; width: 100%; }
+  .krb__verdict-value { order: 2; }
+  .krb__verdict-note { order: 3; }
+}
+@container krb (max-width: 560px) {
+  .krb__kpis { margin-top: 0; padding-top: var(--krb-gap); }
+}
+@container krb (max-width: 400px) {
+  .krb__scale div { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* ==========================================================================
+   Motion + print
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .krb *, .krb *::before, .krb *::after { transition: none !important; animation: none !important; }
+}
+
+@media print {
+  .krb {
+    --krb-bg: #fff; --krb-surface: #fff; --krb-surface-2: #fff; --krb-raised: #fff;
+    --krb-text: #000; --krb-text-muted: #333; --krb-text-faint: #444;
+    --krb-tint-red: #fff; --krb-tint-blue: #fff;
+    box-shadow: none; border: 2px solid var(--krb-red); max-width: none;
+  }
+  .krb__hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .krb__acc > summary::after { display: none; }
+  .krb__acc-body { display: block !important; }
+  .krb__card, .krb__acc { break-inside: avoid; }
+  .krb__card:hover { transform: none; box-shadow: none; }
+  .krb a { color: #000; text-decoration: none; }
+}
+
+/* ==========================================================================
+   Optional standalone-page wrapper (inert when embedded)
+   ========================================================================== */
+.krb-page {
+  margin: 0;
+  padding: clamp(16px, 4vw, 56px) clamp(12px, 4vw, 40px);
+  background: #eef0f6;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  .krb-page:not([data-krb-theme="light"]) { background: #07080b; }
+}
+[data-theme="dark"] .krb-page, .krb-page[data-krb-theme="dark"] { background: #07080b; }
+
+/* ==========================================================================
+   Template variants
+   Shared tokens, shared hero, shared disclosures. Only what genuinely differs
+   between the four Kotak formats is restated here.
+   ========================================================================== */
+
+/* ---- Pick of the Week ---------------------------------------------------- */
+.krb__hero--potw {
+  background:
+    radial-gradient(90% 130% at 88% 6%, rgba(255, 92, 120, .5) 0%, rgba(255, 92, 120, 0) 58%),
+    linear-gradient(135deg, #ff2440 0%, #fa1432 24%, #8f0b30 58%, #12124a 84%, var(--krb-navy-deep) 100%);
+}
+.krb__potw-rating {
+  display: inline-block;
+  padding: .04em .34em .1em;
+  border: 3px solid rgba(255, 255, 255, .85);
+  border-radius: .3em;
+  margin-right: .12em;
+}
+.krb__closing {
+  justify-self: start;
+  padding: 13px 22px;
+  border-radius: var(--krb-r-sm);
+  background: var(--krb-tint-red);
+  border: 1px solid var(--krb-red);
+  font-weight: 800;
+  color: var(--krb-red-ink);
+  font-size: var(--krb-fs-h3);
+  letter-spacing: -.01em;
+}
+.krb__foot-holding {
+  padding: 0 var(--krb-pad) var(--krb-pad);
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  color: var(--krb-text);
+}
+
+/* ---- Stock Recommendations table ---------------------------------------- */
+.krb__hero--table {
+  background: linear-gradient(135deg, #23234f 0%, var(--krb-navy) 46%, #05052e 100%);
+}
+.krb__tablewrap {
+  overflow-x: auto;                 /* 18 columns cannot fit a phone; scroll it */
+  -webkit-overflow-scrolling: touch;
+  border-block: 1px solid var(--krb-border);
+}
+.krb__tablewrap:focus-visible { outline: 2px solid var(--krb-red); outline-offset: -2px; }
+.krb__table { border-collapse: collapse; width: max-content; min-width: 100%; font-size: var(--krb-fs-xs); }
+.krb__table th, .krb__table td {
+  padding: 9px 12px;
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--krb-border-soft);
+}
+.krb__table thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--krb-surface);
+  color: var(--krb-text);
+  font-weight: 700;
+  text-align: right;
+  border-bottom: 2px solid var(--krb-red);
+}
+.krb__t-name {
+  position: sticky; left: 0; z-index: 1;
+  text-align: left !important;
+  background: var(--krb-bg);
+  font-weight: 600;
+  color: var(--krb-text);
+  min-width: 190px;
+}
+.krb__table thead .krb__t-name { z-index: 3; background: var(--krb-surface); }
+.krb__t-sector th {
+  position: sticky; left: 0;
+  text-align: left !important;
+  background: var(--krb-tint-red);
+  color: var(--krb-red-ink);
+  font-size: var(--krb-fs-xs);
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.krb__table tbody tr:hover td, .krb__table tbody tr:hover .krb__t-name { background: var(--krb-surface); }
+.krb__t-reco {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  font-size: 10.5px;
+  border: 1px solid currentColor;
+  color: var(--krb-text-muted);
+}
+.krb__t-reco[data-reco="BUY"], .krb__t-reco[data-reco="ADD"] { color: var(--krb-red-ink); }
+.krb__note--table { margin: var(--krb-pad); }
+
+/* ---- KIE full report ----------------------------------------------------- */
+.krb__hero--kie {
+  background: linear-gradient(135deg, #1d1d46 0%, var(--krb-navy) 52%, #05052e 100%);
+}
+.krb__kie-tic { font-weight: 500; opacity: .72; }
+.krb__kie-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 30px;
+  margin-top: clamp(18px, 2.4vw, 26px);
+  padding-top: clamp(16px, 2vw, 22px);
+  border-top: 1px solid rgba(255, 255, 255, .22);
+}
+.krb__kie-meta dt {
+  font-size: var(--krb-fs-xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .72);
+}
+.krb__kie-meta dd { font-size: var(--krb-fs-h3); font-weight: 800; color: #fff; letter-spacing: -.02em; }
+
+.krb__restricted {
+  margin: 0;
+  padding: 14px var(--krb-pad);
+  background: var(--krb-tint-red);
+  border-bottom: 1px solid var(--krb-border);
+  color: var(--krb-text);
+  font-size: var(--krb-fs-sm);
+}
+.krb__restricted strong { color: var(--krb-red-ink); }
+
+.krb__kie-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: clamp(24px, 3.4vw, 52px);
+  padding: var(--krb-pad);
+}
+.krb__kie-headline {
+  font-size: var(--krb-fs-h3);
+  font-weight: 800;
+  letter-spacing: -.018em;
+  color: var(--krb-red-ink);
+  margin-bottom: 12px;
+}
+.krb__kie-summary { font-weight: 600; margin-bottom: clamp(18px, 2.4vw, 26px); }
+.krb__kie-sec { margin-bottom: clamp(18px, 2.4vw, 26px); }
+.krb__kie-sec h4 {
+  font-size: var(--krb-fs-sm);
+  font-weight: 800;
+  color: var(--krb-link);
+  margin-bottom: 7px;
+}
+.krb__kie-sec p + p { margin-top: 10px; }
+.krb__kie-by {
+  padding-top: 14px;
+  border-top: 1px solid var(--krb-border);
+  font-size: var(--krb-fs-sm);
+  font-weight: 700;
+  color: var(--krb-text-muted);
+}
+.krb__kie-side { display: grid; gap: clamp(18px, 2.2vw, 24px); align-content: start; }
+.krb__panel h4 {
+  font-size: var(--krb-fs-xs);
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--krb-text);
+  padding-bottom: 7px;
+  margin-bottom: 8px;
+  border-bottom: 1.5px solid var(--krb-red);
+}
+.krb__panel table { width: 100%; border-collapse: collapse; font-size: var(--krb-fs-xs); }
+.krb__panel th, .krb__panel td { padding: 6px 4px; border-bottom: 1px solid var(--krb-border-soft); }
+.krb__panel th[scope="row"] { text-align: left; font-weight: 500; color: var(--krb-text-muted); }
+.krb__panel td, .krb__panel th[scope="col"] { text-align: right; font-weight: 700; color: var(--krb-text); }
+.krb__kie-src { font-size: 11px; color: var(--krb-text-faint); font-style: italic; }
+
+@container krb (max-width: 780px) {
+  .krb__kie-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@supports not (container-type: inline-size) {
+  @media (max-width: 820px) { .krb__kie-grid { grid-template-columns: minmax(0, 1fr); } }
+}
+
+/* KIE exhibits: a wide table scrolls in its own region rather than forcing the
+   whole page sideways. */
+.krb__exhibit {
+  overflow-x: auto;
+  margin: 16px 0 20px;
+  border: 1px solid var(--krb-border);
+  border-radius: var(--krb-r-sm);
+}
+.krb__exhibit:focus-visible { outline: 2px solid var(--krb-red); outline-offset: 2px; }
+.krb__exhibit table { border-collapse: collapse; width: max-content; min-width: 100%; font-size: var(--krb-fs-xs); }
+.krb__exhibit th, .krb__exhibit td {
+  padding: 7px 11px; text-align: right; white-space: nowrap;
+  border-bottom: 1px solid var(--krb-border-soft);
+}
+.krb__exhibit thead th { background: var(--krb-surface); font-weight: 700; color: var(--krb-text); border-bottom: 2px solid var(--krb-red); }
+.krb__exhibit th[scope="row"] { text-align: left; font-weight: 600; color: var(--krb-text); }
+.krb__kie-h {
+  font-size: var(--krb-fs-sm);
+  font-weight: 800;
+  color: var(--krb-link);
+  margin: 20px 0 7px;
+}
+.krb__kie-main p + p { margin-top: 10px; }
+
+  </style>
+</head>
+<body class="krb-page">
+      <article class="krb krb--kie" data-krb-rating="ADD" itemscope itemtype="https://schema.org/Report">
+        <header class="krb__hero krb__hero--kie">
+          <div class="krb__hero-inner">
+            <span class="krb__wordmark" role="img" aria-label="Kotak Neo"><span class="krb__wm-mark" aria-hidden="true"></span><span class="krb__wm-name">kotak <b>neo</b></span></span>
+            <div class="krb__headrow">
+              <div class="krb__identity">
+                <h2 class="krb__title" itemprop="headline">Lenskart Solutions <span class="krb__kie-tic">(LENSKART)</span></h2>
+                <span class="krb__holding">Retailing</span>
+              </div>
+              <div class="krb__verdict"><span class="krb__verdict-label">Rating</span><span class="krb__verdict-value">ADD</span></div>
+            </div>
+            <dl class="krb__kie-meta">
+              <div><dt>CMP (₹)</dt><dd>586</dd></div>
+              <div><dt>Fair Value (₹)</dt><dd>615</dd></div>
+              <div><dt>Sector View</dt><dd>Cautious</dd></div>
+              <div><dt>NIFTY-50</dt><dd>24,436</dd></div>
+              <div><dt>Dated</dt><dd>12 August 2026</dd></div>
+            </dl>
+          </div>
+        </header>
+        <p class="krb__restricted"><strong>Circulation restriction.</strong> This report is not intended for circulation to retail clients.</p>
+        <div class="krb__kie-grid">
+          <div class="krb__kie-main">
+            <h3 class="krb__kie-headline">International segment drives earnings outperformance</h3>
+            <p class="krb__kie-summary">Lenskart’s revenue grew 34% yoy, with both the India and international businesses reporting strong growth. Segmentally, (1) India business revenue increased 31% yoy, led by a 23% yoy rise in eyewear units sold and remainder by an ASP increase, also demonstrated by healthy SSSG of 18% and (2) international business revenue rose 38% yoy, led by a 34% yoy rise in eyewear units sold. According to Lenskart, it will continue to focus on network expansion and improved merchandising to structurally drive future growth.</p>
+            <p>This report is not intended for circulation to retail clients.</p>
+            <h4 class="krb__kie-h">Retailing</h4>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">CMP(₹):</th><th scope="col">586</th><th scope="col">Fair</th><th scope="col">Value(₹):</th><th scope="col">615</th><th scope="col">Sector</th><th scope="col">View:</th><th scope="col">Cautious</th><th scope="col">NIFTY-50:</th><th scope="col">24,436</th><th scope="col">August</th><th scope="col">12,</th><th scope="col">2026</th></tr></thead><tbody></tbody></table>
+            </div>
+            <h4 class="krb__kie-h">Lenskart posted strong revenue growth of 34% yoy, driven by 31% yoy growth</h4>
+            <h4 class="krb__kie-h">in the India business and 38% yoy growth in the international business. India</h4>
+            <p>gross margin was up 74 bps yoy and EBITDA margin expanded 197 bps yoy.</p>
+            <h4 class="krb__kie-h">International gross margin/EBITDA margin increased 111/506 bps yoy. The</h4>
+            <h4 class="krb__kie-h">company exceeded our pre-Ind AS EBITDA estimate by 9.2% and EPS</h4>
+            <h4 class="krb__kie-h">estimate by 14%. We upgrade our FY2027-29 EPS estimates by 9-15%, as we</h4>
+            <h4 class="krb__kie-h">bake in higher revenue growth and margin expansion for both segments. This</h4>
+            <p>drives a revised DCF-based FV of Rs615 (Rs560 earlier). Retain ADD.</p>
+            <h4 class="krb__kie-h">Strong 34% yoy revenue growth, driven by India and international segments</h4>
+            <h4 class="krb__kie-h">Higher GM and operating leverage drive 374 bps yoy EBITDA margin expansion</h4>
+            <p>Lenskart reported overall gross margin of 70.3% in 1QFY27 (versus 68.7% in 1QFY26). The company managed to offset the currency headwind by increasing reliance on in-house manufacturing. Pre-Ind AS EBITDA margin was at 13.3%, registering a strong expansion of 374 bps yoy. Segmentally, (1) India business EBITDA margin expanded 197 bps yoy and pre-Ind AS EBITDA margin expanded 208 bps yoy and (2) international EBITDA margin increased 506 bps yoy and pre-Ind AS EBITDA margin expanded 620 bps yoy. EBITDA margin expansion was driven by gross margin expansion and operating leverage from marketing and other fixed expenses.</p>
+            <h4 class="krb__kie-h">Healthy store expansion, large opportunity ahead</h4>
+            <p>Other highlights include (1) India store count increasing to 2,725 from 2,609 stores in 4QFY26 and 2,137 stores in 1QFY26. Of its 2,725 stores, 1,067 stores were in metro cities and (2) international store count rising to 734 from 718 stores in 4QFY26 and 669 stores in 1QFY26. Stores were added across Japan, Southeast Asia and the Middle East. Lenskart is witnessing strong revenue ramp-up and SSSG in metro and non-metro stores in India. The company believes there is clear potential to add 10k+ stores in India across existing and new cities.</p>
+            <h4 class="krb__kie-h">Retain ADD with a revised FV of Rs615</h4>
+            <p>Lenskart is on a strong revenue growth trajectory, which is driving operating leverage. We account for stronger-than-expected 1Q performance, particularly in the international segment. We upgrade our FY2027-29 revenue estimates by ~3% and EPS estimates by 9-15%. This, coupled with a roll forward to September 2027, drives a revised DCF-based FV of Rs615. Retain ADD. Company data and valuation summary Stock data CMP(Rs)/FV(Rs)/Rating 586/615/ADD 52-week range (Rs) (high-low) 596-356 Mcap (bn) (Rs/US$) 1,020/10.7 ADTV-3M (mn) (Rs/US$) 3,720/39.0 Shareholding pattern (%) Price performance (%) 1M 3M 12M Absolute 8 23 0 Rel. to Nifty 7 19 0 Rel. to MSCI India 7 18 0 Forecasts/Valuations 2026 2027E 2028E EPS (Rs) 3.0 5.5 7.4 EPS growth (%) 65.7 85.9 33.4 P/E (X) 196.8 105.9 79.3 P/B (X) 11.6 10.5 9.3 EV/EBITDA (X) 55.7 39.4 30.6 RoE (%) 7.0 10.4 12.4 Div. yield (%) 0.0 0.0 0.0 Sales (Rs bn) 88 116 141 EBITDA (Rs bn) 18 25 32 Net profits (Rs bn) 5.2 9.6 13 Source: Bloomberg, Company data, Kotak Institutional Equities estimates Prices in this report are based on the market close of Related Research → Lenskart Solutions: 4QFY26: Strong revenue and margin beat again→ Lenskart Solutions: 3QFY26: Healthy all-round performance→ Lenskart Solutions: A clear vision on growth and profitability Full sector coverage on KINSITE</p>
+            <h4 class="krb__kie-h">RESULT17.6</h4>
+            <p>14.7 6.4 9.11.3 50.9 Promoters FPIs MFs BFIs Retail Others| Refer to the disclosures at the end of the report. | Garima Mishra | Ishani Swain</p>
+            <h4 class="krb__kie-h">Lenskart Solutions</h4>
+            <p>Retailing India Research</p>
+            <h4 class="krb__kie-h">Revenue growth of 34% yoy was driven by 31% yoy growth in the India business and 38% yoy growth in the international business</h4>
+            <p>Consolidated quarterly pro forma financials of Lenskart, March fiscal year-ends, 2026-27E (Rs mn)1QFY27 1QFY27E 1QFY26 4QFY26 1QFY27E yoy qoq FY2027E FY2026 Key financials (Rs mn)</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">27,142</th><th scope="col">26,564</th><th scope="col">20,322</th><th scope="col">25,157</th><th scope="col">2.2</th><th scope="col">33.6</th><th scope="col">7.9</th><th scope="col">115,919</th><th scope="col">88,140</th><th scope="col">31.5</th></tr></thead><tbody><tr><th scope="row">Total</th><td>expenses</td><td>(21,257)</td><td>(21,002)</td><td>(16,677)</td><td>(19,773)</td><td>1.2</td><td>27.5</td><td>7.5</td><td>(91,001)</td><td>(70,611)</td><td>28.9</td></tr><tr><th scope="row">COGS</th><td>(8,073)</td><td>(8,155)</td><td>(6,361)</td><td>(7,645)</td><td>(1.0)</td><td>26.9</td><td>5.6</td><td>(36,198)</td><td>(27,357)</td><td>32.3</td></tr><tr><th scope="row">Gross</th><td>profit</td><td>19,069</td><td>18,410</td><td>13,961</td><td>17,512</td><td>3.6</td><td>36.6</td><td>8.9</td><td>79,720</td><td>60,784</td><td>31.2</td></tr><tr><th scope="row">Employee</th><td>benefits</td><td>expense</td><td>(5,994)</td><td>(5,727)</td><td>(4,722)</td><td>(5,476)</td><td>4.7</td><td>26.9</td><td>9.4</td><td>(25,261)</td><td>(20,436)</td><td>23.6</td></tr><tr><th scope="row">Other</th><td>expenses</td><td>(7,191)</td><td>(7,121)</td><td>(5,594)</td><td>(6,652)</td><td>1.0</td><td>28.5</td><td>8.1</td><td>(29,541)</td><td>(22,818)</td><td>29.5</td></tr><tr><th scope="row">EBITDA</th><td>5,885</td><td>5,562</td><td>3,646</td><td>5,384</td><td>5.8</td><td>61.4</td><td>9.3</td><td>24,918</td><td>17,530</td><td>42.1</td></tr><tr><th scope="row">EBITDA</th><td>(pre-IndAS)</td><td>3,605</td><td>3,300</td><td>1,846</td><td>3,216</td><td>9.2</td><td>95.3</td><td>12.1</td><td>15,554</td><td>10,174</td><td>52.9</td></tr><tr><th scope="row">Depreciation</th><td>and</td><td>amortisation</td><td>expense</td><td>(3,046)</td><td>(3,049)</td><td>(2,383)</td><td>(2,875)</td><td>(0.1)</td><td>27.8</td><td>6.0</td><td>(12,344)</td><td>(10,484)</td><td>17.7</td></tr><tr><th scope="row">EBIT</th><td>2,839</td><td>2,513</td><td>1,263</td><td>2,509</td><td>13.0</td><td>124.8</td><td>13.1</td><td>12,574</td><td>7,046</td><td>78.5</td></tr><tr><th scope="row">Other</th><td>income</td><td>685</td><td>582</td><td>519</td><td>490</td><td>17.7</td><td>32.0</td><td>39.7</td><td>2,423</td><td>1,743</td><td>39.0</td></tr><tr><th scope="row">Finance</th><td>costs</td><td>(532)</td><td>(500)</td><td>(418)</td><td>(435)</td><td>6.4</td><td>27.3</td><td>22.2</td><td>(2,088)</td><td>(1,785)</td><td>17.0</td></tr><tr><th scope="row">Restated</th><td>profit/(loss)</td><td>before</td><td>tax</td><td>2,991</td><td>2,595</td><td>1,364</td><td>2,564</td><td>15.3</td><td>119.3</td><td>16.7</td><td>12,909</td><td>7,004</td><td>84.3</td></tr><tr><th scope="row">Total</th><td>tax</td><td>expense</td><td>(712)</td><td>(649)</td><td>(459)</td><td>(506)</td><td>(3,305)</td><td>(1,794)</td><td>84.2</td></tr><tr><th scope="row">Profit</th><td>after</td><td>tax</td><td>2,280</td><td>1,946</td><td>905</td><td>2,058</td><td>17.1</td><td>151.9</td><td>10.8</td><td>9,604</td><td>5,211</td><td>84.3</td></tr><tr><th scope="row">Share</th><td>of</td><td>(loss)</td><td>of</td><td>an</td><td>associate</td><td>and</td><td>joint</td><td>venture</td><td>5</td><td>(10)</td><td>7</td><td>(22)</td><td>—</td><td>(44.0)</td></tr></tbody></table>
+            </div>
+            <p>Exceptional item — — (104) — — (157)</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Reported</th><th scope="col">PAT</th><th scope="col">2,284</th><th scope="col">1,936</th><th scope="col">808</th><th scope="col">2,036</th><th scope="col">18.0</th><th scope="col">182.8</th><th scope="col">12.2</th><th scope="col">9,604</th><th scope="col">5,010</th><th scope="col">91.7</th></tr></thead><tbody><tr><th scope="row">EPS</th><td>1.3</td><td>1.1</td><td>0.5</td><td>1.2</td><td>14.0</td><td>169.2</td><td>10.3</td><td>5.5</td><td>2.9</td><td>91.7</td></tr></tbody></table>
+            </div>
+            <p>Costs (% of revenues)</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Employee</th><th scope="col">expenses</th><th scope="col">22.1</th><th scope="col">21.6</th><th scope="col">23.2</th><th scope="col">21.8</th><th scope="col">52</th><th scope="col">bps</th><th scope="col">-116</th><th scope="col">bps</th><th scope="col">31</th><th scope="col">bps</th><th scope="col">21.8</th><th scope="col">23.2</th><th scope="col">-139</th><th scope="col">bps</th></tr></thead><tbody><tr><th scope="row">Other</th><td>expenses</td><td>26.5</td><td>26.8</td><td>27.5</td><td>26.4</td><td>-32</td><td>bps</td><td>-104</td><td>bps</td><td>5</td><td>bps</td><td>25.5</td><td>25.9</td><td>-40</td><td>bps</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>70.3</td><td>69.3</td><td>68.7</td><td>69.6</td><td>95</td><td>bps</td><td>155</td><td>bps</td><td>64</td><td>bps</td><td>68.8</td><td>69.0</td><td>-19</td><td>bps</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>21.7</td><td>20.9</td><td>17.9</td><td>21.4</td><td>74</td><td>bps</td><td>374</td><td>bps</td><td>27</td><td>bps</td><td>21.5</td><td>19.9</td><td>161</td><td>bps</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>13.3</td><td>12.4</td><td>9.1</td><td>12.8</td><td>85</td><td>bps</td><td>419</td><td>bps</td><td>49</td><td>bps</td><td>13.4</td><td>11.5</td><td>188</td><td>bps</td></tr><tr><th scope="row">PAT</th><td>margin</td><td>8.4</td><td>7.3</td><td>4.0</td><td>8.1</td><td>112</td><td>bps</td><td>444</td><td>bps</td><td>32</td><td>bps</td><td>8.3</td><td>5.7</td><td>260</td><td>bps</td></tr><tr><th scope="row">Effective</th><td>tax</td><td>rate</td><td>23.8</td><td>25.0</td><td>33.7</td><td>19.7</td><td>-121</td><td>bps</td><td>-986</td><td>bps</td><td>406</td><td>bps</td><td>25.6</td><td>25.6</td><td>-1</td><td>bps</td></tr></tbody></table>
+            </div>
+            <p>India business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">(Rs</th><th scope="col">mn)</th><th scope="col">15,310</th><th scope="col">15,230</th><th scope="col">11,715</th><th scope="col">14,750</th><th scope="col">0.5</th><th scope="col">30.7</th><th scope="col">3.8</th><th scope="col">66,864</th><th scope="col">52,648</th><th scope="col">27.0</th></tr></thead><tbody><tr><th scope="row">EBITDA</th><td>(Rs</td><td>mn)</td><td>3,280</td><td>3,201</td><td>2,278</td><td>3,115</td><td>2.5</td><td>44.0</td><td>5.3</td><td>15,056</td><td>10,675</td><td>41.0</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>(Rs</td><td>mn)</td><td>2,360</td><td>2,286</td><td>1,561</td><td>2,252</td><td>3.2</td><td>51.2</td><td>4.8</td><td>11,018</td><td>7,535</td><td>46.2</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>(%)</td><td>15.4</td><td>15.0</td><td>13.3</td><td>15.3</td><td>40</td><td>bps</td><td>208</td><td>bps</td><td>14</td><td>bps</td><td>16.5</td><td>14.3</td><td>217</td><td>bps</td></tr></tbody></table>
+            </div>
+            <p>International business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">(Rs</th><th scope="col">mn)</th><th scope="col">12,030</th><th scope="col">11,335</th><th scope="col">8,719</th><th scope="col">10,540</th><th scope="col">6.1</th><th scope="col">38.0</th><th scope="col">14.1</th><th scope="col">49,628</th><th scope="col">37,896</th><th scope="col">31.0</th></tr></thead><tbody><tr><th scope="row">EBITDA</th><td>(Rs</td><td>mn)</td><td>2,640</td><td>2,361</td><td>1,472</td><td>2,258</td><td>11.8</td><td>79.3</td><td>16.9</td><td>10,434</td><td>7,302</td><td>42.9</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>(Rs</td><td>mn)</td><td>1,280</td><td>1,014</td><td>387</td><td>975</td><td>26.2</td><td>230.7</td><td>31.3</td><td>4,537</td><td>2,639</td><td>71.9</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>(%)</td><td>10.6</td><td>8.9</td><td>4.4</td><td>9.3</td><td>169</td><td>bps</td><td>620</td><td>bps</td><td>138</td><td>bps</td><td>9.1</td><td>7.0</td><td>218</td><td>bps</td></tr></tbody></table>
+            </div>
+            <p>Change (%) yoy growth (%) Source: Company, Kotak Institutional Equities estimates Pro forma financials assume that acquisitions such as Dealskart and Meller are included in the base quarter as well, even though the acquisition actually closed later. We refer to these financials when providing growth and margin expansion commentary. In 2HFY26, pro forma and reported financials were similar.</p>
+            <h4 class="krb__kie-h">Lenskart Solutions</h4>
+            <p>Retailing India Research</p>
+            <h4 class="krb__kie-h">Strong yoy growth in revenue and EBITDA</h4>
+            <h4 class="krb__kie-h">Consolidated quarterly financials of Lenskart, March fiscal year-ends, 2026-27E (Rs mn)1QFY27 1QFY27E 1QFY26 4QFY26 1QFY27E yoy qoq FY2027E FY2026</h4>
+            <p>Key financials (Rs mn)</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">27,142</th><th scope="col">26,564</th><th scope="col">18,945</th><th scope="col">25,157</th><th scope="col">2.2</th><th scope="col">43.3</th><th scope="col">7.9</th><th scope="col">115,919</th><th scope="col">88,140</th><th scope="col">31.5</th></tr></thead><tbody><tr><th scope="row">Total</th><td>expenses</td><td>(21,257)</td><td>(21,002)</td><td>(15,584)</td><td>(19,773)</td><td>1.2</td><td>36.4</td><td>7.5</td><td>(91,001)</td><td>(70,611)</td><td>28.9</td></tr><tr><th scope="row">COGS</th><td>(8,073)</td><td>(8,155)</td><td>(6,040)</td><td>(7,645)</td><td>(1.0)</td><td>33.6</td><td>5.6</td><td>(36,198)</td><td>(27,357)</td><td>32.3</td></tr><tr><th scope="row">Gross</th><td>profit</td><td>19,069</td><td>18,410</td><td>12,904</td><td>17,512</td><td>3.6</td><td>47.8</td><td>8.9</td><td>79,720</td><td>60,784</td><td>31.2</td></tr><tr><th scope="row">Employee</th><td>benefits</td><td>expense</td><td>(5,994)</td><td>(5,727)</td><td>(4,656)</td><td>(5,476)</td><td>4.7</td><td>28.7</td><td>9.4</td><td>(25,261)</td><td>(20,436)</td><td>23.6</td></tr><tr><th scope="row">Other</th><td>expenses</td><td>(7,191)</td><td>(7,121)</td><td>(4,888)</td><td>(6,652)</td><td>1.0</td><td>47.1</td><td>8.1</td><td>(29,541)</td><td>(22,818)</td><td>29.5</td></tr><tr><th scope="row">EBITDA</th><td>5,885</td><td>5,562</td><td>3,360</td><td>5,384</td><td>5.8</td><td>75.1</td><td>9.3</td><td>24,918</td><td>17,530</td><td>42.1</td></tr><tr><th scope="row">EBITDA</th><td>(pre-IndAS)</td><td>3,605</td><td>3,300</td><td>1,560</td><td>3,216</td><td>9.2</td><td>131.1</td><td>12.1</td><td>15,554</td><td>10,174</td><td>52.9</td></tr><tr><th scope="row">Depreciation</th><td>and</td><td>amortisation</td><td>expense</td><td>(3,046)</td><td>(3,049)</td><td>(2,371)</td><td>(2,875)</td><td>(0.1)</td><td>28.5</td><td>6.0</td><td>(12,344)</td><td>(10,484)</td><td>17.7</td></tr><tr><th scope="row">EBIT</th><td>2,839</td><td>2,513</td><td>989</td><td>2,509</td><td>13.0</td><td>187.0</td><td>13.1</td><td>12,574</td><td>7,046</td><td>78.5</td></tr><tr><th scope="row">Other</th><td>income</td><td>685</td><td>582</td><td>516</td><td>490</td><td>17.7</td><td>32.6</td><td>39.7</td><td>2,423</td><td>1,743</td><td>39.0</td></tr><tr><th scope="row">Finance</th><td>costs</td><td>(532)</td><td>(500)</td><td>(410)</td><td>(435)</td><td>6.4</td><td>29.6</td><td>22.2</td><td>(2,088)</td><td>(1,785)</td><td>17.0</td></tr><tr><th scope="row">Restated</th><td>profit/(loss)</td><td>before</td><td>tax</td><td>2,991</td><td>2,595</td><td>1,095</td><td>2,564</td><td>15.3</td><td>173.1</td><td>16.7</td><td>12,909</td><td>7,004</td><td>84.3</td></tr><tr><th scope="row">Total</th><td>tax</td><td>expense</td><td>(712)</td><td>(649)</td><td>(385)</td><td>(506)</td><td>(3,305)</td><td>(1,794)</td><td>84.2</td></tr><tr><th scope="row">Profit</th><td>after</td><td>tax</td><td>2,280</td><td>1,946</td><td>710</td><td>2,058</td><td>17.1</td><td>221.2</td><td>10.8</td><td>9,604</td><td>5,211</td><td>84.3</td></tr><tr><th scope="row">Share</th><td>of</td><td>(loss)</td><td>of</td><td>an</td><td>associate</td><td>and</td><td>joint</td><td>venture</td><td>5</td><td>(10)</td><td>6</td><td>(22)</td><td>-</td><td>(44.0)</td></tr></tbody></table>
+            </div>
+            <p>Exceptional item — — (104) - - (157.09)</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Reported</th><th scope="col">PAT</th><th scope="col">2,284</th><th scope="col">1,936</th><th scope="col">612</th><th scope="col">2,036</th><th scope="col">18.0</th><th scope="col">273.4</th><th scope="col">12.2</th><th scope="col">9,604</th><th scope="col">5,010</th><th scope="col">91.7</th></tr></thead><tbody><tr><th scope="row">EPS</th><td>1.3</td><td>1.1</td><td>0.4</td><td>1.2</td><td>14.0</td><td>255.6</td><td>10.3</td><td>5.5</td><td>2.9</td><td>91.7</td></tr></tbody></table>
+            </div>
+            <p>Costs (% of revenues)</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Employee</th><th scope="col">expenses</th><th scope="col">22.1</th><th scope="col">21.6</th><th scope="col">24.6</th><th scope="col">21.8</th><th scope="col">52</th><th scope="col">bps</th><th scope="col">-250</th><th scope="col">bps</th><th scope="col">31</th><th scope="col">bps</th><th scope="col">21.8</th><th scope="col">23.2</th><th scope="col">-139</th><th scope="col">bps</th></tr></thead><tbody><tr><th scope="row">Other</th><td>expenses</td><td>26.5</td><td>26.8</td><td>25.8</td><td>26.4</td><td>-32</td><td>bps</td><td>69</td><td>bps</td><td>5</td><td>bps</td><td>25.5</td><td>25.9</td><td>-40</td><td>bps</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>70.3</td><td>69.3</td><td>68.1</td><td>69.6</td><td>95</td><td>bps</td><td>214</td><td>bps</td><td>64</td><td>bps</td><td>68.8</td><td>69.0</td><td>-19</td><td>bps</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>21.7</td><td>20.9</td><td>17.7</td><td>21.4</td><td>74</td><td>bps</td><td>394</td><td>bps</td><td>27</td><td>bps</td><td>21.5</td><td>19.9</td><td>161</td><td>bps</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>13.3</td><td>12.4</td><td>8.2</td><td>12.8</td><td>85</td><td>bps</td><td>504</td><td>bps</td><td>49</td><td>bps</td><td>13.4</td><td>11.5</td><td>188</td><td>bps</td></tr><tr><th scope="row">PAT</th><td>margin</td><td>8.4</td><td>729%</td><td>3.2</td><td>8.1</td><td>112</td><td>bps</td><td>518</td><td>bps</td><td>32</td><td>bps</td><td>8.3</td><td>5.7</td><td>260</td><td>bps</td></tr><tr><th scope="row">Effective</th><td>tax</td><td>rate</td><td>23.8</td><td>25.0</td><td>35.2</td><td>19.7</td><td>-121</td><td>bps</td><td>-1141</td><td>bps</td><td>406</td><td>bps</td><td>25.6</td><td>25.6</td><td>-1</td><td>bps</td></tr></tbody></table>
+            </div>
+            <p>India business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">(Rs</th><th scope="col">mn)</th><th scope="col">15,308</th><th scope="col">15,230</th><th scope="col">11,691</th><th scope="col">14,750</th><th scope="col">0.5</th><th scope="col">30.9</th><th scope="col">3.8</th><th scope="col">66,864</th><th scope="col">52,648</th><th scope="col">27.0</th></tr></thead><tbody><tr><th scope="row">EBITDA</th><td>(Rs</td><td>mn)</td><td>3,280</td><td>3,201</td><td>2,281</td><td>3,115</td><td>2.5</td><td>43.8</td><td>5.3</td><td>15,056.4</td><td>10,675</td><td>41.0</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>(Rs</td><td>mn)</td><td>2,360</td><td>-</td><td>-</td><td>2,253</td><td>4.7</td><td>11,018</td><td>7,535</td><td>46.2</td></tr></tbody></table>
+            </div>
+            <p>International business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">(Rs</th><th scope="col">mn)</th><th scope="col">12,033</th><th scope="col">11,335</th><th scope="col">7,365</th><th scope="col">10,540</th><th scope="col">6.2</th><th scope="col">63.4</th><th scope="col">14.2</th><th scope="col">49,628</th><th scope="col">37,896</th><th scope="col">31.0</th></tr></thead><tbody><tr><th scope="row">EBITDA</th><td>(Rs</td><td>mn)</td><td>2,640</td><td>2,040</td><td>1,172</td><td>2,258</td><td>29.4</td><td>125.2</td><td>16.9</td><td>10,434</td><td>7,302</td><td>42.9</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>(Rs</td><td>mn)</td><td>1,280</td><td>-</td><td>-</td><td>975</td><td>31.3</td><td>4,537</td><td>2,639</td><td>71.9</td></tr></tbody></table>
+            </div>
+            <p>Change (%) yoy growth (%) Source: Company, Kotak Institutional Equities</p>
+            <h4 class="krb__kie-h">Pre-Ind AS EBITDA margin expansion of ~208 bps yoy in the India business and 620 bps in the international business</h4>
+            <h4 class="krb__kie-h">Segmental pro forma financials of Lenskart, March fiscal year-ends, 2025-271QFY25 2QFY25 3QFY25 4QFY25 1QFY26 2QFY26 3QFY26 4QFY26 1QFY27 yoy (%)</h4>
+            <p>India business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">9,203</th><th scope="col">10,086</th><th scope="col">9,866</th><th scope="col">10,236</th><th scope="col">11,715</th><th scope="col">12,329</th><th scope="col">13,853</th><th scope="col">14,750</th><th scope="col">15,310</th><th scope="col">30.7</th></tr></thead><tbody><tr><th scope="row">Gross</th><td>profit</td><td>5,853</td><td>6,359</td><td>6,275</td><td>6,555</td><td>7,427</td><td>7,822</td><td>8,828</td><td>9,447</td><td>9,820</td><td>32.2</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>(%)</td><td>63.6</td><td>63.0</td><td>63.6</td><td>64.0</td><td>63.4</td><td>63.4</td><td>63.7</td><td>64.0</td><td>64.1</td><td>74</td><td>bps</td></tr><tr><th scope="row">EBITDA</th><td>1,256</td><td>1,824</td><td>1,607</td><td>1,590</td><td>2,278</td><td>2,407</td><td>2,875</td><td>3,115</td><td>3,280</td><td>44.0</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>13.6</td><td>18.1</td><td>16.3</td><td>15.5</td><td>19.4</td><td>19.5</td><td>20.8</td><td>21.1</td><td>21.4</td><td>197</td><td>bps</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>692</td><td>1,239</td><td>990</td><td>926</td><td>1,561</td><td>1,655</td><td>2,067</td><td>2,252</td><td>2,360</td><td>51.2</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>(%)</td><td>7.5</td><td>12.3</td><td>10.0</td><td>9.0</td><td>13.3</td><td>13.4</td><td>14.9</td><td>15.3</td><td>15.4</td><td>208</td><td>bps</td></tr></tbody></table>
+            </div>
+            <p>International business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">6,915</th><th scope="col">7,353</th><th scope="col">7,055</th><th scope="col">7,784</th><th scope="col">8,719</th><th scope="col">9,278</th><th scope="col">9,359</th><th scope="col">10,540</th><th scope="col">12,030</th><th scope="col">38.0</th></tr></thead><tbody><tr><th scope="row">Gross</th><td>profit</td><td>5,221</td><td>5,453</td><td>5,201</td><td>5,853</td><td>6,621</td><td>7,002</td><td>7,091</td><td>8,077</td><td>9,270</td><td>40.0</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>(%)</td><td>75.5</td><td>74.2</td><td>73.7</td><td>75.2</td><td>75.9</td><td>75.5</td><td>75.8</td><td>76.6</td><td>77.1</td><td>111</td><td>bps</td></tr><tr><th scope="row">EBITDA</th><td>1,266</td><td>1,300</td><td>771</td><td>1,677</td><td>1,472</td><td>1,810</td><td>1,762</td><td>2,258</td><td>2,640</td><td>79.3</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>18.3</td><td>17.7</td><td>10.9</td><td>21.5</td><td>16.9</td><td>19.5</td><td>18.8</td><td>21.4</td><td>21.9</td><td>506</td><td>bps</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>358</td><td>311</td><td>(254)</td><td>633</td><td>387</td><td>677</td><td>595</td><td>975</td><td>1,280</td><td>na</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>(%)</td><td>5.2</td><td>4.2</td><td>(3.6)</td><td>8.1</td><td>4.4</td><td>7.3</td><td>6.4</td><td>9.3</td><td>10.6</td><td>620</td><td>bps</td></tr></tbody></table>
+            </div>
+            <p>Source: Company, Kotak Institutional Equities</p>
+            <h4 class="krb__kie-h">Lenskart Solutions</h4>
+            <p>Retailing India Research</p>
+            <h4 class="krb__kie-h">Strong growth driven primarily by higher volumes in both the India and international segments</h4>
+            <h4 class="krb__kie-h">Key quarterly operating metrics of Lenskart, March fiscal year-ends, 2025-271QFY25 2QFY25 3QFY25 4QFY25 1QFY26 2QFY26 3QFY26 4QFY26 1QFY27 yoy (%)</h4>
+            <p>India business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">(Rs</th><th scope="col">mn)</th><th scope="col">9,203</th><th scope="col">10,086</th><th scope="col">9,866</th><th scope="col">10,236</th><th scope="col">11,715</th><th scope="col">12,329</th><th scope="col">13,853</th><th scope="col">14,750</th><th scope="col">15,310</th><th scope="col">30.7</th></tr></thead><tbody><tr><th scope="row">Eye</th><td>tests</td><td>performed</td><td>(mn)</td><td>2.8</td><td>3.3</td><td>3.4</td><td>3.9</td><td>4.4</td><td>4.9</td><td>5.5</td><td>6.0</td><td>6.3</td><td>43.2</td></tr><tr><th scope="row">Eyewear</th><td>units</td><td>sold</td><td>(mn)</td><td>5.3</td><td>5.6</td><td>5.6</td><td>6.4</td><td>6.7</td><td>6.8</td><td>7.4</td><td>7.9</td><td>8.3</td><td>23.1</td></tr><tr><th scope="row">Quarterly</th><td>transacting</td><td>customer</td><td>accounts</td><td>(mn)</td><td>2.8</td><td>3.1</td><td>3.2</td><td>3.3</td><td>3.7</td><td>3.9</td><td>4.1</td><td>4.3</td><td>4.4</td><td>18.5</td></tr><tr><th scope="row">Net</th><td>store</td><td>addition</td><td>(#)</td><td>31</td><td>55</td><td>65</td><td>131</td><td>70</td><td>133</td><td>169</td><td>170</td><td>116</td></tr><tr><th scope="row">Total</th><td>store</td><td>count</td><td>(#)</td><td>1,816</td><td>1,871</td><td>1,936</td><td>2,067</td><td>2,137</td><td>2,270</td><td>2,439</td><td>2,609</td><td>2,725</td><td>27.5</td></tr><tr><th scope="row">ASP</th><td>(Rs)</td><td>1,694</td><td>1,609</td><td>1,744</td><td>1,813</td><td>1,865</td><td>1,856</td><td>6.4</td></tr><tr><th scope="row">Net</th><td>promoter</td><td>score</td><td>79</td><td>80.9</td><td>81.4</td><td>77.6</td></tr></tbody></table>
+            </div>
+            <p>International business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">(Rs</th><th scope="col">mn)</th><th scope="col">6,915</th><th scope="col">7,353</th><th scope="col">7,055</th><th scope="col">7,784</th><th scope="col">8,719</th><th scope="col">9,278</th><th scope="col">9,359</th><th scope="col">10,540</th><th scope="col">12,030</th><th scope="col">38.0</th></tr></thead><tbody><tr><th scope="row">Eye</th><td>tests</td><td>performed</td><td>(mn)</td><td>0.6</td><td>0.6</td><td>0.7</td><td>0.7</td><td>0.7</td><td>0.7</td><td>0.8</td><td>0.8</td><td>0.8</td><td>17.1</td></tr><tr><th scope="row">Eyewear</th><td>units</td><td>sold</td><td>(mn)</td><td>1.4</td><td>1.4</td><td>1.2</td><td>1.4</td><td>1.7</td><td>1.6</td><td>1.5</td><td>1.8</td><td>2.3</td><td>34.1</td></tr><tr><th scope="row">Quarterly</th><td>transacting</td><td>customer</td><td>accounts</td><td>(mn)</td><td>0.8</td><td>0.8</td><td>0.8</td><td>0.8</td><td>1.0</td><td>1.0</td><td>0.9</td><td>1.0</td><td>1.2</td><td>22.0</td></tr><tr><th scope="row">Net</th><td>store</td><td>addition</td><td>(#)</td><td>15</td><td>11</td><td>16</td><td>11</td><td>13</td><td>9</td><td>26</td><td>13</td><td>16</td></tr><tr><th scope="row">Total</th><td>store</td><td>count</td><td>(#)</td><td>619</td><td>630</td><td>646</td><td>656</td><td>669</td><td>679</td><td>705</td><td>718</td><td>734</td><td>9.7</td></tr></tbody></table>
+            </div>
+            <p>Source: Company, Kotak Institutional Equities</p>
+            <h4 class="krb__kie-h">Lenskart has added 116 stores in India in 1QFY27</h4>
+            <h4 class="krb__kie-h">Store network of Lenskart, March fiscal year-ends, 2025-271QFY25 2QFY25 3QFY25 4QFY25 1QFY26 2QFY26 3QFY26 4QFY26 1QFY27</h4>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">India</th><th scope="col">1,816</th><th scope="col">1,871</th><th scope="col">1,936</th><th scope="col">2,067</th><th scope="col">2,137</th><th scope="col">2,270</th><th scope="col">2,439</th><th scope="col">2,609</th><th scope="col">2,725</th></tr></thead><tbody><tr><th scope="row">-Metropolitan</th><td>cities</td><td>809</td><td>836</td><td>849</td><td>900</td><td>928</td><td>970</td><td>1,006</td><td>1,043</td><td>1,067</td></tr><tr><th scope="row">-Tier-1</th><td>cities</td><td>395</td><td>412</td><td>438</td><td>469</td><td>491</td><td>509</td><td>571</td><td>614</td><td>623</td></tr><tr><th scope="row">-Tier-2</th><td>cities</td><td>and</td><td>beyond</td><td>612</td><td>623</td><td>649</td><td>698</td><td>718</td><td>791</td><td>862</td><td>952</td><td>1,035</td></tr><tr><th scope="row">International</th><td>619</td><td>630</td><td>646</td><td>656</td><td>669</td><td>679</td><td>705</td><td>718</td><td>734</td></tr><tr><th scope="row">-Japan</th><td>263</td><td>265</td><td>265</td><td>267</td><td>272</td><td>275</td><td>285</td><td>287</td><td>289</td></tr><tr><th scope="row">-Southeast</th><td>Asia</td><td>230</td><td>234</td><td>246</td><td>251</td><td>256</td><td>263</td><td>274</td><td>284</td><td>288</td></tr><tr><th scope="row">-Middle</th><td>East</td><td>32</td><td>35</td><td>36</td><td>39</td><td>39</td><td>39</td><td>41</td><td>41</td><td>43</td></tr><tr><th scope="row">-Others</th><td>94</td><td>96</td><td>99</td><td>99</td><td>102</td><td>102</td><td>105</td><td>106</td><td>114</td></tr><tr><th scope="row">Total</th><td>2,435</td><td>2,501</td><td>2,582</td><td>2,723</td><td>2,806</td><td>2,949</td><td>3,144</td><td>3,327</td><td>3,459</td></tr></tbody></table>
+            </div>
+            <p>Source: Company, Kotak Institutional Equities</p>
+            <h4 class="krb__kie-h">Key takeaways from earnings call</h4>
+            <h4 class="krb__kie-h"> Management guidance. Management maintained its guidance for long-term, steady-state pre-Ind AS</h4>
+            <p>EBITDA margin of ~25%.</p>
+            <h4 class="krb__kie-h"> Gross margin. A meaningful share of Lenskart’s frame procurement is sourced from China—so the</h4>
+            <p>depreciation of INR against RMB exerts direct pressure on the cost of goods. Despite this, the product margin has continued to be resilient in both the India and international businesses through (1) growing premiumization and, increasingly, (2) a higher proportion of in-house manufacturing. At a consolidated level, the product margin crossed 70% for the first time this quarter, helped in part by a seasonally heavier international sunglasses mix.  Alongside its own manufacturing, vendor relationships and the volume-based cost efficiencies that come with scale are equally important levers to absorb input cost pressures. Management will focus on negotiations with vendors to improve product margins.</p>
+            <h4 class="krb__kie-h"> Manufacturing. Lenskart’s long-term goal is self-reliance in frame and lens manufacturing. This</h4>
+            <p>quarter, the company increased its investment in Baofeng Framekart, its China frame-manufacturing JV, to add in-house capacity. The Hyderabad facility will be the next major step-up in this journey.</p>
+            <h4 class="krb__kie-h">Lenskart Solutions</h4>
+            <p>Retailing India Research According to management, as more of the manufacturing is in-house, the impact of currency movements on the cost base will keep reducing.</p>
+            <h4 class="krb__kie-h">Lenskart has been shifting more manufacturing to its Indian facilities</h4>
+            <h4 class="krb__kie-h">Snapshot of Lenskart’s in-house manufacturing</h4>
+            <p>Source: Company, Kotak Institutional Equities</p>
+            <h4 class="krb__kie-h"> Eye tests. Lenskart conducts free eye tests to increase the size of the market. Management believes</h4>
+            <p>eye testing is the biggest driver of the 23% volume growth in India. A significant majority of customers who do an eye test at Lenskart will purchase eyeglasses from the store, either immediately or within a few months. Management noted that customers who get an eye test for the first time take longer to make their purchase. It is possible that as the volume of eye tests increases, the conversion rates will drop and the company will have to work on improving rates.</p>
+            <h4 class="krb__kie-h"> India business. In 1QFY27, the India business reported revenue growth of 31% yoy. The revenue</h4>
+            <p>growth was primarily volume-driven, with eyewear units growing 23% yoy. This was powered by a 43% yoy increase in the eye tests conducted. ASP contributed a 6.4% increase yoy, driven by customers choosing premium lens options and not just by price increases. The SSSG came in at 18% in 1Q, driven by volume expansion from new customers acquired and also deepening relationships with gold members, driving repeat purchases. Gold membership now has 9 mn+ active members.  Market size. According to management, as India urbanizes, studies longer and lives on screens, the market size keeps growing. ~780 mn Indians need vision correction today, heading toward ~940 mn by FY2030E. Daily, 35k Indians get tested at Lenskart for the first time and discover they need prescription eyewear.  Growth. According to management, supply and not demand, is the constraint in India. Management noted that while there is a large opportunity for store expansion in Tier 2+ regions, it requires better understanding of the logistics, finding manpower for these stores, hiring optometrists and more. Remote optometry has enabled Lenskart to expand faster; management is also investing in AI eye testing to solve constraints related to Tier 2+ store expansion.  Network expansion (1/2). Lenskart has grown in three directions, i.e., (1) deeper in the pin codes it already served, (2) wider into unserved pin codes within existing cities and (3) into new towns. In the 1,517 pin codes that already had a Lenskart store in 2QFY26, density rose from 1.5 to 1.6 stores per pin code in nine months and the same stores kept growing, with SSSG of ~18% and SPSG of ~24%. Of the 2,821 unserved pin codes in 2QFY26 mapped in Lenskart’s existing cities, it entered 152 and opened 155 stores. 2,669 unserved pin codes remain, as of 1QFY27. It opened up stores in 140 Tier 2+ towns that Lenskart had never entered, with 142 stores in towns such as Hassan in Karnataka, Balasore in Odisha, Tura in Meghalaya and Gandhidham in Gujarat. According to GeoIQ, there are an additional 3,644 viable new Tier 2+ towns for Lenskart to enter.  Network expansion (2/2). Management noted that despite the net addition of 455 stores in the past nine months, it only covered ~5% of the 6,400 pin codes it had identified in 2QFY26. Management noted that most of its stores are still relatively young and can continue to grow at a healthy rate, given the high demand in India.</p>
+            <h4 class="krb__kie-h">Lenskart Solutions</h4>
+            <p>Retailing India Research</p>
+            <h4 class="krb__kie-h">Lenskart envisages store count of 10,000 over the medium term</h4>
+            <h4 class="krb__kie-h">Snapshot of Lenskart’s store network expansion strategy</h4>
+            <p>Source: Company, Kotak Institutional Equities  Premiumization. According to management, prescription eyeglasses with premium lenses form a healthy share of the overall business. Owndays lenses have captured a significant share of the premium price point. Owndays premium lenses now generate over Rs15 bn annually in prescription eyeglass sales. Lenskart also has a luxury lens portfolio: Rodenstock and Tokai. Rodenstock is a century-old German optical house and Tokai is Japan&#39;s neuroscience-led lens maker. Volumes of this portfolio grew over 35% yoy combined in 1QFY27; together they generated Rs2.5 bn in prescription eyeglass sales last year. The frame portfolio is premiumizing too, with Meller on track to be a ~US$70 mn brand globally for sunglasses alone.  Progressive Lens. The progressive lens market has a distinct and growing share of volume, addressing presbyopia—where eyeglasses coverage in India is as low as ~25%. Lenskart has digitized progressive eye testing and units grew 33% yoy in 1QFY27.  Value-eyewear. The company has launched glasses priced at Rs500, sold profitably through Hustlr Club. According to management, lower-priced products are more margin accretive and will not dilute profitability as the business scales.  ASP. India ASP grew 6.4% yoy in 1Q to Rs1,856, driven by a continued shift in product mix toward premium products and progressive lenses.</p>
+            <h4 class="krb__kie-h"> International business. Its revenue grew 38% yoy. While the business benefited from favorable</h4>
+            <p>currency tailwinds, the underlying momentum remains strong. On a constant-currency basis, 1Q clocked revenue growth of ~29% yoy. This growth was broad-based, with robust performance across Japan, Southeast Asia, the Middle East and its other geographies. In the international business, the store addition will gradually accelerate once the unit economics improves.  Growth. Volume was the primary driver of growth; eyewear units grew 37.6% yoy. Additionally, sunglasses had a pronounced seasonal quarter, with units growing 58% yoy and nearly doubling sequentially, as April-June is the segment&#39;s seasonal peak, amplified by Meller&#39;s fast-growing online channel.  ASP. The ASP was roughly flat yoy at Rs5,267. On a constant-currency basis, ASP would have declined, reflecting this quarter&#39;s heavier sunglasses mix, a structurally lower-ASP category.  Profitability. According to management, international has structurally higher product margins than the India business, which should translate into even higher profitability as it scales. The international business has a higher product margin than the India business, as international ASP is 3X of India, while the ACP is 2X. In 1QFY27, the pre-Ind AS EBITDA margin expansion of 620 bps was driven by (1) operating leverage and (2) product margin expansion. The margin was also driven by higher sales of sunglasses this quarter, which carry a structurally higher margin.</p>
+            <h4 class="krb__kie-h">Lenskart Solutions</h4>
+            <p>Retailing India Research  Smart glasses. Lenskart opened early access for its smart glasses in 4QFY26; sign-ups crossed 80k. The B Smart glasses are priced at Rs22k and have photo and video capture, open-ear audio, Google Gemini integration with multilingual support and prescription-lens capability. The product will be available for sale across Lenskart stores very soon, so customers can experience it before purchasing.</p>
+            <h4 class="krb__kie-h"> Currency risk. In the India business, a significant proportion of frames are imported and that has a</h4>
+            <p>currency risk. Lenskart’s international business provides a natural hedge to some extent and it is a net importer from that perspective. For the long term, the company is accelerating its in-house manufacturing for frames. This will reduce its exposure to currency on the negative side.</p>
+            <h4 class="krb__kie-h">Key changes to estimates</h4>
+            <p>We upgrade our FY2027-29 revenue estimates by ~3% and EPS estimates by 9-15%.</p>
+            <h4 class="krb__kie-h">We raise EPS by 9-15% for FY2027-29E</h4>
+            <h4 class="krb__kie-h">Key changes in estimates for Lenskart, March fiscal year-ends, 2027-29E (Rs mn)New estimates Old estimates Change (%)</h4>
+            <p>2027E 2028E 2029E 2027E 2028E 2029E 2027E 2028E 2029E Total</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">(Rs</th><th scope="col">mn)</th><th scope="col">115,919</th><th scope="col">140,673</th><th scope="col">168,981</th><th scope="col">112,159</th><th scope="col">136,135</th><th scope="col">163,551</th><th scope="col">3.4</th><th scope="col">3.3</th><th scope="col">3.3</th></tr></thead><tbody><tr><th scope="row">Revenue</th><td>growth</td><td>(%)</td><td>32</td><td>21</td><td>20</td><td>27</td><td>21</td><td>20</td></tr><tr><th scope="row">Gross</th><td>profit</td><td>(Rs</td><td>mn)</td><td>79,720</td><td>97,566</td><td>117,677</td><td>77,023</td><td>93,998</td><td>113,399</td><td>3.5</td><td>3.8</td><td>3.8</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>(%)</td><td>68.8</td><td>69.4</td><td>69.6</td><td>68.7</td><td>69.0</td><td>69.3</td></tr><tr><th scope="row">EBITDA</th><td>(Rs</td><td>mn)</td><td>24,918</td><td>31,859</td><td>39,976</td><td>23,287</td><td>29,928</td><td>38,207</td><td>7.0</td><td>6.5</td><td>4.6</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>21.5</td><td>22.6</td><td>23.7</td><td>20.8</td><td>22.0</td><td>23.4</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>(Rs</td><td>mn)</td><td>15,554</td><td>20,426</td><td>26,165</td><td>13,706</td><td>18,637</td><td>24,620</td><td>13.5</td><td>9.6</td><td>6.3</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>13.4</td><td>14.5</td><td>15.5</td><td>12.2</td><td>13.7</td><td>15.1</td></tr><tr><th scope="row">PBT</th><td>(Rs</td><td>mn)</td><td>12,909</td><td>17,223</td><td>23,900</td><td>11,247</td><td>15,184</td><td>21,937</td><td>14.8</td><td>13.4</td><td>9.0</td></tr><tr><th scope="row">Net</th><td>Profit</td><td>(Rs</td><td>mn)</td><td>9,604</td><td>12,814</td><td>17,686</td><td>8,368</td><td>11,297</td><td>16,233</td><td>14.8</td><td>13.4</td><td>9.0</td></tr><tr><th scope="row">EPS</th><td>(Rs)</td><td>5.5</td><td>7.4</td><td>10.2</td><td>4.8</td><td>6.5</td><td>9.4</td><td>14.8</td><td>13.4</td><td>9.0</td></tr></tbody></table>
+            </div>
+            <p>India business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">66,864</th><th scope="col">81,546</th><th scope="col">98,186</th><th scope="col">65,565</th><th scope="col">79,962</th><th scope="col">96,279</th><th scope="col">2.0</th><th scope="col">2.0</th><th scope="col">2.0</th></tr></thead><tbody><tr><th scope="row">Gross</th><td>profit</td><td>42,576</td><td>52,333</td><td>63,502</td><td>41,749</td><td>51,316</td><td>62,269</td><td>2.0</td><td>2.0</td><td>2.0</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>(%)</td><td>63.7</td><td>64.2</td><td>64.7</td><td>63.7</td><td>64.2</td><td>64.7</td></tr><tr><th scope="row">EBITDA</th><td>15,056</td><td>19,684</td><td>24,914</td><td>14,112</td><td>18,516</td><td>23,490</td><td>6.7</td><td>6.3</td><td>6.1</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>22.5</td><td>24.1</td><td>25.4</td><td>21.5</td><td>23.2</td><td>24.4</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>11,018</td><td>14,722</td><td>18,904</td><td>10,160</td><td>13,660</td><td>17,609</td><td>8.4</td><td>7.8</td><td>7.4</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>(%)</td><td>16.5</td><td>18.1</td><td>19.3</td><td>15.5</td><td>17.1</td><td>18.3</td></tr></tbody></table>
+            </div>
+            <p>International business</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">49,628</th><th scope="col">59,757</th><th scope="col">71,489</th><th scope="col">47,167</th><th scope="col">56,803</th><th scope="col">67,965</th><th scope="col">5.2</th><th scope="col">5.2</th><th scope="col">5.2</th></tr></thead><tbody><tr><th scope="row">Gross</th><td>profit</td><td>37,717</td><td>45,864</td><td>54,868</td><td>35,847</td><td>43,312</td><td>51,823</td><td>5.2</td><td>5.9</td><td>5.9</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>(%)</td><td>76.0</td><td>76.8</td><td>76.8</td><td>76.0</td><td>76.3</td><td>76.3</td></tr><tr><th scope="row">EBITDA</th><td>10,434</td><td>12,806</td><td>15,756</td><td>9,748</td><td>12,042</td><td>15,410</td><td>7.0</td><td>6.3</td><td>2.2</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>21.0</td><td>21.4</td><td>22.0</td><td>20.7</td><td>21.2</td><td>22.7</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>4,537</td><td>5,704</td><td>7,260</td><td>3,545</td><td>4,977</td><td>7,010</td><td>28.0</td><td>14.6</td><td>3.6</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>(%)</td><td>9.1</td><td>9.5</td><td>10.2</td><td>7.5</td><td>8.8</td><td>10.3</td></tr></tbody></table>
+            </div>
+            <p>Source: Company, Kotak Institutional Equities estimates</p>
+            <h4 class="krb__kie-h">Lenskart Solutions</h4>
+            <p>Retailing India Research</p>
+            <h4 class="krb__kie-h">We model revenue growth of 23%/24% for the India/international businesses over FY2026-29</h4>
+            <h4 class="krb__kie-h">Key operating metrics of Lenskart, March fiscal year-ends, 2024-29ECAGR (%)</h4>
+            <p>2024 2025 2026 2027E 2028E 2029E 2026-29 India</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Annual</th><th scope="col">transacting</th><th scope="col">customer</th><th scope="col">accounts</th><th scope="col">(mn)</th><th scope="col">8.1</th><th scope="col">9.9</th><th scope="col">12.3</th><th scope="col">15.0</th><th scope="col">17.9</th><th scope="col">21.0</th><th scope="col">20</th></tr></thead><tbody><tr><th scope="row">Eyewear</th><td>units</td><td>sold</td><td>(mn)</td><td>17.7</td><td>22.9</td><td>28.8</td><td>35.5</td><td>42.9</td><td>51.1</td><td>21</td></tr><tr><th scope="row">Store</th><td>count</td><td>(#)</td><td>1,785</td><td>2,067</td><td>2,609</td><td>3,159</td><td>3,709</td><td>4,259</td><td>18</td></tr><tr><th scope="row">Revenue</th><td>(Rs</td><td>mn)</td><td>31,628</td><td>40,149</td><td>52,648</td><td>66,864</td><td>81,546</td><td>98,186</td><td>23</td></tr><tr><th scope="row">Revenue</th><td>growth</td><td>(%)</td><td>32</td><td>27</td><td>31</td><td>27</td><td>22</td><td>20</td></tr><tr><th scope="row">Gross</th><td>profit</td><td>(Rs</td><td>mn)</td><td>19,569</td><td>25,000</td><td>33,524</td><td>42,576</td><td>52,333</td><td>63,502</td><td>24</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>(%)</td><td>61.9</td><td>62.3</td><td>63.7</td><td>63.7</td><td>64.2</td><td>64.7</td></tr><tr><th scope="row">EBITDA</th><td>(Rs</td><td>mn)</td><td>2,600</td><td>4,439</td><td>10,675</td><td>15,056</td><td>19,684</td><td>24,914</td><td>33</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>8.2</td><td>11.1</td><td>20.3</td><td>22.5</td><td>24.1</td><td>25.4</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>(Rs</td><td>mn)</td><td>1,363</td><td>2,460</td><td>7,535</td><td>11,018</td><td>14,722</td><td>18,904</td><td>36</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>(%)</td><td>4.3</td><td>6.1</td><td>14.3</td><td>16.5</td><td>18.1</td><td>19.3</td></tr></tbody></table>
+            </div>
+            <p>International</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Annual</th><th scope="col">transacting</th><th scope="col">customer</th><th scope="col">accounts</th><th scope="col">(mn)</th><th scope="col">2.1</th><th scope="col">2.5</th><th scope="col">3.5</th><th scope="col">4.7</th><th scope="col">5.6</th><th scope="col">6.5</th><th scope="col">23</th></tr></thead><tbody><tr><th scope="row">Eyewear</th><td>units</td><td>sold</td><td>(mn)</td><td>3.6</td><td>4.3</td><td>6.5</td><td>9.2</td><td>10.9</td><td>12.9</td><td>26</td></tr><tr><th scope="row">Store</th><td>count</td><td>(#)</td><td>604</td><td>656</td><td>718</td><td>768</td><td>818</td><td>868</td><td>7</td></tr><tr><th scope="row">Revenue</th><td>(Rs</td><td>mn)</td><td>22,649</td><td>26,377</td><td>37,896</td><td>49,628</td><td>59,757</td><td>71,489</td><td>24</td></tr><tr><th scope="row">Revenue</th><td>growth</td><td>(%)</td><td>58</td><td>16</td><td>44</td><td>31</td><td>20</td><td>20</td></tr><tr><th scope="row">Gross</th><td>profit</td><td>(Rs</td><td>mn)</td><td>16,483</td><td>19,639</td><td>28,792</td><td>37,717</td><td>45,864</td><td>54,868</td><td>24</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>(%)</td><td>72.8</td><td>74.5</td><td>76.0</td><td>76.0</td><td>76.8</td><td>76.8</td></tr><tr><th scope="row">EBITDA</th><td>(Rs</td><td>mn)</td><td>3,444</td><td>4,574</td><td>7,302</td><td>10,434</td><td>12,806</td><td>15,756</td><td>29</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>15.2</td><td>17.3</td><td>19.3</td><td>21.0</td><td>21.4</td><td>22.0</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>(Rs</td><td>mn)</td><td>(93)</td><td>620</td><td>2,639</td><td>4,537</td><td>5,704</td><td>7,260</td><td>40</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>(%)</td><td>(0.4)</td><td>2.4</td><td>7.0</td><td>9.1</td><td>9.5</td><td>10.2</td></tr></tbody></table>
+            </div>
+            <p>Consolidated</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Annual</th><th scope="col">transacting</th><th scope="col">customer</th><th scope="col">accounts</th><th scope="col">(mn)</th><th scope="col">10.2</th><th scope="col">12.4</th><th scope="col">15.8</th><th scope="col">19.7</th><th scope="col">23.4</th><th scope="col">27.6</th><th scope="col">20</th></tr></thead><tbody><tr><th scope="row">Eyewear</th><td>units</td><td>sold</td><td>(mn)</td><td>21.2</td><td>27.2</td><td>35.3</td><td>44.7</td><td>53.8</td><td>64.0</td><td>22</td></tr><tr><th scope="row">Store</th><td>count</td><td>(#)</td><td>2,389</td><td>2,723</td><td>3,327</td><td>3,927</td><td>4,527</td><td>5,127</td><td>16</td></tr><tr><th scope="row">Reported</th><td>revenue</td><td>(Rs</td><td>mn)</td><td>54,277</td><td>66,525</td><td>88,140</td><td>115,919</td><td>140,673</td><td>168,981</td><td>24</td></tr><tr><th scope="row">Revenue</th><td>growth</td><td>(%)</td><td>43.3</td><td>22.6</td><td>32.5</td><td>31.5</td><td>21.4</td><td>20.1</td></tr><tr><th scope="row">Gross</th><td>profit</td><td>(Rs</td><td>mn)</td><td>36,516</td><td>45,182</td><td>62,441</td><td>80,114</td><td>98,003</td><td>118,160</td><td>24</td></tr><tr><th scope="row">Gross</th><td>margin</td><td>(%)</td><td>67.3</td><td>67.9</td><td>69.0</td><td>68.8</td><td>69.4</td><td>69.6</td></tr><tr><th scope="row">EBITDA</th><td>(Rs</td><td>mn)</td><td>6,721</td><td>9,711</td><td>17,530</td><td>24,918</td><td>31,859</td><td>39,976</td><td>32</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>12.4</td><td>14.6</td><td>19.9</td><td>21.5</td><td>22.6</td><td>23.7</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>(Rs</td><td>mn)</td><td>1,947</td><td>3,778</td><td>10,174</td><td>15,554</td><td>20,426</td><td>26,165</td><td>37</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>margin</td><td>(%)</td><td>3.6</td><td>5.7</td><td>11.5</td><td>13.4</td><td>14.5</td><td>15.5</td></tr></tbody></table>
+            </div>
+            <p>Notes: (a) Dealskart acquisition was effective from December 2024 and hence, financials for FY2026 and beyond are not like-for-like with previous years. Source: Company, Kotak Institutional Equities estimates</p>
+            <h4 class="krb__kie-h">Lenskart Solutions</h4>
+            <p>Retailing India Research</p>
+            <h4 class="krb__kie-h">We model a revenue CAGR of 24% and PAT CAGR of 52% over FY2026-29E</h4>
+            <h4 class="krb__kie-h">Condensed consolidated financials of Lenskart, March fiscal year-ends, 2024-29E (Rs mn)2024 2025 2026 2027E 2028E 2029E</h4>
+            <p>Profit and loss statement</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">54,277</th><th scope="col">66,525</th><th scope="col">88,140</th><th scope="col">115,919</th><th scope="col">140,673</th><th scope="col">168,981</th></tr></thead><tbody><tr><th scope="row">Gross</th><td>profit</td><td>36,516</td><td>45,181</td><td>60,784</td><td>79,720</td><td>97,566</td><td>117,677</td></tr><tr><th scope="row">EBITDA</th><td>6,733</td><td>9,755</td><td>17,530</td><td>24,918</td><td>31,859</td><td>39,976</td></tr><tr><th scope="row">Pre-IndAS</th><td>EBITDA</td><td>1,929</td><td>4,513</td><td>10,174</td><td>15,554</td><td>20,426</td><td>26,165</td></tr><tr><th scope="row">Depreciation</th><td>and</td><td>amortisation</td><td>expense</td><td>(6,722)</td><td>(7,966)</td><td>(10,484)</td><td>(12,344)</td><td>(14,609)</td><td>(16,283)</td></tr><tr><th scope="row">EBIT</th><td>11</td><td>1,789</td><td>7,046</td><td>12,574</td><td>17,251</td><td>23,693</td></tr><tr><th scope="row">Other</th><td>income</td><td>1,822</td><td>3,568</td><td>1,743</td><td>2,423</td><td>2,484</td><td>3,195</td></tr><tr><th scope="row">Finance</th><td>costs</td><td>(1,230)</td><td>(1,459)</td><td>(1,785)</td><td>(2,088)</td><td>(2,512)</td><td>(2,988)</td></tr><tr><th scope="row">Profit</th><td>before</td><td>tax</td><td>603</td><td>3,898</td><td>7,004</td><td>12,909</td><td>17,223</td><td>23,900</td></tr><tr><th scope="row">Taxation</th><td>(692)</td><td>(880)</td><td>(1,794)</td><td>(3,305)</td><td>(4,409)</td><td>(6,214)</td></tr><tr><th scope="row">Profit</th><td>after</td><td>tax</td><td>(89)</td><td>3,018</td><td>5,211</td><td>9,604</td><td>12,814</td><td>17,686</td></tr></tbody></table>
+            </div>
+            <p>Exceptional items - - (157) - - - Minority interest + share of loss in associates (12) (44) (44) - - -</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Reported</th><th scope="col">PAT</th><th scope="col">(102)</th><th scope="col">2,973</th><th scope="col">5,010</th><th scope="col">9,604</th><th scope="col">12,814</th><th scope="col">17,686</th></tr></thead><tbody><tr><th scope="row">Diluted</th><td>EPS</td><td>(Rs/share)</td><td>(0.6)</td><td>1.8</td><td>2.9</td><td>5.5</td><td>7.4</td><td>10.2</td></tr><tr><th scope="row">Weighted</th><td>average</td><td>number</td><td>of</td><td>shares</td><td>-</td><td>diluted</td><td>(mn)</td><td>1,735</td><td>1,735</td><td>1,735</td><td>1,735</td><td>1,735</td><td>1,735</td></tr></tbody></table>
+            </div>
+            <p>Balance sheet</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Shareholder&#39;s</th><th scope="col">funds</th><th scope="col">56,493</th><th scope="col">60,987</th><th scope="col">87,385</th><th scope="col">96,990</th><th scope="col">109,803</th><th scope="col">127,489</th></tr></thead><tbody><tr><th scope="row">Minority</th><td>Interest</td><td>1,067</td><td>1,074</td><td>1,132</td><td>1,132</td><td>1,132</td><td>1,132</td></tr><tr><th scope="row">Total</th><td>borrowings</td><td>4,972</td><td>3,459</td><td>2,196</td><td>2,196</td><td>2,196</td><td>2,196</td></tr><tr><th scope="row">Deferred</th><td>tax</td><td>liabilities</td><td>1,510</td><td>1,515</td><td>1,727</td><td>1,727</td><td>1,727</td><td>1,727</td></tr><tr><th scope="row">Lease</th><td>liabilities</td><td>16,787</td><td>22,268</td><td>28,770</td><td>34,129</td><td>41,706</td><td>50,216</td></tr><tr><th scope="row">Total</th><td>sources</td><td>of</td><td>funds</td><td>80,828</td><td>89,304</td><td>121,210</td><td>136,173</td><td>156,564</td><td>182,760</td></tr><tr><th scope="row">Fixed</th><td>assets</td><td>(tangible/intangible)</td><td>28,899</td><td>23,541</td><td>29,406</td><td>33,480</td><td>37,392</td><td>37,662</td></tr><tr><th scope="row">Investments</th><td>17,086</td><td>14,660</td><td>29,361</td><td>29,361</td><td>29,361</td><td>29,361</td></tr><tr><th scope="row">Goodwill</th><td>18,674</td><td>18,756</td><td>21,977</td><td>21,977</td><td>21,977</td><td>21,977</td></tr><tr><th scope="row">RoU</th><td>assets</td><td>8,144</td><td>21,085</td><td>27,134</td><td>32,945</td><td>40,523</td><td>49,033</td></tr><tr><th scope="row">Cash</th><td>and</td><td>bank</td><td>balances</td><td>8,052</td><td>8,649</td><td>15,437</td><td>9,769</td><td>17,449</td><td>33,467</td></tr><tr><th scope="row">Net</th><td>working</td><td>capital</td><td>(ex-cash)</td><td>3,516</td><td>2,625</td><td>(899)</td><td>6,192</td><td>7,514</td><td>9,026</td></tr><tr><th scope="row">Deferred</th><td>tax</td><td>assets</td><td>1,195</td><td>2,024</td><td>2,919</td><td>2,919</td><td>2,919</td><td>2,919</td></tr><tr><th scope="row">Total</th><td>usage</td><td>of</td><td>funds</td><td>80,828</td><td>89,304</td><td>121,210</td><td>136,173</td><td>156,564</td><td>182,760</td></tr></tbody></table>
+            </div>
+            <p>Cash flow</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Operating</th><th scope="col">Profits</th><th scope="col">before</th><th scope="col">working</th><th scope="col">capital</th><th scope="col">changes</th><th scope="col">1,757</th><th scope="col">3,335</th><th scope="col">7,884</th><th scope="col">13,806</th><th scope="col">18,708</th><th scope="col">24,449</th></tr></thead><tbody><tr><th scope="row">Working</th><td>capital</td><td>adjustments:</td><td>(1,656)</td><td>3,038</td><td>983</td><td>(10,746)</td><td>(1,222)</td><td>(1,397)</td></tr><tr><th scope="row">Net</th><td>finance</td><td>cost/income</td><td>592</td><td>2,118</td><td>(42)</td><td>335</td><td>(28)</td><td>207</td></tr><tr><th scope="row">Cash</th><td>flow</td><td>from</td><td>operations</td><td>692</td><td>8,491</td><td>8,825</td><td>3,396</td><td>17,458</td><td>23,258</td></tr><tr><th scope="row">Core</th><td>capital</td><td>expenditure</td><td>(4,253)</td><td>(4,154)</td><td>(8,231)</td><td>(7,649)</td><td>(8,292)</td><td>(5,679)</td></tr></tbody></table>
+            </div>
+            <p>Acquisitions (252) (1,483) (4,650) - - -</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Free</th><th scope="col">cash</th><th scope="col">flow</th><th scope="col">(3,813)</th><th scope="col">2,854</th><th scope="col">(4,055)</th><th scope="col">(4,253)</th><th scope="col">9,166</th><th scope="col">17,579</th></tr></thead><tbody></tbody></table>
+            </div>
+            <p>Key ratios/metrics</p>
+            <div class="krb__exhibit" tabindex="0" role="region" aria-label="Exhibit table">
+              <table><thead><tr><th scope="col">Revenue</th><th scope="col">growth</th><th scope="col">(%)</th><th scope="col">43.3</th><th scope="col">22.6</th><th scope="col">32.5</th><th scope="col">31.5</th><th scope="col">21.4</th><th scope="col">20.1</th></tr></thead><tbody><tr><th scope="row">Gross</th><td>margin</td><td>(%)</td><td>67.3</td><td>67.9</td><td>69.0</td><td>68.8</td><td>69.4</td><td>69.6</td></tr><tr><th scope="row">EBITDA</th><td>margin</td><td>(%)</td><td>12.4</td><td>14.7</td><td>19.9</td><td>21.5</td><td>22.6</td><td>23.7</td></tr><tr><th scope="row">RoAE</th><td>(%)</td><td>(0.2)</td><td>5.1</td><td>6.8</td><td>10.4</td><td>12.4</td><td>14.9</td></tr><tr><th scope="row">RoACE</th><td>(%)</td><td>0.0</td><td>2.4</td><td>7.3</td><td>10.5</td><td>12.6</td><td>15.0</td></tr></tbody></table>
+            </div>
+            <p>Notes: (a) Dealskart acquisition was effective from December 2024 and hence, financials for FY2026 and beyond are not like-for-like with previous years. Source: Company, Kotak Institutional Equities estimates</p>
+
+          </div>
+          <aside class="krb__kie-side">
+
+
+
+          </aside>
+        </div>
+        <div class="krb__disclosures">
+          <details class="krb__acc">
+            <summary>Rating Scale (Private Client Group)</summary>
+            <div class="krb__acc-body"><p class="krb__acc-lead">Definitions of ratings</p>
+          <dl class="krb__scale">
+            <div><dt>BUY</dt><dd>We expect the stock to deliver more than 15% returns over the next 12 months</dd></div>
+            <div data-current="true"><dt>ADD<span class="krb__scale-flag">This report</span></dt><dd>We expect the stock to deliver 5% - 15% returns over the next 12 months</dd></div>
+            <div><dt>REDUCE</dt><dd>We expect the stock to deliver -5% - +5% returns over the next 12 months</dd></div>
+            <div><dt>SELL</dt><dd>We expect the stock to deliver &lt; -5% returns over the next 12 months</dd></div>
+            <div><dt>NR</dt><dd><strong>Not Rated.</strong> Kotak Securities is not assigning any rating or price target to the stock. The report has been prepared for information purposes only.</dd></div>
+            <div><dt>SUBSCRIBE</dt><dd>We advise investor to subscribe to the IPO.</dd></div>
+            <div><dt>RS</dt><dd><strong>Rating Suspended.</strong> Kotak Securities has suspended the investment rating and price target for this stock, either because there is not a sufficient fundamental basis for determining, or there are legal, regulatory or policy constraints around publishing, an investment rating or target. The previous investment rating and price target, if any, are no longer in effect for this stock and should not be relied upon.</dd></div>
+            <div><dt>NA</dt><dd><strong>Not Available or Not Applicable.</strong> The information is not available for display or is not applicable</dd></div>
+            <div><dt>NM</dt><dd><strong>Not Meaningful.</strong> The information is not meaningful and is therefore excluded.</dd></div>
+            <div><dt>NOTE</dt><dd>Our target prices are with a 12-month perspective. Returns stated in the rating scale are our internal benchmark.</dd></div>
+          </dl></div>
+          </details>
+          <details class="krb__acc">
+            <summary>Research Team (Private Client Group)</summary>
+            <div class="krb__acc-body">          <div class="krb__team">
+            <div class="krb__team-group">
+              <h4>Fundamental Research Team (Private Client Group)</h4>
+              <div class="krb__team-grid">
+                <div class="krb__person">
+                  <strong>Shrikant Chouhan</strong>
+                  <span>Head of Research</span>
+                  <a href="mailto:shrikant.chouhan@kotak.com">shrikant.chouhan@kotak.com</a>
+                  <a href="tel:+912262185408">+91 22 6218 5408</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Arun Agarwal</strong>
+                  <span>Auto &amp; Auto Ancillary, Building Material, Cement, Consumer Durable</span>
+                  <a href="mailto:arun.agarwal@kotak.com">arun.agarwal@kotak.com</a>
+                  <a href="tel:+912262186443">+91 22 6218 6443</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Amit Agarwal, CFA</strong>
+                  <span>Transportation, Paints, FMCG</span>
+                  <a href="mailto:agarwal.amit@kotak.com">agarwal.amit@kotak.com</a>
+                  <a href="tel:+912262186439">+91 22 6218 6439</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Rini Mehta</strong>
+                  <span>Research Analyst</span>
+                  <a href="mailto:rini.mehta@kotak.com">rini.mehta@kotak.com</a>
+                  <a href="tel:+912262186433">+91 22 6218 6433</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Sumit Pokharna</strong>
+                  <span>Oil and Gas, Information Tech</span>
+                  <a href="mailto:sumit.pokharna@kotak.com">sumit.pokharna@kotak.com</a>
+                  <a href="tel:+912262186438">+91 22 6218 6438</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Veer Trivedi</strong>
+                  <span>BFSI</span>
+                  <a href="mailto:veer.trivedi@kotak.com">veer.trivedi@kotak.com</a>
+                  <a href="tel:+912262186432">+91 22 6218 6432</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Pankaj Kumar</strong>
+                  <span>Construction, Capital Goods &amp; Midcaps</span>
+                  <a href="mailto:pankajr.kumar@kotak.com">pankajr.kumar@kotak.com</a>
+                  <a href="tel:+912262185498">+91 22 6218 5498</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Amarjeet Maurya</strong>
+                  <span>Internet Software &amp; Services</span>
+                  <a href="mailto:amarjeet.maurya@kotak.com">amarjeet.maurya@kotak.com</a>
+                  <a href="tel:+912262186427">+91 22 6218 6427</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Gaurav Bhandari</strong>
+                  <span>Research Analyst</span>
+                  <a href="mailto:bhandari.gaurav@Kotak.com">bhandari.gaurav@Kotak.com</a>
+                  <a href="tel:+912262186440">+91 22 6218 6440</a>
+                </div>
+              </div>
+            </div>
+            <div class="krb__team-group">
+              <h4>Technical Research Team (Private Client Group)</h4>
+              <div class="krb__team-grid">
+                <div class="krb__person">
+                  <strong>Shrikant Chouhan</strong>
+                  
+                  <a href="mailto:shrikant.chouhan@kotak.com">shrikant.chouhan@kotak.com</a>
+                  <a href="tel:+912262185408">+91 22 6218 5408</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Amol Athawale</strong>
+                  
+                  <a href="mailto:amol.athawale@kotak.com">amol.athawale@kotak.com</a>
+                  <a href="tel:+912066203350">+91 20 6620 3350</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Sayed Haider</strong>
+                  
+                  <a href="mailto:sayed.haider@kotak.com">sayed.haider@kotak.com</a>
+                  <a href="tel:+912262185458">+91 22 62185458</a>
+                </div>
+              </div>
+            </div>
+            <div class="krb__team-group">
+              <h4>Derivatives Research Team (Private Client Group)</h4>
+              <div class="krb__team-grid">
+                <div class="krb__person">
+                  <strong>Sahaj Agrawal</strong>
+                  
+                  <a href="mailto:sahaj.agrawal@kotak.com">sahaj.agrawal@kotak.com</a>
+                  <a href="tel:+917966041701">+91 79 66041701</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Prasenjit Biswas, CMT, CFTe</strong>
+                  
+                  <a href="mailto:prasenjit.biswas@kotak.com">prasenjit.biswas@kotak.com</a>
+                  <a href="tel:+913366388331">+91 33 6638 8331</a>
+                </div>
+                <div class="krb__person">
+                  <strong>Karan Kulkarni</strong>
+                  
+                  <a href="mailto:karan.kulkarni@kotak.com">karan.kulkarni@kotak.com</a>
+                  <a href="tel:+912066203350">+91 20 66203350</a>
+                </div>
+              </div>
+            </div>
+          </div></div>
+          </details>
+          <details class="krb__acc">
+            <summary>Disclosure / Disclaimer</summary>
+            <div class="krb__acc-body">          <p class="krb__risk">Investments in securities market are subject to market risks. Read all the related documents carefully before investing.</p>
+          <p class="krb__risk">Registration granted by SEBI and certification from NISM in no way guarantee performance of the intermediary or provide any assurance of returns to investors.</p>
+          <p>Kotak Securities Limited established in 1994, is a subsidiary of Kotak Mahindra Bank Limited. Kotak Securities is one of India’s largest brokerage and distribution house. Kotak Securities Limited is a corporate trading and clearing member of BSE Limited (BSE), National Stock Exchange of India Limited (NSE), Metropolitan Stock Exchange of India Limited (MSE), National Commodity and Derivatives Exchange (NCDEX) and Multi Commodity Exchange (MCX). Our businesses include stock broking, services rendered in connection with distribution of primary market issues and financial products like mutual funds and fixed deposits, depository services and Portfolio Management.</p>
+          <p>Kotak Securities Limited is also a depository participant with National Securities Depository Limited (NSDL) and Central Depository Services (India) Limited (CDSL). Kotak Securities Limited is also registered with Insurance Regulatory and Development Authority as Corporate Agent for Kotak Mahindra Life Insurance Company Limited and Kotak Mahindra General Insurance Company Limited and is also a Mutual Fund Advisor registered with Association of Mutual Funds in India (AMFI). We are registered as a Research Analyst under SEBI (Research Analyst) Regulations, 2014.</p>
+          <p>We hereby declare that our activities were neither suspended nor we have defaulted with any stock exchange authority with whom we are registered in last five years. However SEBI, Exchanges, Clearing Corporations and Depositories etc have conducted the routine inspection and based on their observations have issued advise/warning/show cause notices/deficiency letters/ or levied penalty or imposed charges for certain deviations observed in inspections or in normal course of business, as a Stock Broker / Depository Participant/Portfolio Manager. We have not been debarred from doing business by any Stock Exchange / SEBI or any other authorities; nor has our certificate of registration been cancelled by SEBI at any point of time.</p>
+          <p>We offer our research services to clients as well as our prospects.</p>
+          <p>This document is not for public distribution and has been furnished to you solely for your information and must not be reproduced or redistributed to any other person. Persons into whose possession this document may come are required to observe these restrictions.</p>
+          <p>This material is for the personal information of the authorized recipient, and we are not soliciting any action based upon it. This report is not to be construed as an offer to sell or the solicitation of an offer to buy any security in any jurisdiction where such an offer or solicitation would be illegal. It is for the general information of clients of Kotak Securities Ltd. It does not constitute a personal recommendation or take into account the particular investment objectives, financial situations, or needs of individual clients. We have reviewed the report, and in so far as it includes current or historical information, it is believed to be reliable though its accuracy or completeness cannot be guaranteed. Neither Kotak Securities Limited, nor any person connected with it, accepts any liability arising from the use of this document. The recipients of this material should rely on their own investigations and take their own professional advice. Price and value of the investments referred to in this material may go up or down. Past performance is not a guide for future performance. Certain transactions -including those involving futures, options and other derivatives as well as non-investment grade securities - involve substantial risk and are not suitable for all investors. Reports based on technical analysis centers on studying charts of a stock’s price movement and trading volume, as opposed to focusing on a company’s fundamentals and as such, may not match with a report on a company’s fundamentals.</p>
+          <p>Opinions expressed are our current opinions as of the date appearing on this material only. While we endeavor to update on a reasonable basis the information discussed in this material, there may be regulatory, compliance or other reasons that prevent us from doing so. Prospective investors and others are cautioned that any forward-looking statements are not predictions and may be subject to change without notice. Our proprietary trading and investment businesses may make investment decisions that are inconsistent with the recommendations expressed herein.</p>
+          <p>Kotak Securities Limited has two independent equity research groups: Institutional Equities and Private Client Group. This report has been prepared by the Private Client Group.</p>
+          <p>We and our affiliates/associates, officers, directors, and employees, Research Analyst(including relatives) worldwide may: (a) from time to time, have long or short positions in, and buy or sell the securities thereof, of company (ies) mentioned herein or (b) be engaged in any other transaction involving such securities and earn brokerage or other compensation or act as a market maker in the financial instruments of the subject company/company (ies) discussed herein or act as advisor or lender / borrower to such company (ies) or have other potential/material conflict of interest with respect to any recommendation and related information and opinions at the time of publication of Research Report or at the time of public appearance. Kotak Securities Limited (KSL) may have proprietary long/short position in the above mentioned scrip(s) and therefore may be considered as interested. The views provided herein are general in nature and does not consider risk appetite or investment objective of particular investor; readers are requested to take independent professional advice before investing. This should not be construed as invitation or solicitation to do business with KSL. Kotak Securities Limited is also a Portfolio Manager. Portfolio Management Team (PMS) takes its investment decisions independent of the PCG research and accordingly PMS may have positions contrary to the PCG research recommendation. Kotak Securities Limited does not provide any promise or assurance of favourable view for a particular industry or sector or business group in any manner. The investor is requested to take into consideration all the risk factors including their financial condition, suitability to risk return profile and take professional advice before investing.</p>
+          <p>The analyst for this report certifies that all of the views expressed in this report accurately reflect his or her personal views about the subject company or companies and its or their securities, and no part of his or her compensation was, is or will be, directly or indirectly related to specific recommendations or views expressed in this report.</p>
+          <p>No part of this material may be duplicated in any form and/or redistributed without Kotak Securities’ prior written consent. Details of Associates are available on www.kotak.com</p>
+          <p>1. “Note that the research analysts contributing to the research report may not be registered/qualified as research analysts with FINRA; and 2. Such research analysts may not be associated persons of Kotak Mahindra Inc and therefore, may not be subject to NASD Rule 2711 restrictions on communications with a subject company, public appearances and trading securities held by a research analyst account</p>
+          <p>Any U.S. recipients of the research who wish to effect transactions in any security covered by the report should do so with or through Kotak Mahindra Inc. (Member FINRA/SIPC) and (ii) any transactions in the securities covered by the research by U.S. recipients must be effected only through Kotak Mahindra Inc. (Member FINRA/SIPC) at 369 Lexington Avenue 28th Floor NY NY 10017 USA (Tel:+1 212-600-8850).</p>
+          <p>Kotak Securities Limited and its non US affiliates may, to the extent permissible under applicable laws, have acted on or used this research to the extent that it relates to non US issuers, prior to or immediately following its publication. This material should not be construed as an offer to sell or the solicitation of an offer to buy any security in any jurisdiction where such an offer or solicitation would be illegal. This research report and its respective contents do not constitute an offer or invitation to purchase or subscribe for any securities or solicitation of any investments or investment services. Accordingly, any brokerage and investment services including the products and services described are not available to or intended for Canadian persons or US persons.”</p>
+          <p>Research Analyst has served as an officer, director or employee of subject company(ies): No</p>
+          <p>We or our associates may have received compensation from the subject company(ies) in the past 12 months. We or our associates have managed or co-managed public offering of securities for the subject company(ies) in the past 12 months: No</p>
+          <p>We or our associates may have received compensation for investment banking or merchant banking or brokerage services from the subject company(ies) in the past 12 months. We or our associates may have received any compensation for products or services other than investment banking or merchant banking or brokerage services from the subject company(ies) in the past 12 months. We or our associates may have received compensation or other benefits from the subject company(ies) or third party in connection with the research report. Our associates may have financial interest in the subject company(ies).</p>
+          <p>Research Analyst or his/her relative’s financial interest in the subject company(ies): No</p>
+          <p>Kotak Securities Limited has financial interest in the subject company(ies) at the end of the week immediately preceding the date of publication of Research Report: Yes</p>
+          <p>“However, Kotak Securities Prop/Arbitrage team could have exposure/financial interest to the subject company/companies during the ongoing month.” “Nature of financial interest is holding of equity shares and/or derivatives of the subject company.”</p>
+          <p>Our associates may have actual/beneficial ownership of 1% or more securities of the subject company(ies) at the end of the month immediately preceding the date of publication of Research Report.</p>
+          <p>Research Analyst or his/her relatives has actual/beneficial ownership of 1% or more securities of the subject company(ies) at the end of the month immediately preceding the date of publication of Research Report: No.</p>
+          <p>Kotak Securities Limited has actual/beneficial ownership of 1% or more securities of the subject company(ies) at the end of the month immediately preceding the date of publication of Research Report: No</p>
+          <p>By referring to any particular sector, Kotak Securities Limited does not provide any promise or assurance of favourable view for a particular industry or sector or business group in any manner. The investor is requested to take into consideration all the risk factors including their financial condition, suitability to risk return profile and take professional advice before investing. Such representations are not indicative of future results.</p>
+          <p>Subject company(ies) may have been client during twelve months preceding the date of distribution of the research report.</p>
+          <p>“A graph of daily closing prices of securities is available at <a href="https://www.nseindia.com/ChartApp/install/charts/mainpage.jsp" target="_blank" rel="noopener noreferrer">https://www.nseindia.com/ChartApp/install/charts/mainpage.jsp</a> and <a href="http://economictimes.indiatimes.com/markets/stocks/stock-quotes" target="_blank" rel="noopener noreferrer">http://economictimes.indiatimes.com/markets/stocks/stock-quotes</a>. (Choose a company from the list on the browser and select the “three years” icon in the price chart).”</p>
+          <p>Our research should not be considered as an advertisement or advice, professional or otherwise. The investor is requested to take into consideration all the risk factors including their financial condition, suitability to risk return profile and the like and take professional advice before investing.</p>
+          <p>“Investments in securities market are subject to market risks, read all the related documents carefully before investing. This information is purely backed by KSL research analyst based on research recommendation. Registration granted by SEBI, Enlistment as RA and certification from NISM in no way guarantee performance of the intermediary or provide any assurance of returns to investors. Any views and/or opinions stated are personal. Please do thorough research or consult your financial manager/advisor before making an investment.</p>
+          <p>Registered Address: 27 BKC, C 27, G Block, Bandra Kurla Complex, Bandra (E), Mumbai 400051. SEBI Registration No. INZ000200137 (Member of NSE, BSE, MSE, MCX &amp; NCDEX), Member Id: NSE-08081; BSE-673; MSE-1024; MCX-56285; NCDEX-1262. Research Analyst: INH000000586; BSE Enlistment No: 5035 for compliance T&amp;C and disclaimers, Visit <a href="https://bit.ly/longdisc" target="_blank" rel="noopener noreferrer">https://bit.ly/longdisc</a> ”</p>
+          <p>“General Terms and Conditions for Usage of AI/ML in Research Services. These Terms and Conditions (“T&amp;C’s”) govern the use of research services provided by Kotak Securities Limited (“KSL”), where Artificial Intelligence (AI) and Machine Learning (ML) technologies are used as part of the research presentation and related services. By accessing or using such services, you acknowledge and agree to the following: 1. Purpose of AI/ML Usage KSL employs AI/ML based tools for limited purposes such as • Audio and video generation using AI-created voices, avatars, and formats; • Enhancing accessibility and presentation of research insights; • Facilitating efficiency in dissemination of market related content and research content. The AI/ML tools are used only as a medium of presentation and/or dissemination and do not alter the substance of research prepared by KSL. 2. Extent of Usage The specific scope and manner of AI/ML usage in research services is set out in the AI Disclaimer published along with the relevant research content and is also published on the website under the disclaimers section. Users are advised to carefully review such disclaimers for detailed information on the extent and limitations of AI/ML usage as may be updated by KSL from time to time in the disclaimer section <a href="https://www.kotakneo.com/disclaimer/" target="_blank" rel="noopener noreferrer">https://www.kotakneo.com/disclaimer/</a>. 3. Ownership of Research Content The underlying research, market views, data, analysis, and opinions remain solely those of KSL. AI/ML is not used to create independent investment recommendations. 4. Accuracy and Limitations While KSL takes reasonable care to ensure the accuracy of its research content: • AI/ML outputs may not always reflect complete, precise, or contextually appropriate information; • KSL makes no warranties, express or implied, as to the reliability, accuracy, or fitness of AI/ML generated presentations. 5. No Confidential Information Input KSL does not upload, disclose, or process any client specific, confidential, or proprietary information through AI/ML platforms. All content generated through AI/ML is limited to publicly available information, market data, and internally developed research compliant with SEBI regulations. 6. Investor Responsibility Clients and viewers shall not rely solely on AI generated content for making any investment or trading decisions. The AI/ML generated presentations, output and dissemination are only for informational and illustrative purposes. Investors are further advised to consult their financial advisor before making any investment or trading decisions. 7. No Liability KSL shall not be responsible for or liable for any losses, damages, or claims arising directly or indirectly from reliance on AI/ML generated presentations or any output produced by the AI/ML. KSL shall not be liable for any loss, damage, or harm, whether direct, indirect, incidental, special, consequential, or punitive, arising from: • reliance on any AI-generated information; • business, financial, or investment decisions made based on such outputs; or • any inaccuracies, errors, or omissions in the responses. 8. Amendments KSL reserves the right to modify, update, or withdraw these T&amp;C’s or its usage of AL/ML technologies at its sole discretion, subject to compliance with applicable laws and regulations”</p>
+          <p>Disclaimer: <a href="https://bit.ly/DisclaimerKSLResearch" target="_blank" rel="noopener noreferrer">https://bit.ly/DisclaimerKSLResearch</a></p>
+          <p>Derivatives are a sophisticated investment device. The investor is requested to take into consideration all the risk factors before actually trading in derivative contracts.</p>
+          <p>Compliance Officer Details: Mr. Hiren Thakkar. Call: 022 - 4285 8484, or Email: ks.compliance@kotak.com.</p>
+          <p>Kotak Securities Limited. Registered Office: 27 BKC, C 27, G Block, Bandra Kurla Complex, Bandra (E), Mumbai 400051. CIN: U99999MH1994PLC134051, Telephone No.: +22 43360000, Fax No.: +22 67132430. Website: www.kotak.com / www.kotakneo.com. Correspondence Address: Infinity IT Park, Bldg. No 21, Opp. Film City Road, A K Vaidya Marg, Malad (East), Mumbai 400097. Telephone No: 42856825. SEBI Registration No: INZ000200137 (Member of NSE, BSE, MSE, MCX &amp; NCDEX), AMFI ARN 0164, PMS INP000000258 and Research Analyst INH000000586. NSDL/CDSL: IN-DP-629-2021.</p>
+          <p>“In case you require any clarification or have any query/concern, kindly write to us at Service.securities@kotak.com. For grievances write to KS.escalation@kotak.com and find Grievances Escalation matrix in the link below.” <a href="https://www.kotakneo.com/disclaimer/" target="_blank" rel="noopener noreferrer">https://www.kotakneo.com/disclaimer/</a></p></div>
+          </details>
+        </div>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Report","headline":"Lenskart Solutions (LENSKART) - ADD","datePublished":"2026-08-12","inLanguage":"en-IN","about":{"@type":"Corporation","name":"Lenskart Solutions","tickerSymbol":"LENSKART"},"publisher":{"@type":"Organization","name":"Kotak Securities Limited","url":"https://www.kotakneo.com"},"genre":"Result"}</script>
+      </article>
+</body>
+</html>

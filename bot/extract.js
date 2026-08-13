@@ -698,6 +698,21 @@ function extractFromLines(lines, opts) {
   /* ---- report type cross-check ---- */
   let reportType = meta.type;
   const bandIdx = roles.indexOf('reportTypeBand');
+  // Filenames differ by source: Jamun/S3 encode the type, but files served from
+  // kotakneo.com/uploads (and anything a human renamed) do not. Fall back to the
+  // type band printed on page 1 before giving up.
+  if (!reportType) {
+    const KNOWN = /^(Result Update|Company Update|Initiating Coverage|Event Update|Sector Update|IPO Note|Result|Company Report)$/i;
+    const band = bandIdx >= 0 ? norm(src[bandIdx].text) : null;
+    const printed = (band && KNOWN.test(band))
+      ? band
+      : (src.map((l) => norm(l.text)).find((t) => KNOWN.test(t)) || null);
+    if (printed) {
+      reportType = printed;
+      dg.note('REPORT_TYPE_FROM_PAGE', 'report.type',
+        `Report type "${printed}" read from page 1; the filename did not carry one.`);
+    }
+  }
   if (!reportType) {
     dg.error('REPORT_TYPE_MISSING', 'report.type',
       'No report type in the filename and none could be corroborated on page 1. report.type is mandatory.');
@@ -771,7 +786,14 @@ function extractFromLines(lines, opts) {
   };
   prune(report);
 
-  if (!meta.reportId) {
+  // Same for the id. A stable id derived from the ticker and report date is
+  // still de-duplicable across re-runs, which is all the publisher needs.
+  if (!meta.reportId && report.stock && report.stock.ticker && report.publishedAt) {
+    report.reportId = `${String(report.stock.ticker).toLowerCase()}-${report.publishedAt}`;
+    dg.note('REPORT_ID_DERIVED', 'reportId',
+      `No id in the filename; using "${report.reportId}", derived from ticker and report date.`);
+  }
+  if (!meta.reportId && !report.reportId) {
     dg.error('REPORT_ID_MISSING', 'reportId',
       'No report id could be derived from the filename. Without it the publisher cannot de-duplicate, ' +
       'so a re-run would create a second entry.');
