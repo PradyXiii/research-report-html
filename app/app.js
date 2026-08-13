@@ -37,7 +37,13 @@
 
     try {
       var buf = new Uint8Array(await f.arrayBuffer());
-      var pages = await B.extract.__lines(buf);           // page-1 lines + raw text
+      // A hang is worse than an error: bound the parse so it can never spin.
+      var pages = await Promise.race([
+        B.extract.__lines(buf),
+        new Promise(function (_, rej) {
+          setTimeout(function () { rej(new Error('Timed out after 60s reading this PDF.')); }, 60000);
+        })
+      ]);           // page-1 lines + raw text
       var det = B.detectFormat(pages.page1Text, { pageCount: pages.pageCount, filename: f.name });
 
       meta.innerHTML =

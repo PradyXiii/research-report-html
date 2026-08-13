@@ -20,7 +20,6 @@ const R = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 
 const krbCss = R('src/krb.css');
 const kieCss = fs.existsSync(path.join(root, 'src/kie.css')) ? R('src/kie.css') : '';
-const workerSrc = R('bot/node_modules/pdfjs-dist/build/pdf.worker.min.mjs');
 
 /* fs/path shims: render.js reads the stylesheets off disk. Serve them from
    memory instead so the module is used unmodified. */
@@ -49,8 +48,13 @@ const memPlugin = {
     b.onResolve({ filter: /^(path|node:path)$/ }, () => ({ path: 'shim-path', namespace: 'k' }));
     // pdf.js is bundled by esbuild from the real package: it ships as ESM and
     // will not parse inside a classic <script> tag.
+    // The legacy/ paths are not exported by the package; point both the main
+    // build and the worker module at the real files.
     b.onResolve({ filter: /^pdfjs-dist\/legacy\/build\/pdf\.mjs$/ }, () => ({
       path: path.join(root, 'bot/node_modules/pdfjs-dist/build/pdf.mjs')
+    }));
+    b.onResolve({ filter: /^pdfjs-dist\/legacy\/build\/pdf\.worker\.mjs$/ }, () => ({
+      path: path.join(root, 'bot/node_modules/pdfjs-dist/build/pdf.worker.mjs')
     }));
     b.onLoad({ filter: /.*/, namespace: 'k' }, (a) => {
       if (a.path === 'shim-fs') return { contents: shim, loader: 'js' };
@@ -75,10 +79,13 @@ const memPlugin = {
     .replace('/*__APP_CSS__*/', appCss)
     .replace('/*__KRB_CSS__*/', krbCss)
     .replace('/*__KIE_CSS__*/', kieCss)
-    .replace('/*__WORKER__*/', JSON.stringify(Buffer.from(workerSrc, 'utf8').toString('base64')))
-    .replace('/*__BOT__*/', botJs)
-    .replace('/*__APP__*/', appJs);
+    // Both scripts go in as base64 data URIs. The bundle contains pdf.js's
+    // worker, whose source has a literal </script> and other sequences that
+    // cannot survive being pasted between script tags -- encoding sidesteps
+    // every one of those hazards instead of trying to escape them.
+    .replace('__BOT_SRC__', 'data:text/javascript;base64,' + Buffer.from(botJs, 'utf8').toString('base64'))
+    .replace('__APP_SRC__', 'data:text/javascript;base64,' + Buffer.from(appJs, 'utf8').toString('base64'));
 
   fs.writeFileSync(path.join(root, 'converter.html'), html);
-  console.log(`converter.html  ${(html.length / 1024 / 1024).toFixed(2)} MB  (bundle ${(botJs.length / 1024).toFixed(0)} kB, worker ${(workerSrc.length / 1024).toFixed(0)} kB)`);
+  console.log(`converter.html  ${(html.length / 1024 / 1024).toFixed(2)} MB  (bundle ${(botJs.length / 1024).toFixed(0)} kB)`);
 })().catch((e) => { console.error(e); process.exit(1); });

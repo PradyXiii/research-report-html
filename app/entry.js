@@ -51,22 +51,16 @@ extract.__lines = async function (bytes) {
   };
 };
 
-/* Wire the worker synchronously, before anything can call getDocument.
-   esbuild bundles pdfjs into this file, so this is the very same module
-   instance pdftext.js later awaits -- there is no second copy. */
+/* pdf.js normally parses in a Web Worker. A Blob worker is blocked on file://,
+   where it hangs forever with no error, so instead we hand pdf.js the worker
+   MODULE directly: when globalThis.pdfjsWorker is present it uses it on the
+   main thread and never constructs a Worker at all. Works from disk and over
+   http, with no blob URL and no second copy of the code. */
 const pdfjs = require('pdfjs-dist/legacy/build/pdf.mjs');
-if (globalThis.__KOTAK_WORKER_B64 && pdfjs.GlobalWorkerOptions) {
-  // base64 rather than a JS string literal: the worker source contains
-  // sequences (</script, U+2028) that cannot survive inline escaping.
-  const bin = atob(globalThis.__KOTAK_WORKER_B64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  const url = URL.createObjectURL(new Blob([bytes], { type: 'text/javascript' }));
-  try {
-    // The worker ships as an ES module, so it must be constructed as one.
-    pdfjs.GlobalWorkerOptions.workerPort = new Worker(url, { type: 'module' });
-  } catch (e) {
-    pdfjs.GlobalWorkerOptions.workerSrc = url;
-  }
+const pdfjsWorker = require('pdfjs-dist/legacy/build/pdf.worker.mjs');
+globalThis.pdfjsWorker = pdfjsWorker;
+if (pdfjs.GlobalWorkerOptions) {
+  pdfjs.GlobalWorkerOptions.workerPort = null;
+  pdfjs.GlobalWorkerOptions.workerSrc = '';
 }
 module.exports.pdfjs = pdfjs;
