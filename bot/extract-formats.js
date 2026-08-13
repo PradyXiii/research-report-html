@@ -130,7 +130,9 @@ function extractPickOfWeek(lines, meta) {
         // reaches the text layer. Complete it from the fair value printed
         // elsewhere on the same page rather than publishing a dangling phrase.
         if (/\b(with|of|at|to)$/i.test(t) && fv) {
-          t += ' FV Rs' + fv.toLocaleString('en-IN');
+          // A space, not the hyphen the PDF's graphic uses: "Rs-2,220" reads
+          // as a negative number.
+          t += ' FV Rs ' + fv.toLocaleString('en-IN');
         }
         return t;
       })()

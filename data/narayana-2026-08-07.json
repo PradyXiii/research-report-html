@@ -3,8 +3,14 @@
   "format": "pick-of-the-week",
   "reportId": "potw-narh-2026-08-10",
   "publishedAt": "2026-08-07",
-  "stock": { "name": "Narayana Hrudayalaya", "ticker": "NARH" },
-  "report": { "type": "Pick of the Week", "template": "Pick of the Week" },
+  "stock": {
+    "name": "Narayana Hrudayalaya",
+    "ticker": "NARH"
+  },
+  "report": {
+    "type": "Pick of the Week",
+    "template": "Pick of the Week"
+  },
   "recommendation": {
     "rating": "ADD",
     "cmp": 1884,
@@ -13,7 +19,7 @@
     "currency": "INR",
     "timePeriod": "12 months",
     "holdingPeriod": "12 months",
-    "closing": "Maintain ADD with FV Rs-2,220"
+    "closing": "Maintain ADD with FV Rs 2,220"
   },
   "sections": [
     {
