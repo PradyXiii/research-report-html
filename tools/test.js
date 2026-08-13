@@ -68,7 +68,7 @@ t('allows a null fairValue (NR / RS reports)', () => {
   assert.ok(validate(d));
   const html = renderBlock(d);
   assert.ok(!/Fair Value \(FV\)/.test(html), 'Fair Value cell should be omitted');
-  assert.strictEqual((html.match(/class="krb__stat"/g) || []).length, 1, 'only the CMP cell should remain');
+  assert.strictEqual((html.match(/class="krb__kpi"/g) || []).length, 1, 'only the CMP cell should remain');
 });
 
 console.log('\ninjection safety (PDF text is untrusted input)');
@@ -139,17 +139,27 @@ t('price cells use the PDF labels verbatim', () => {
   assert.ok(html.includes('Fair Value (FV)'), 'FV label');
   // the currency mark is its own span so it can be set smaller; the rendered
   // text is still exactly "Rs.487" / "Rs.560"
-  assert.ok(/krb__cur">Rs\.<\/span>487/.test(html), 'CMP as printed');
-  assert.ok(/krb__cur">Rs\.<\/span>560/.test(html), 'FV as printed');
+  assert.ok(/<sup>Rs\.<\/sup>487/.test(html), 'CMP as printed');
+  assert.ok(/<sup>Rs\.<\/sup>560/.test(html), 'FV as printed');
   assert.ok(!/as on /i.test(html), 'no qualifier the PDF does not print');
 });
-t('title line reproduces the PDF headline exactly', () => {
+t('headline is the company and ticker; the rating sits in the medallion', () => {
   const d = clone(valid); d.recommendation.rating = 'add';
   const h = renderBlock(d);
   const m = /<h2 class="krb__title"[^>]*>([\s\S]*?)<\/h2>/.exec(h);
   const plain = m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-  assert.strictEqual(plain, 'Lenskart Solutions (LENSKART) - ADD');
+  assert.strictEqual(plain, 'Lenskart Solutions (LENSKART)');
+  assert.ok(/krb__verdict-value">ADD</.test(h), 'rating normalised and shown once');
   assert.ok(/data-krb-rating="ADD"/.test(h), 'root carries the normalised rating');
+});
+t('the rating meaning and holding period are both above the fold', () => {
+  // Quoted from the page-2 scale, so this is the report's own wording.
+  assert.ok(/krb__verdict-note">We expect the stock to deliver 5% - 15% returns over the next 12 months</.test(html));
+  assert.ok(/krb__holding">Holding Period: 12 months</.test(html));
+  // and both must sit inside the hero, not further down the page
+  const hero = /<header class="krb__hero">[\s\S]*?<\/header>/.exec(html)[0];
+  assert.ok(hero.includes('Holding Period: 12 months'), 'holding period is in the hero');
+  assert.ok(hero.includes('5% - 15% returns'), 'rating definition is in the hero');
 });
 t('emits NO derived figures -- the PDF is reproduced, not interpreted', () => {
   // The report's own CMP/fair-value gap and the rating band need not agree, so
@@ -166,7 +176,7 @@ t('every visible string on page 1 comes from the source data or the PDF labels',
   assert.ok(html.includes('Holding Period: 12 months'), 'holding period as printed');
   assert.ok(html.includes('Dated:'), 'date label as printed');
 });
-t('the ticker is not repeated outside the title', () => {
+t('the ticker is not repeated outside the headline', () => {
   const outside = html.replace(/<h2 class="krb__title"[\s\S]*?<\/h2>/, '');
   assert.ok(!/>LENSKART</.test(outside), 'no redundant ticker chip');
 });

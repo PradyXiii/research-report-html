@@ -166,65 +166,100 @@ const PAGE1 = {
   holding: 'Holding Period:'
 };
 
+const ICONS = {
+  rationale: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  positive: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 13.5 9 18.5 20 6.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  negative: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 8v5m0 3.5v.2M10.3 3.9 2.6 17.2A2 2 0 0 0 4.3 20.2h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+
+function iconFor(section) {
+  if (section.icon && ICONS[section.icon]) return ICONS[section.icon];
+  const tone = String(section.tone || '').toLowerCase();
+  if (tone === 'positive') return ICONS.positive;
+  if (tone === 'negative') return ICONS.negative;
+  return ICONS.rationale;
+}
+
 function renderSection(section, index) {
   const tone = String(section.tone || 'neutral').toLowerCase();
   const id = esc(section.id || ('section-' + (index + 1)));
-  const items = (section.bullets || []).map((b) => `<li>${linkify(esc(b))}</li>`).join('\n                ');
-  const paras = (section.paragraphs || []).map((p) => `<p>${linkify(esc(p))}</p>`).join('\n                ');
+  const count = (section.bullets || []).length;
+  const items = (section.bullets || []).map((b) => `<li>${linkify(esc(b))}</li>`).join('\n              ');
+  const paras = (section.paragraphs || []).map((p) => `<p>${linkify(esc(p))}</p>`).join('\n              ');
+  const modifier = index === 0 ? ' krb__card--thesis' : '';
   const heading = /[:：]$/.test(section.title) ? section.title : section.title + ':';
 
-  // Label rail on the left, content on the right -- the label stacks above the
-  // content once the block is narrow.
-  return `            <section class="krb__section" data-tone="${esc(tone)}" aria-labelledby="krb-${id}">
-              <h3 class="krb__section-label" id="krb-${id}">${esc(heading)}</h3>
-              <div class="krb__section-content">
-${items ? `                <ul class="krb__list">\n                ${items}\n                </ul>` : ''}${paras ? `\n                <div class="krb__prose">\n                ${paras}\n                </div>` : ''}
-              </div>
-            </section>`;
-}
-
-function renderHead(data, options) {
-  const src = logoSrc(options);
-  const bits = [data.report.type, data.report.period].filter(Boolean);
-  return `        <header class="krb__head">
-${src ? `          <img class="krb__logo" src="${src}" alt="Kotak Neo" width="360" height="80">` : ''}
-          <p class="krb__meta">
-            <span class="krb__type">${esc(bits.join(' \u00b7 '))}</span>
-            <span class="krb__dated">${esc(PAGE1.dated)} <time datetime="${esc(data.publishedAt)}" itemprop="datePublished">${esc(formatDate(data.publishedAt))}</time></span>
-          </p>
-        </header>`;
+  return `          <section class="krb__card${modifier}" data-tone="${esc(tone)}" aria-labelledby="krb-${id}">
+            <div class="krb__card-head">
+              <span class="krb__icon">${iconFor(section)}</span>
+              <h3 class="krb__card-title" id="krb-${id}">${esc(heading)}</h3>
+              ${count ? `<span class="krb__count">${count}</span>` : ''}
+            </div>
+${items ? `            <ul class="krb__list">\n              ${items}\n            </ul>` : ''}${paras ? `\n            <div class="krb__prose">\n              ${paras}\n            </div>` : ''}
+          </section>`;
 }
 
 /**
- * The headline, string-for-string as printed: "<Name> (<TICKER>) - <RATING>".
- * Only the typography differs -- the ticker recedes, the rating carries the
- * single accent colour.
+ * The hero carries everything a reader needs before scrolling: what the report
+ * is, the company, the rating AND what that rating means, and the holding
+ * period. The rating definition is quoted verbatim from the scale on page 2 --
+ * it is the report's own wording, not an interpretation of it.
  */
-function renderTitle(data) {
-  const rating = String(data.recommendation.rating).toUpperCase();
-  return `        <h2 class="krb__title" itemprop="headline">${esc(data.stock.name)} <span class="krb__title-ticker">(${esc(data.stock.ticker)})</span> - <span class="krb__title-rating">${esc(rating)}</span></h2>`;
+function renderHero(data, options) {
+  const rec = data.recommendation;
+  const rating = String(rec.rating).toUpperCase();
+  const band = boilerplate.ratingScale.find((r) => r.code === rating);
+  const definition = band ? ((band.lead ? band.lead + ' ' : '') + band.text) : '';
+  const chips = [
+    { text: data.report.type, lead: true },
+    { text: data.report.period },
+    { text: PAGE1.dated + ' ' + formatDate(data.publishedAt) }
+  ].filter((c) => c.text);
+
+  const logo = logoSrc(options);
+
+  return `        <header class="krb__hero">
+          <div class="krb__hero-inner">
+${logo ? `            <img class="krb__logo" src="${logo}" alt="Kotak Neo" width="360" height="80">` : ''}
+            <div class="krb__chips">
+${chips.map((c) => `              <span class="krb__chip${c.lead ? ' krb__chip--lead' : ''}">${esc(c.text)}</span>`).join('\n')}
+            </div>
+            <div class="krb__headrow">
+              <div class="krb__identity">
+                <h2 class="krb__title" itemprop="headline">${esc(data.stock.name)} (${esc(data.stock.ticker)})</h2>
+${rec.holdingPeriod ? `                <span class="krb__holding">${esc(PAGE1.holding)} ${esc(rec.holdingPeriod)}</span>` : ''}
+              </div>
+              <div class="krb__verdict">
+                <span class="krb__verdict-label">Rating</span>
+                <span class="krb__verdict-value">${esc(rating)}</span>
+${definition ? `                <span class="krb__verdict-note">${esc(definition)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </header>`;
 }
 
 function money(value, currency) {
   const mark = currency === 'INR' || !currency ? 'Rs.' : String(currency) + ' ';
-  return `<span class="krb__cur">${esc(mark)}</span>${esc(formatNumber(value))}`;
+  return `<sup>${esc(mark)}</sup>${esc(formatNumber(value))}`;
 }
 
+/** The two figures printed on page 1. Nothing derived from them. */
 function renderPrices(data) {
   const rec = data.recommendation;
-  const cells = [
-    `          <div class="krb__stat">
-            <span class="krb__stat-label">${esc(PAGE1.cmp)}</span>
-            <span class="krb__stat-value">${money(rec.cmp, rec.currency)}</span>
+  const tiles = [
+    `          <div class="krb__kpi">
+            <span class="krb__kpi-label">${esc(PAGE1.cmp)}</span>
+            <span class="krb__kpi-value">${money(rec.cmp, rec.currency)}</span>
           </div>`
   ];
   if (rec.fairValue !== null && rec.fairValue !== undefined) {
-    cells.push(`          <div class="krb__stat">
-            <span class="krb__stat-label">${esc(PAGE1.fv)}</span>
-            <span class="krb__stat-value">${money(rec.fairValue, rec.currency)}</span>
+    tiles.push(`          <div class="krb__kpi krb__kpi--hero">
+            <span class="krb__kpi-label">${esc(PAGE1.fv)}</span>
+            <span class="krb__kpi-value">${money(rec.fairValue, rec.currency)}</span>
           </div>`);
   }
-  return `        <div class="krb__stats">\n${cells.join('\n')}\n        </div>`;
+  return `        <div class="krb__kpis">\n${tiles.join('\n')}\n        </div>`;
 }
 
 function renderRatingScale(data) {
@@ -290,36 +325,33 @@ function renderBlock(data, options) {
 
   const rating = String(data.recommendation.rating).toUpperCase();
   const themeAttr = opts.theme ? ` data-krb-theme="${esc(opts.theme)}"` : '';
-  const rec = data.recommendation;
 
   const css = opts.inlineCss
     ? `      <style>\n${fs.readFileSync(path.join(__dirname, 'krb.css'), 'utf8')}\n      </style>\n`
     : '';
 
-  const sections = data.sections.map(renderSection).join('\n');
+  // First section is the thesis and gets the full-width card; the rest pair up
+  // as a split that collapses to one column when the block is narrow.
+  const cards = data.sections.map(renderSection);
+  const thesis = cards.length ? cards[0] : '';
+  const rest = cards.slice(1);
 
   return `${css}      <article class="krb"${themeAttr} data-krb-rating="${esc(rating)}" itemscope itemtype="https://schema.org/Report">
-${renderHead(data, opts)}
-
-${renderTitle(data)}
+${renderHero(data, opts)}
 
 ${renderPrices(data)}
 
         <div class="krb__body">
-          <div class="krb__sections">
-${sections}
-          </div>
-${data.abbreviations ? `          <p class="krb__abbr">${esc(data.abbreviations)}</p>` : ''}
+${thesis}
+${rest.length ? `          <div class="krb__split">\n${rest.join('\n')}\n          </div>` : ''}
+${data.abbreviations ? `          <p class="krb__note">${esc(data.abbreviations)}</p>` : ''}
         </div>
 
-        <div class="krb__foot">
-${data.attribution ? `          <p class="krb__attribution">${linkify(esc(data.attribution))}</p>` : ''}
-${rec.holdingPeriod ? `          <p class="krb__holding">${esc(PAGE1.holding)} ${esc(rec.holdingPeriod)}</p>` : ''}
-        </div>
+${data.attribution ? `        <p class="krb__attribution">${linkify(esc(data.attribution))}</p>` : ''}
 
         <div class="krb__disclosures">
           <details class="krb__acc">
-            <summary>Rating Scale (Private Client Group)<span class="krb__acc-icon" aria-hidden="true"></span></summary>
+            <summary>Rating Scale (Private Client Group)</summary>
             <div class="krb__acc-body">
               <p class="krb__acc-lead">Definitions of ratings</p>
 ${renderRatingScale(data)}
@@ -327,14 +359,14 @@ ${renderRatingScale(data)}
           </details>
 
           <details class="krb__acc">
-            <summary>Research Team (Private Client Group)<span class="krb__acc-icon" aria-hidden="true"></span></summary>
+            <summary>Research Team (Private Client Group)</summary>
             <div class="krb__acc-body">
 ${renderTeams()}
             </div>
           </details>
 
           <details class="krb__acc">
-            <summary>Disclosure / Disclaimer<span class="krb__acc-icon" aria-hidden="true"></span></summary>
+            <summary>Disclosure / Disclaimer</summary>
             <div class="krb__acc-body">
 ${renderDisclosures()}
             </div>
