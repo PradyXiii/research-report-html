@@ -1,4 +1,6 @@
 'use strict';
+
+const { verify, summarise } = require('./verify');
 /**
  * pipeline.js -- the one code path every trigger shares.
  *
@@ -117,6 +119,31 @@ class Pipeline {
       outcome.errors = outcome.errors.concat([{ code: 'RENDER_FAILED', field: 'report', message: err.message }]);
       return this.fail(outcome, 'rejected', 'RENDER_FAILED', err.message, log, started, { fetched, extracted });
     }
+    /* 4b. VERIFY -- the gate. Nothing reaches a publisher that has not been
+       reconciled back to the source document. This block sits unread for months;
+       a wrong figure that looks right is the failure that costs jobs, so an
+       unverifiable render is treated exactly like a failed one. */
+    const verification = verify({
+      data: extracted.report,
+      html: html,
+      sourceText: extracted.sourceText,
+      page1Text: extracted.page1Text,
+      filename: (fetched && fetched.filename) || (this.cfg && this.cfg.filename) || null
+    });
+    outcome.verification = {
+      ok: verification.ok,
+      checks: verification.passed.length,
+      failures: verification.failures,
+      warnings: verification.warnings
+    };
+    for (const w of verification.warnings) log.warn(`verify: ${w.detail}`, { code: w.code });
+    if (!verification.ok) {
+      for (const f of verification.failures) log.error(`verify: ${f.detail}`, { code: f.code });
+      return this.fail(outcome, 'rejected', 'VERIFICATION_FAILED',
+        summarise(verification), log, started, { fetched, extracted });
+    }
+    log.info(`verified: ${summarise(verification)}`);
+
     // publishState is part of the stored row, so it must be part of the hash --
     // otherwise flipping shadow -> live would be skipped as "unchanged" and the
     // entry would never go live.

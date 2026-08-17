@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/plugins/i-have-adhd-hooks/always-on.mjs\" 2>/dev/null || true",
+            "timeout": 5,
+            "statusMessage": "i-have-adhd: checking always-on flag"
+          }
+        ]
+      }
+    ]
+  }
+}

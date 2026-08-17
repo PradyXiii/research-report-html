@@ -848,7 +848,13 @@ async function extractFromPdf(buffer, opts) {
     return result(false, null, dg, { filename: cfg.filename || null });
   }
   const page1 = doc.pages[0] || { lines: [] };
-  return extractFromLines(page1.lines, Object.assign({}, opts, { pageCount: doc.pageCount }));
+  const out = extractFromLines(page1.lines, Object.assign({}, opts, { pageCount: doc.pageCount }));
+  // The gate reconciles the report against the document, so the document's own
+  // text has to travel with the result. Page 1 is kept separate: the later pages
+  // print the whole rating scale, and searching them would match every rating.
+  out.page1Text = page1.lines.map((l) => l.text).join('\n');
+  out.sourceText = out.page1Text;
+  return out;
 }
 
 module.exports = {
