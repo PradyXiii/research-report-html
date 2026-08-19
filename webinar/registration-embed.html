@@ -1,0 +1,335 @@
+<!-- ==========================================================================
+     Kotak Neo &mdash; webinar registration + Zoom embed
+     Drop this block into the masterclass page where "Register Now" sits.
+
+     Flow: register -> POST to your endpoint -> endpoint calls Zoom's Webinar
+     Registrant API -> returns that registrant's UNIQUE join_url -> the iframe
+     loads it. Unique URLs are how Zoom attributes attendance, so do not hand
+     everyone one shared link.
+
+     No dependencies. Scoped under .knw so it cannot collide with page styles.
+     ========================================================================== -->
+
+<section class="knw" id="register" aria-labelledby="knw-title">
+  <div class="knw__card">
+    <header class="knw__head">
+      <p class="knw__eyebrow">Free &middot; Live on Zoom</p>
+      <h2 class="knw__title" id="knw-title">Register for the Masterclass</h2>
+      <p class="knw__sub">29th &amp; 30th Aug&nbsp;'26 &middot; 10 a.m. &ndash; 1 p.m. &middot; Your joining link is emailed instantly.</p>
+    </header>
+
+    <!-- ---------- registration ---------- -->
+    <form class="knw__form" id="knwForm" novalidate>
+      <div class="knw__row">
+        <label class="knw__field">
+          <span class="knw__label">Full name</span>
+          <input id="knwName" name="name" type="text" autocomplete="name"
+                 required minlength="2" maxlength="80" placeholder="Jyoti Budhia"
+                 aria-describedby="knwNameErr">
+          <span class="knw__err" id="knwNameErr" role="alert"></span>
+        </label>
+
+        <label class="knw__field">
+          <span class="knw__label">Email address</span>
+          <input id="knwEmail" name="email" type="email" autocomplete="email"
+                 required maxlength="120" placeholder="you@example.com"
+                 aria-describedby="knwEmailErr">
+          <span class="knw__err" id="knwEmailErr" role="alert"></span>
+        </label>
+      </div>
+
+      <label class="knw__field">
+        <span class="knw__label">Mobile number</span>
+        <span class="knw__tel">
+          <span class="knw__cc" aria-hidden="true">+91</span>
+          <input id="knwPhone" name="phone" type="tel" inputmode="numeric"
+                 autocomplete="tel-national" required placeholder="98765 43210"
+                 maxlength="11" aria-describedby="knwPhoneErr">
+        </span>
+        <span class="knw__err" id="knwPhoneErr" role="alert"></span>
+      </label>
+
+      <label class="knw__consent">
+        <input id="knwConsent" type="checkbox" required aria-describedby="knwConsentErr">
+        <span>I agree to be contacted by Kotak Securities about this masterclass and
+              related offerings, and accept the
+              <a href="https://www.kotakneo.com/disclaimer/" target="_blank" rel="noopener">terms and privacy policy</a>.</span>
+      </label>
+      <span class="knw__err" id="knwConsentErr" role="alert"></span>
+
+      <button class="knw__btn" id="knwSubmit" type="submit">
+        <span class="knw__btn-text">Register free</span>
+        <span class="knw__spin" hidden aria-hidden="true"></span>
+      </button>
+
+      <p class="knw__note">No fees. No card details. Takes 20 seconds.</p>
+      <p class="knw__err knw__err--form" id="knwFormErr" role="alert"></p>
+    </form>
+
+    <!-- ---------- success + Zoom embed ---------- -->
+    <div class="knw__done" id="knwDone" hidden>
+      <p class="knw__tick" aria-hidden="true">&check;</p>
+      <h3 class="knw__done-title">You're registered</h3>
+      <p class="knw__done-sub" id="knwDoneSub">We've emailed your joining link. Keep this page open to join here.</p>
+
+      <div class="knw__actions">
+        <a class="knw__btn knw__btn--join" id="knwJoin" href="#" target="_blank" rel="noopener">Join on Zoom</a>
+        <button class="knw__btn knw__btn--ghost" id="knwEmbedBtn" type="button">Join in this page</button>
+        <a class="knw__btn knw__btn--ghost" id="knwCal" href="#" download="masterclass.ics">Add to calendar</a>
+      </div>
+
+      <!-- The Zoom web client. `allow` is required: without camera/microphone
+           the client loads but cannot be used, and the failure is silent. -->
+      <div class="knw__embed" id="knwEmbed" hidden>
+        <iframe id="knwFrame"
+                title="Options Trading Live Masterclass on Zoom"
+                src="about:blank"
+                allow="camera; microphone; fullscreen; display-capture; autoplay; clipboard-write"
+                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      <p class="knw__fallback" id="knwFallback" hidden>
+        If the session does not load above, use <b>Join on Zoom</b> &mdash; some networks block embedded video.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+.knw{--knw-red:#fa1432;--knw-red-ink:#e00f2b;--knw-navy:#00005a;--knw-ink:#12141b;--knw-muted:#5b6270;
+     --knw-line:#e3e6ee;--knw-bg:#fff;--knw-wash:#f7f8fb;
+     font-family:inherit;color:var(--knw-ink);display:block;padding:clamp(16px,4vw,40px) 0}
+@media (prefers-color-scheme:dark){.knw{--knw-ink:#eceef4;--knw-muted:#a0a7b4;--knw-line:#272c38;--knw-bg:#12141a;--knw-wash:#171a21;--knw-red-ink:#ff4d63}}
+.knw *,.knw *::before,.knw *::after{box-sizing:border-box}
+.knw__card{max-width:680px;margin:0 auto;background:var(--knw-bg);border:1px solid var(--knw-line);
+  border-top:4px solid var(--knw-red);border-radius:16px;padding:clamp(20px,4vw,40px);
+  box-shadow:0 1px 2px rgba(12,14,20,.04),0 18px 44px rgba(12,14,20,.08)}
+.knw__eyebrow{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--knw-red-ink)}
+.knw__title{margin:0 0 6px;font-size:clamp(22px,1.1rem+1.4vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.knw__sub{margin:0 0 22px;color:var(--knw-muted);font-size:15px;line-height:1.6}
+/* The UA rule for [hidden] is display:none at specificity 0-1-0, so any
+   class that sets display beats it and the 'hidden' element stays on
+   screen. Everything here is toggled by .hidden, so enforce it once. */
+.knw [hidden]{display:none!important}
+.knw__form{display:grid;gap:16px}
+.knw__row{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.knw__field{display:grid;gap:6px}
+.knw__label{font-size:13px;font-weight:600;color:var(--knw-muted)}
+.knw input[type=text],.knw input[type=email],.knw input[type=tel]{
+  width:100%;padding:13px 14px;min-height:48px;font:inherit;font-size:16px; /* 16px stops iOS zooming on focus */
+  color:var(--knw-ink);background:var(--knw-wash);border:1px solid var(--knw-line);border-radius:10px}
+.knw input:focus-visible{outline:2px solid var(--knw-red);outline-offset:2px;background:var(--knw-bg)}
+.knw input[aria-invalid=true]{border-color:var(--knw-red-ink);background:color-mix(in srgb,var(--knw-red) 5%,var(--knw-bg))}
+.knw__tel{display:flex;align-items:stretch;border:1px solid var(--knw-line);border-radius:10px;overflow:hidden;background:var(--knw-wash)}
+.knw__tel:focus-within{outline:2px solid var(--knw-red);outline-offset:2px}
+.knw__cc{display:grid;place-items:center;padding:0 12px;font-weight:700;color:var(--knw-muted);border-right:1px solid var(--knw-line)}
+.knw__tel input{border:0!important;border-radius:0!important;background:transparent!important}
+.knw__tel input:focus-visible{outline:none}
+.knw__consent{display:flex;gap:10px;align-items:center;font-size:13.5px;line-height:1.55;color:var(--knw-muted)}
+/* 24px, not the 18px this looks like it wants: WCAG 2.2 SC 2.5.8 measures
+   the box, and a checkbox is not the inline-link exception. */
+.knw__consent input{margin:0;width:24px;height:24px;accent-color:var(--knw-red);flex:none}
+.knw__consent a{color:var(--knw-navy)}
+@media (prefers-color-scheme:dark){.knw__consent a{color:#9db0ff}}
+.knw__btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  padding:15px 24px;min-height:52px;border:0;border-radius:10px;background:var(--knw-red-ink);color:#fff;
+  font:inherit;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;transition:background .15s,transform .15s}
+.knw__btn:hover{background:var(--knw-red)}
+.knw__btn:active{transform:translateY(1px)}
+.knw__btn[disabled]{opacity:.6;cursor:not-allowed}
+.knw__btn--ghost{background:transparent;color:var(--knw-ink);border:1px solid var(--knw-line)}
+.knw__btn--ghost:hover{background:var(--knw-wash);color:var(--knw-ink)}
+.knw__spin{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:knwspin .7s linear infinite}
+@keyframes knwspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.knw__spin{animation:none}}
+.knw__note{margin:0;text-align:center;font-size:12.5px;color:var(--knw-muted)}
+.knw__err{color:var(--knw-red-ink);font-size:12.5px;font-weight:600;min-height:0}
+.knw__err:empty{display:none}
+.knw__err--form{text-align:center;margin:0}
+.knw__done{text-align:center}
+.knw__tick{margin:0 auto 12px;width:52px;height:52px;display:grid;place-items:center;border-radius:50%;
+  background:var(--knw-red-ink);color:#fff;font-size:26px;font-weight:800}
+.knw__done-title{margin:0 0 6px;font-size:22px;font-weight:800}
+.knw__done-sub{margin:0 0 20px;color:var(--knw-muted);font-size:14.5px;line-height:1.6}
+.knw__actions{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));margin-bottom:18px}
+.knw__embed{position:relative;padding-top:60%;border-radius:12px;overflow:hidden;border:1px solid var(--knw-line);background:#000}
+.knw__embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.knw__fallback{margin:12px 0 0;font-size:12.5px;color:var(--knw-muted)}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ------------------------------------------------------------------ config */
+  var CONFIG = {
+    // Your endpoint. It registers the person with Zoom and returns { join_url }.
+    // See server-example.js -- the Zoom API secret must never be in this file.
+    endpoint: '/api/webinar/register',
+
+    // Fallback only, used when the endpoint is missing or errors. Set '' in
+    // production: a shared link means Zoom cannot attribute attendance to a
+    // registrant, and anyone who has the URL can join without registering.
+    // Store the plain /j/ link -- embed() rewrites it to the /wc/ web-client
+    // form for the iframe, and the "Open in Zoom app" button needs the /j/ one.
+    fallbackJoinUrl: 'https://zoom.us/j/93315444846?pwd=Z91Q8a8M3EpYjYH7CH9S0mMWn8BvZa.1',
+
+    event: {
+      title: 'Options Trading Live Masterclass',
+      startsAt: '2026-08-29T10:00:00+05:30',
+      endsAt:   '2026-08-29T13:00:00+05:30',
+      details:  'Live on Zoom with Jyoti Budhia. Joining link is in your email.'
+    }
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var form = $('knwForm');
+  if (!form) return;
+
+  /* ---------------------------------------------------------------- validate */
+  var RULES = {
+    knwName: function (v) {
+      if (!v.trim()) return 'Enter your name.';
+      if (v.trim().length < 2) return 'That name looks too short.';
+      return '';
+    },
+    knwEmail: function (v) {
+      if (!v.trim()) return 'Enter your email address.';
+      // Deliberately permissive: the real proof is the mail arriving. Over-strict
+      // patterns reject valid addresses and lose registrations.
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim())) return 'Check the email address.';
+      return '';
+    },
+    knwPhone: function (v) {
+      var d = v.replace(/\D/g, '');
+      if (!d) return 'Enter your mobile number.';
+      if (d.length === 12 && d.indexOf('91') === 0) d = d.slice(2); // pasted with +91
+      if (d.length !== 10) return 'Enter a 10-digit mobile number.';
+      if (!/^[6-9]/.test(d)) return 'Indian mobile numbers start with 6, 7, 8 or 9.';
+      return '';
+    }
+  };
+
+  function setError(id, msg) {
+    var input = $(id), err = $(id + 'Err');
+    if (err) err.textContent = msg;
+    if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    return !msg;
+  }
+
+  Object.keys(RULES).forEach(function (id) {
+    var el = $(id);
+    if (!el) return;
+    el.addEventListener('blur', function () { setError(id, RULES[id](el.value)); });
+    el.addEventListener('input', function () { if (el.getAttribute('aria-invalid') === 'true') setError(id, RULES[id](el.value)); });
+  });
+
+  // Digits only, so the number is never submitted with stray characters.
+  $('knwPhone').addEventListener('input', function () {
+    this.value = this.value.replace(/[^\d\s]/g, '');
+  });
+
+  /* ------------------------------------------------------------------ submit */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    $('knwFormErr').textContent = '';
+
+    var ok = true, firstBad = null;
+    Object.keys(RULES).forEach(function (id) {
+      var good = setError(id, RULES[id]($(id).value));
+      if (!good && !firstBad) firstBad = $(id);
+      ok = ok && good;
+    });
+    if (!$('knwConsent').checked) {
+      $('knwConsentErr').textContent = 'Please accept the terms to continue.';
+      if (!firstBad) firstBad = $('knwConsent');
+      ok = false;
+    } else $('knwConsentErr').textContent = '';
+
+    if (!ok) { if (firstBad) firstBad.focus(); return; }
+
+    var phone = $('knwPhone').value.replace(/\D/g, '');
+    if (phone.length === 12 && phone.indexOf('91') === 0) phone = phone.slice(2);
+
+    var payload = {
+      name: $('knwName').value.trim(),
+      email: $('knwEmail').value.trim(),
+      phone: '+91' + phone,
+      source: location.pathname
+    };
+
+    busy(true);
+    fetch(CONFIG.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, body: b }; }); })
+      .then(function (res) {
+        if (!res.ok) throw new Error((res.body && res.body.message) || 'Registration failed.');
+        succeed(res.body.join_url || CONFIG.fallbackJoinUrl, payload.email);
+      })
+      .catch(function (err) {
+        // Never strand someone who has already typed their details in.
+        if (CONFIG.fallbackJoinUrl) return succeed(CONFIG.fallbackJoinUrl, payload.email);
+        busy(false);
+        $('knwFormErr').textContent = err.message + ' Please try again, or email service.securities@kotak.com.';
+      });
+  });
+
+  function busy(on) {
+    var b = $('knwSubmit');
+    b.disabled = on;
+    b.querySelector('.knw__btn-text').textContent = on ? 'Registering\u2026' : 'Register free';
+    b.querySelector('.knw__spin').hidden = !on;
+  }
+
+  /* ----------------------------------------------------------------- success */
+  function succeed(joinUrl, email) {
+    form.hidden = true;
+    var done = $('knwDone');
+    done.hidden = false;
+    $('knwDoneSub').textContent = 'We\u2019ve emailed your joining link to ' + email +
+      '. Keep this page open to join here.';
+    $('knwCal').href = icsUrl();
+
+    var join = $('knwJoin');
+    if (joinUrl) {
+      join.href = joinUrl;
+      $('knwEmbedBtn').addEventListener('click', function () { embed(joinUrl); });
+    } else {
+      join.hidden = true;
+      $('knwEmbedBtn').hidden = true;
+      $('knwDoneSub').textContent += ' The link opens 15 minutes before the session.';
+    }
+    done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    done.setAttribute('tabindex', '-1');
+    done.focus({ preventScroll: true });
+  }
+
+  function embed(joinUrl) {
+    // Only the /wc/ web-client path renders inside a frame; a plain /j/ link
+    // bounces to the desktop app and the frame stays blank.
+    var src = joinUrl.replace(/\/j\/(\d+)/, '/wc/$1/join');
+    $('knwFrame').src = src;
+    $('knwEmbed').hidden = false;
+    $('knwFallback').hidden = false;
+    $('knwEmbedBtn').hidden = true;
+  }
+
+  /* -------------------------------------------------------------- calendar */
+  function icsUrl() {
+    var z = function (d) { return new Date(d).toISOString().replace(/[-:]|\.\d{3}/g, ''); };
+    var ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Kotak Neo//Masterclass//EN', 'BEGIN:VEVENT',
+      'UID:' + Date.now() + '@kotakneo.com',
+      'DTSTAMP:' + z(Date.now()),
+      'DTSTART:' + z(CONFIG.event.startsAt),
+      'DTEND:' + z(CONFIG.event.endsAt),
+      'SUMMARY:' + CONFIG.event.title,
+      'DESCRIPTION:' + CONFIG.event.details,
+      'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+    return URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  }
+})();
+</script>
