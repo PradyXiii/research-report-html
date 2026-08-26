@@ -417,11 +417,16 @@ color:var(--text-light-grey);
     padding: 18px;
 }
 .zoom-form {
-    --zoom-crop-top: 260px;    /* height of the title / Description / Date & Time block */
-    --zoom-visible-h: 470px;   /* how much to show: heading, fields, button */
-    --zoom-page-h: 2000px;     /* MUST stay well above Zoom's own page height -- see note */
-    --zoom-mask-top: 340px;    /* top of the privacy line, measured from the crop */
-    --zoom-mask-h: 60px;       /* its height -- it wraps to more rows when narrow */
+    /* Measured with crop-tuner.html, not estimated. */
+    --zoom-crop-top: 587px;    /* height of the title / Description / Date & Time block */
+    --zoom-visible-h: 319px;   /* how much to show: heading, fields, button */
+    --zoom-page-h: 3000px;     /* MUST stay well above Zoom's own page height -- see note */
+    /* NOT PLACED YET. 900 is past the 319px window, so the patch is clipped
+       away and paints nothing -- the privacy line is still on screen. To fix:
+       reopen crop-tuner.html, tick "show mask", drag these two until the red
+       band covers the line, untick, copy. Both must land inside 0..319. */
+    --zoom-mask-top: 900px;    /* top of the privacy line, measured from the crop */
+    --zoom-mask-h: 220px;      /* its height -- it wraps to more rows when narrow */
     --zoom-mask-bg: #ffffff;   /* whatever colour sits behind it */
     position: relative;
     height: var(--zoom-visible-h);
@@ -1116,15 +1121,19 @@ html[data-theme="dark"] .cta-banner {
 
 /* ============ RESPONSIVE ============ */
 @media (max-width:960px) {
-/* The card goes full-width here, so Zoom's text stops wrapping and its header
-   block gets shorter. STARTING POINTS -- measure these with .zoom-tune at this
-   width before going live, they are not the desktop numbers. */
+/* The card goes full-width here (~812px), so Zoom's text stops wrapping and
+   every offset moves. The desktop numbers above will NOT be right at this
+   width -- but nor were the estimates that used to sit here, so nothing is
+   guessed any more. Run crop-tuner.html with its width slider at 812, then
+   uncomment this and paste what it prints.
+
 .zoom-form {
-    --zoom-crop-top: 200px;
-    --zoom-visible-h: 430px;
-    --zoom-mask-top: 300px;
-    --zoom-mask-h: 44px;
+    --zoom-crop-top: ?px;
+    --zoom-visible-h: ?px;
+    --zoom-mask-top: ?px;
+    --zoom-mask-h: ?px;
 }
+*/
 .wrap, .topnav {
     padding-left: 24px;
     padding-right: 24px;
@@ -1172,15 +1181,17 @@ html[data-theme="dark"] .cta-banner {
 .register-card.is-zoom {
     padding: 12px;
 }
-/* Narrowest card, so Zoom wraps hardest and its header block is tallest, and
-   the privacy line runs to more rows. STARTING POINTS -- measure with
-   .zoom-tune at this width before going live. */
+/* Narrowest card (~330px at 390px viewport), so Zoom wraps hardest, its header
+   block is tallest and the privacy line runs to the most rows. Run
+   crop-tuner.html with its width slider at 330, then uncomment and paste.
+
 .zoom-form {
-    --zoom-crop-top: 300px;
-    --zoom-visible-h: 500px;
-    --zoom-mask-top: 350px;
-    --zoom-mask-h: 80px;
+    --zoom-crop-top: ?px;
+    --zoom-visible-h: ?px;
+    --zoom-mask-top: ?px;
+    --zoom-mask-h: ?px;
 }
+*/
 	.hero-meta{display: block;}
 	.hero-meta span{font-size:12px; width: fit-content;}
 .topnav {
