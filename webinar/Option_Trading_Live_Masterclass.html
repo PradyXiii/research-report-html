@@ -388,23 +388,67 @@ color:var(--text-light-grey);
     box-shadow: 0 10px 20px rgba(193,18,31,0.3);
 }
 /* ============ ZOOM REGISTRATION EMBED ============ */
+/*
+   The iframe is cross-origin, so no rule in this file can reach inside it.
+   What this does instead is put a window onto it: the frame is rendered at
+   its full height and pushed up, and .zoom-form clips whatever falls outside.
+   Zoom's title / Description / Date & Time block sits above the window, and
+   the privacy line is covered by a patch. Both still exist in the frame and
+   still go to Zoom -- they are just not on screen.
+
+   Six numbers, all tunable. To measure them, set --zoom-crop-top to 0 and
+   --zoom-visible-h to 1400px, load the page, and read the offsets off the
+   Zoom form as it actually renders at your card width.
+*/
 .register-card.is-zoom {
     padding: 18px;
 }
 .zoom-form {
-    --zoom-frame-h: 720px;
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-md);
+    --zoom-crop-top: 430px;    /* height of the title / Description / Date & Time block */
+    --zoom-visible-h: 490px;   /* how much to show: heading, fields, button */
+    --zoom-page-h: 1400px;     /* taller than Zoom's whole page, so it never scrolls itself */
+    --zoom-mask-top: 350px;    /* top of the privacy line, measured from the crop */
+    --zoom-mask-h: 72px;       /* its height -- it wraps to more lines when narrow */
+    --zoom-mask-bg: #ffffff;   /* whatever colour sits behind it */
+    position: relative;
+    height: var(--zoom-visible-h);
     overflow: hidden;
+    /* outline, not border: an absolutely positioned child is offset from the
+       padding box, so a 1px border would push the crop 1px off and let the
+       last row of Zoom's header bleed in at the top. outline costs no layout. */
+    outline: 1px solid var(--border-light);
+    outline-offset: -1px;
+    border-radius: var(--radius-md);
     background: #ffffff;
 }
 .zoom-form iframe {
-    display: block;
+    position: absolute;
+    top: calc(var(--zoom-crop-top) * -1);
+    left: 0;
     width: 100%;
-    height: var(--zoom-frame-h);
+    height: var(--zoom-page-h);
     border: 0;
     background: #ffffff;
     color-scheme: light;
+}
+.zoom-mask {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--zoom-mask-top);
+    height: var(--zoom-mask-h);
+    background: var(--zoom-mask-bg);
+    pointer-events: none;
+}
+/* Tuning aid. Add class="zoom-form zoom-tune" to see the whole Zoom page
+   uncropped, measure the four offsets against your own card width, then
+   drop the class again. Not used in production. */
+.zoom-form.zoom-tune {
+    --zoom-crop-top: 0px;
+    --zoom-visible-h: var(--zoom-page-h);
+}
+.zoom-form.zoom-tune .zoom-mask {
+    display: none;
 }
 .zoom-fallback {
     margin: 12px 2px 0;
@@ -1059,9 +1103,14 @@ html[data-theme="dark"] .cta-banner {
 
 /* ============ RESPONSIVE ============ */
 @media (max-width:960px) {
-/* card is full-width from here down, so Zoom lays out wider and shorter */
+/* The card goes full-width here, so Zoom's text stops wrapping and its header
+   block gets shorter. STARTING POINTS -- measure these with .zoom-tune at this
+   width before going live, they are not the desktop numbers. */
 .zoom-form {
-    --zoom-frame-h: 680px;
+    --zoom-crop-top: 300px;
+    --zoom-visible-h: 430px;
+    --zoom-mask-top: 300px;
+    --zoom-mask-h: 48px;
 }
 .wrap, .topnav {
     padding-left: 24px;
@@ -1110,8 +1159,14 @@ html[data-theme="dark"] .cta-banner {
 .register-card.is-zoom {
     padding: 12px;
 }
+/* Narrowest card, so Zoom wraps hardest and its header block is tallest, and
+   the privacy line runs to more rows. STARTING POINTS -- measure with
+   .zoom-tune at this width before going live. */
 .zoom-form {
-    --zoom-frame-h: 640px;
+    --zoom-crop-top: 460px;
+    --zoom-visible-h: 520px;
+    --zoom-mask-top: 360px;
+    --zoom-mask-h: 90px;
 }
 	.hero-meta{display: block;}
 	.hero-meta span{font-size:12px; width: fit-content;}
@@ -1275,7 +1330,9 @@ html[data-theme="dark"] .cta-banner {
         <iframe
             src="https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw"
             title="Register for the Options Trading Live Masterclass"
-            allow="clipboard-write"></iframe>
+            allow="clipboard-write"
+            scrolling="no"></iframe>
+        <div class="zoom-mask" aria-hidden="true"></div>
       </div>
       <p class="zoom-fallback">Form not loading? <a href="https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw" target="_blank" rel="noopener">Open the registration page in a new tab</a>.</p>
     </div>
