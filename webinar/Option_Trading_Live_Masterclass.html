@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Options Trading Live Masterclass | Kotak Stocksshaala</title>
+<script>
+  // Set theme before first paint to avoid a flash of the wrong theme.
+  (function(){
+    try{
+      var stored = localStorage.getItem('theme');
+      var theme = stored || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    }catch(e){}
+  })();
+</script>
+<style>
+:root {
+--primary-color:#e2001a;
+--primary-dark:#b5000f;
+--maroon-start:#3d0000;
+--maroon-end:#c1121f;
+--navy:#00005a;
+--navy-text:#00005a;
+--text-dark:#1a1a1a;
+--text-grey:#666666;
+--text-light-grey:#8c8c8c;
+--card-pink-bg:#fdeef0;
+--card-pink-border:#f6d3d8;
+--border-light:#e8e8e8;
+--bg-white:#ffffff;
+--bg-page:#ffffff;
+--disclaimer-bg:#fdf6d9;
+--disclaimer-border:#f0e2a0;
+--radius-lg:20px;
+--radius-md:14px;
+--radius-sm:8px;
+--font-main:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+--max-width:1180px;
+}
+html[data-theme="dark"] {
+--text-dark:#f5f5f5;
+--text-grey:#b3b3b3;
+--text-light-grey:#8a8a8a;
+--card-pink-bg:#1c1013;
+--card-pink-border:#3a1a1f;
+--border-light:#2c2c2c;
+--bg-white:#121212;
+--bg-page:#0c0c0c;
+--bg-nav:#1a1a1a;
+--disclaimer-bg:#241f10;
+--disclaimer-border:#4a4326;
+--shadow-color:rgba(0,0,0,0.6);
+--navy-text:#7a9bff;
+}
+html[data-theme="light"] {
+--bg-nav:#ffffff;
+--shadow-color:rgba(0,0,0,0.08);
+}
+:root {
+--bg-nav:#ffffff;
+--shadow-color:rgba(0,0,0,0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+html:not([data-theme="light"]) {
+--text-dark:#f5f5f5;
+--text-grey:#b3b3b3;
+--text-light-grey:#8a8a8a;
+--card-pink-bg:#1c1013;
+--card-pink-border:#3a1a1f;
+--border-light:#2c2c2c;
+--bg-white:#121212;
+--bg-page:#0c0c0c;
+--bg-nav:#1a1a1a;
+--disclaimer-bg:#241f10;
+--disclaimer-border:#4a4326;
+--shadow-color:rgba(0,0,0,0.6);
+--navy-text:#7a9bff;
+}
+
+}
+* {
+    box-sizing: border-box;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: var(--font-main);
+    background: var(--bg-page);
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
+}
+img {
+    max-width: 100%;
+    display: block;
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+/* CSS Smooth Blink Animation */
+.blink-smooth {
+    animation: blink_smooth 1s infinite;
+}
+	
+/*
+@keyframes blink_smooth {
+  0%, 100% {
+    background-color: #fff; 
+  }
+  50% {
+    background: linear-gradient(160deg, var(--maroon-end), var(--maroon-start)); 
+	color:#fff;
+  }
+}
+*/
+
+@keyframes blink_smooth {
+    0% {
+        opacity: 1;
+    }
+    50% {
+/*        opacity: 0.4;*/
+		border-color:var(--card-pink-border);
+/*		color:#e2001a;*/
+		background:var(--card-pink-bg)
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.wrap {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 40px;
+}
+/* ============ TOP NAV ============ */
+.topnav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-nav);
+}
+.topnav .logo img {
+    height: 36px;
+    width: auto;
+}
+.topnav .icons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.topnav .icons .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-pink-bg);
+    color: var(--text-grey);
+    border: none;
+}
+/* Theme toggle */
+.theme-toggle {
+    width: 44px;
+    height: 24px;
+    border-radius: 14px;
+    background: var(--border-light);
+    border: none;
+    position: relative;
+    padding: 0;
+    flex: 0 0 auto;
+    transition: background .2s ease;
+}
+.theme-toggle .knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    transition: left .2s ease, background .2s ease;
+}
+html[data-theme="light"] .logo-dark{display:none;}
+	html[data-theme="dark"] .learn-icon{background:#fff;}
+	
+html[data-theme="dark"] 
+	
+	.theme-toggle .knob {
+    left: 22px;
+    background: #333333;
+}
+/* ============ HERO ============ */
+.hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-white);
+	border-bottom: 1px solid #e7e7e7;
+}
+/*
+.hero-bg-shape {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 550px;
+    height: 401px;
+    background-image: url(https://www.kotakneo.com/uploads/Group_1707480428_80900a8320.png);
+    z-index: 0;
+    pointer-events: none;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+*/
+	.hero-bg-shape {
+    position: absolute;
+    right: 0;
+bottom: -198px;
+    width: 800px;
+    height: 573px;
+    background-image: url(https://www.kotakneo.com/uploads/Group_1707480428_80900a8320.png);
+    z-index: 0;
+    pointer-events: none;
+    background-size: 100%;
+    background-repeat: no-repeat;
+	opacity: 0.8;
+}
+/*
+html[data-theme="dark"] .hero-bg-shape {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 550px;
+    height: 401px;
+    background-image: url(https://www.kotakneo.com/uploads/Group_170748042812_cea2fed761.png);
+    z-index: 0;
+    pointer-events: none;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+*/
+	html[data-theme="dark"] .hero-bg-shape {
+    position: absolute;
+    right: 0;
+bottom: -198px;
+    width: 800px;
+    height: 573px;
+    background-image: url(https://www.kotakneo.com/uploads/Group_170748042812_cea2fed761.png);
+    z-index: 0;
+    pointer-events: none;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap: 40px;
+    padding: 30px 40px 30px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+.hero-brand img {
+    height: 36px;
+    margin-bottom: 14px;
+}
+.hero h1 {
+    color: var(--primary-color);
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 20px 0 15px;
+}
+.hero-desc {
+    color: var(--text-grey);
+    font-size: 18px;
+    line-height: 1.55;
+    margin: 0 0 20px;
+    max-width: 480px;
+}
+/*  .hero-meta{display:flex;flex-wrap:wrap;gap:22px;font-size:13px;color:var(--text-grey);margin-bottom:26px;}*/
+.hero-meta {
+    font-size: 13px;
+    color: var(--text-grey);
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+/*  .hero-meta span{display:flex;align-items:center;gap:6px;}*/
+.hero-meta span {
+    display: flex;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border: 1px solid #D1D1D1;
+    padding: 10px 20px;
+    border-radius: 30px;
+    align-items: center;
+}
+.hero-featuring {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: var(--text-grey);
+    margin-top: 8px;
+}
+.hero-featuring img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.hero-featuring b {
+    color: var(--text-dark);
+}
+/* Register card */
+.register-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 45px var(--shadow-color);
+    padding: 26px;
+    align-self: start;
+}
+.register-card h3 {
+    margin: 0 0 18px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy-text);
+}
+.register-card input[type="text"], .register-card input[type="tel"], .register-card input[type="email"] {
+    width: 100%;
+    padding: 13px 16px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text-dark);
+    background: var(--bg-white);
+    font-family: inherit;
+}
+.register-card input::placeholder {
+color:var(--text-light-grey);
+}
+.register-terms {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-grey);
+    margin-bottom: 18px;
+}
+.register-terms input {
+    margin-top: 2px;
+}
+.register-terms a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+.btn-register {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(135deg, var(--maroon-start), var(--maroon-end));
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 0;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(193,18,31,0.3);
+}
+/* ============ ZOOM REGISTRATION EMBED ============ */
+.register-card.is-zoom {
+    padding: 18px;
+}
+.zoom-form {
+    --zoom-frame-h: 720px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #ffffff;
+}
+.zoom-form iframe {
+    display: block;
+    width: 100%;
+    height: var(--zoom-frame-h);
+    border: 0;
+    background: #ffffff;
+    color-scheme: light;
+}
+.zoom-fallback {
+    margin: 12px 2px 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-grey);
+}
+.zoom-fallback a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: underline;
+}
+/* ============ SECTION HEADERS ============ */
+.section {
+    padding: 60px 40px;
+}
+.section-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+.section-eyebrow {
+    color: var(--text-light-grey);
+    font-size: 13px;
+    margin: 0 0 6px;
+}
+.section-head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 34px;
+}
+.section-head h2 {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-dark);
+    position: relative;
+    margin-bottom: 20px;
+}
+.section-head h2:after {
+    position: absolute;
+    width: 69px;
+    height: 3px;
+    background: linear-gradient( 202deg, #C1121F, #3D0000);
+    content: '';
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: -11px;
+}
+.section-head p {
+    color: var(--text-grey);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 520px;
+    margin: 0;
+}
+.section-head.center {
+    flex-direction: column;
+    text-align: left;
+}
+/* ============ WHAT YOU'LL LEARN ============ */
+.learn-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+.learn-card {
+    background: var(--card-pink-bg);
+    border: 1px solid var(--card-pink-border);
+    border-radius: var(--radius-md);
+    padding: 24px 20px;
+    min-height: 190px;
+	position: relative;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.learn-card:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 80px;
+    height: 80px;
+    
+    background-repeat: no-repeat;
+    background-size: 100%;
+    opacity: 3%;
+}
+.learn-card-1:after{background-image: url(https://www.kotakneo.com/uploads/Group_43f47333fd.svg);}	
+.learn-card:hover .learn-card-1:after{background-image: url(https://www.kotakneo.com/uploads/Group_43f47333fd.svg);}	
+.learn-card-2:after{background-image: url(https://www.kotakneo.com/uploads/Group_1_93b94871a6.svg);}	
+.learn-card-3:after{background-image: url(https://www.kotakneo.com/uploads/stock_market_0695294a33.png);}	
+.learn-card-4:after{background-image: url(https://www.kotakneo.com/uploads/interface_alert_information_circle_information_frame_info_more_help_point_circle_Streamline_Core_dcfc344c5c.svg);}	
+.learn-card:hover {
+    background: linear-gradient(160deg, var(--maroon-end), var(--maroon-start));
+    color: #fff;
+}
+.learn-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(226,0,26,0.1);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.learn-card:hover .learn-icon {
+    background: #fff;
+}
+.learn-card:hover p {
+    color: #fff;
+}
+.learn-card:hover h4 {
+    color: #fff;
+}
+.learn-card h4 {
+    margin: 0 0 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+.learn-card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-grey);
+}
+.learn-card.highlight p {
+    color: rgba(255,255,255,0.85);
+}
+/* ============ INSTRUCTOR ============ */
+.instructor {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr;
+    gap: 40px;
+    align-items: center;
+}
+.instructor-eyebrow {
+    color: var(--text-light-grey);
+    font-size: 14px;
+    margin: 0 0 4px;
+}
+.instructor h3 {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0 0 4px;
+}
+.instructor .role {
+    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 14px;
+}
+.instructor p.bio {
+    color: var(--text-grey);
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 0;
+}
+.instructor-photo {
+    position: relative;
+}
+.instructor-photo:after {
+    position: absolute;
+    content: '';
+    width: 414px;
+    height: 414px;
+    background: linear-gradient( 269deg, var(--maroon-start), var(--maroon-end));
+/*	background: #fdeef0;*/
+    z-index: -2;
+    border-radius: 50%;
+    right: -9px;
+    bottom: -4px;
+}
+.instructor-photo img {
+    width: 100%;
+    /*	  aspect-ratio:1/0.85;*/
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+}
+/* ============ COURSES CAROUSEL ============ */
+.courses-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 26px;
+}
+.carousel {
+    position: relative;
+    overflow: hidden;
+}
+.carousel-track {
+    display: flex;
+    transition: transform .4s ease;
+    gap: 20px;
+}
+.carousel-slide {
+    flex: 0 0 calc(33.333% - 14px);
+}
+.carousel-slide img {
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    /*	  aspect-ratio:4/3;*/
+	  
+    object-fit: contain;
+    border-radius: var(--radius-md);
+	border:4px solid #f6d3d8;
+}
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+.carousel-dots button {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-light);
+    border: none;
+    padding: 0;
+}
+.carousel-dots button.active {
+    background: var(--primary-color);
+    width: 20px;
+    border-radius: 5px;
+}
+/* ============ SESSION SCHEDULE ============ */
+.schedule-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1.4fr;
+    gap: 60px;
+}
+.schedule-days {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.day-block {
+    position: relative;
+    padding-left: 22px;
+    border-left: 2px solid var(--border-light);
+    padding-bottom: 26px;
+}
+.day-block:last-child {
+    border-left: 2px solid transparent;
+    padding-bottom: 0;
+}
+/*
+  .day-block::before{
+    content:'';position:absolute;left:-6px;top:2px;width:10px;height:10px;border-radius:50%;
+    background:var(--primary-color);
+  }
+*/
+.day-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 14px;
+    cursor: pointer;
+    display: block;
+    position: relative;
+    padding-left: 25px;
+}
+.day-title span {
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 5px;
+    padding-left: 0;
+    display: block;
+    color: #666666;
+	font-style: italic;
+}	
+.day-title span:after {
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 7px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary-color);
+}
+.day-title .chevron {
+    font-size: 12px;
+    color: var(--text-light-grey);
+    transition: transform .2s;
+}
+.day-block.open .day-title .chevron {
+    transform: rotate(180deg);
+}
+.day-sessions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+}
+.day-block.open .day-sessions {
+    max-height: 600px;
+}
+.session-item {
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 14px 18px;
+    background: var(--bg-white);
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.session-item:hover {
+    background: linear-gradient(160deg, var(--maroon-end), var(--maroon-start));
+}
+.session-item:hover p {
+    color: #fff;
+}
+.session-item:hover ul li {
+    color: #fff;
+}
+.session-time {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 8px;
+}
+.session-item ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--text-grey);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.session-item.faded {
+    opacity: 0.45;
+}
+/* ============ WHO IS THIS FOR ============ */
+.audience-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+.audience-card {
+    background: var(--card-pink-bg);
+    border: 1px solid var(--card-pink-border);
+    border-radius: var(--radius-md);
+    padding: 22px 20px;
+}
+.audience-card h4 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+.audience-card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-grey);
+}
+/* ============ HOW IT WORKS ============ */
+.steps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    position: relative;
+}
+.step {
+    text-align: center;
+    position: relative;
+}
+.step .num {
+    font-size: 56px;
+    font-weight: 800;
+    background: linear-gradient(180deg, #C1121F, #3D0000);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+    text-align: center;
+	position: relative;
+}
+.step .num:after {
+    position: absolute;
+    content: '';
+    width: 80px;
+    height: 80px;
+    background: var(--bg-white);
+    border-radius: 50px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: -10002;
+    top: -6px;
+}
+.step .num img {
+    display: inline-block;
+    height: 60px;
+}
+.step .label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+.steps-row::before {
+    content: '';
+    position: absolute;
+    top: 32px;
+    left: 12%;
+    right: 12%;
+    height: 0;
+    border-top: 2px dashed var(--border-light);
+    z-index: -999999;
+}
+/* ============ FAQ ============ */
+.faq-layout {
+    display: block;/*	  grid-template-columns:0.6fr 1.4fr;*/
+	  
+/*	  gap:40px;align-items:start;*/
+}
+.faq-heading {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0;
+}
+.faq-item {
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: var(--bg-white);
+}
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.faq-question .icon {
+    font-size: 18px;
+    color: var(--text-light-grey);
+    flex: 0 0 auto;
+    margin-left: 16px;
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease;
+}
+.faq-answer p {
+    margin: 0;
+    padding: 0 20px 16px;
+    color: var(--text-grey);
+    font-size: 13px;
+    line-height: 1.6;
+}
+.faq-item.open .faq-answer {
+    max-height: 200px;
+}
+/* ============ BOTTOM CTA ============ */
+.cta-banner {
+    background: linear-gradient(120deg, var(--maroon-start), var(--maroon-end));
+    border-radius: var(--radius-lg);
+    padding: 36px 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    color: #fff;
+}
+		
+		
+	
+html[data-theme="dark"] .logo-light{display:none;} .logo-dark{display:block;}
+	
+	
+/*
+html[data-theme="dark"] .cta-banner {
+    background: linear-gradient(120deg, #1a1a3d, #00005a);
+}
+*/
+.cta-banner h3 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+.cta-banner p {
+    margin: 0;
+    font-size: 15px;
+    color: rgba(255,255,255,0.85);
+}
+.cta-meta {
+    display: flex;
+    gap: 18px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+.cta-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 0 0 auto;
+}
+.cta-zoom {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #fff;
+    background: rgba(255,255,255,0.12);
+    padding: 9px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+.btn-cta-register {
+    background: #ffffff;
+    color: #b3111c;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 26px;
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+/* ============ DISCLAIMER ============ */
+.disclaimer {
+    background: var(--disclaimer-bg);
+    border: 1px solid var(--disclaimer-border);
+    border-radius: var(--radius-md);
+    padding: 18px 24px;
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: var(--text-grey);
+}
+.disclaimer b {
+    color: var(--text-dark);
+}
+.disclaimer a {
+    text-decoration: underline;
+    color: var(--text-dark);
+}
+.site-footer {
+    background-color: #013975;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 40px 24px;
+}
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.footer-section {
+    margin-bottom: 20px;
+}
+.footer-section h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+}
+.footer-section p {
+    font-size: 13.5px;
+    line-height: 1.5;
+    margin: 0;
+    color: #e0e0e0;
+}
+.footer-section a, .accordion-content a {
+    color: #4ab2fe;
+    text-decoration: underline;
+}
+.footer-section a:hover, .accordion-content a:hover {
+    text-decoration: none;
+}
+/* Accordion Styles */
+.accordion-toggle {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+}
+.accordion-icon {
+    display: inline-block;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+.accordion-content {
+    display: none;
+    padding-top: 10px;
+}
+.accordion-content.open {
+    display: block;
+}
+.accordion-content p {
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    color: #d1d5db;
+}
+.accordion-content ul, .accordion-content ol {
+    font-size: 12px;
+    line-height: 1.6;
+    padding-left: 20px;
+    color: #d1d5db;
+    margin-bottom: 12px;
+}
+.certificationSec {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: fit-content;
+     border: 1px solid var(--card-pink-border); 
+    border-radius: 15px;
+    padding: 10px 15px;
+	background: var(--card-pink-bg);
+}	
+.certificate-left img {
+    width: 55px;
+}
+.certificate-right h4 {
+   font-size:18px;
+	margin:0;
+}
+.certificate-right p {
+   font-size:13px;
+	margin-bottom: 0;
+	margin-top:8px;
+	color:var(--text-grey);
+}
+
+
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:960px) {
+/* card is full-width from here down, so Zoom lays out wider and shorter */
+.zoom-form {
+    --zoom-frame-h: 680px;
+}
+.wrap, .topnav {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+.section {
+    padding: 48px 24px;
+}
+.hero-inner {
+    padding: 32px 24px 24px;
+    grid-template-columns: 1fr;
+    gap: 28px;
+}
+.instructor {
+    grid-template-columns: 1fr;
+}
+.instructor-photo {
+    order: -1;
+    max-width: 260px;
+    margin: 0 auto;
+}
+.schedule-grid {
+    grid-template-columns: 1fr;
+}
+.faq-layout {
+    grid-template-columns: 1fr;
+}
+.learn-grid, .audience-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+.carousel-slide {
+    flex: 0 0 calc(50% - 10px);
+}
+.cta-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+.cta-right {
+    width: 100%;
+    justify-content: space-between;
+}
+}
+
+@media (max-width:600px) {
+.register-card.is-zoom {
+    padding: 12px;
+}
+.zoom-form {
+    --zoom-frame-h: 640px;
+}
+	.hero-meta{display: block;}
+	.hero-meta span{font-size:12px; width: fit-content;}
+.topnav {
+    padding: 14px 16px;
+}
+.wrap {
+    padding: 0 16px;
+}
+.section {
+    padding: 36px 16px;
+}
+.hero-inner {
+    padding: 24px 16px 20px;
+}
+.hero h1 {
+    font-size: 24px;
+}
+.hero-desc {
+    font-size: 14px;
+}
+.hero-meta {
+    gap: 14px;
+    font-size: 12px;
+}
+.section-head {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.section-head h2 {
+    font-size: 20px;
+}
+.learn-grid, .audience-grid {
+    grid-template-columns: 1fr;
+}
+.learn-card {
+    min-height: auto;
+}
+.carousel-slide {
+    flex: 0 0 100%;
+}
+.instructor-photo {
+    max-width: 100%;
+}
+.steps-row {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 32px;
+}
+.steps-row::before {
+    display: none;
+}
+.step .num {
+    font-size: 44px;
+}
+.faq-question {
+    font-size: 13px;
+    padding: 14px 16px;
+}
+.cta-banner {
+    padding: 26px 20px;
+}
+.cta-right {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+.cta-zoom {
+    justify-content: center;
+}
+.btn-cta-register {
+    width: 100%;
+}
+	.instructor-photo img{
+		width:320px;
+	}
+	.instructor-photo:after {
+    width: 320px;
+    height: 320px;
+    right: -5px;
+    bottom: -4px;
+}
+	.hero-meta span img{
+		height: 12px;
+	}
+	.step .num:after {
+    top: -13px;
+}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP NAV ============ -->
+<header class="topnav"> <a class="logo" href="#">
+	<img src="https://www.kotakneo.com/uploads/Kotak_Neo_Hlogo_Whitebg_06b9d5bb21.png" class="logo-light" alt="Kotak Neo">
+	<img src="https://www.kotakneo.com/uploads/Kotak_Neo_Hlogo_darkbg_3026a0d392.png" class="logo-dark" alt="Kotak Neo">
+	</a>
+  <div class="icons">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"> <span class="knob" id="themeKnob">&#9728;</span> </button>
+<!--    <button class="icon-btn" aria-label="Notifications">&#128276;</button>-->
+<!--    <button class="icon-btn" aria-label="Menu">&#9776;</button>-->
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg-shape"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-brand">
+		  <img src="https://www.kotakneo.com/uploads/Horizontal_color_2_3de6c72f07.png" class="logo-light" alt="Kotak Stocksshaala">
+		  <img src="https://www.kotakneo.com/uploads/logo_light_ff40608f72.png" class="logo-dark" alt="Kotak Stocksshaala">
+		
+		</div>
+      <h1>Options Trading Live Masterclass</h1>
+      <p class="hero-desc">Master options trading LIVE with Jyoti Budhia — a trader with 40 years in the Indian markets.</p>
+      <div class="hero-meta"> <span>
+		  
+		  <img src="https://www.kotakneo.com/uploads/Group_d66ea6d07f.png" height="18px" style="margin-right: 8px;" class="logo-light" alt="">
+		  <img src="https://www.kotakneo.com/uploads/Group_d66ea6d07f_68df3617fc.png" height="18px" style="margin-right: 8px;" class="logo-dark" alt="">
+		  29<sup style="margin-right: 4px;">th</sup> - 30<sup style="margin-right: 4px;">th</sup> Aug'26
+        <div style="margin:0 15px;">|</div>
+        <img src="https://www.kotakneo.com/uploads/Group_1_ac11919412.png" height="18px" style="margin-right: 8px;" class="logo-light" alt="">
+		<img src="https://www.kotakneo.com/uploads/Group_1_1_81d0137040.png" height="18px" style="margin-right: 8px;" class="logo-dark" alt="">  
+		  10 AM - 1 PM</span> 
+		  
+		  <span class="blink-smooth">Live on 
+		  <img src="https://www.kotakneo.com/uploads/akar_icons_zoom_fill_c7f708c1a8.png" height="18px" style="margin-right: 8px;  margin-left:8px;" class="logo-light" alt="">
+		  <img src="https://www.kotakneo.com/uploads/akar_icons_zoom_fill_c7f708c1a8_0ac166ab28.png" height="18px" style="margin-right: 8px;  margin-left:8px;" class="logo-dark" alt="">
+		  <div style="display:inline-block;" >Zoom</div></span>
+		  
+		  
+		
+		</div>
+		<div class="certificationSec">
+		  	<div class="certificate-left">
+				<img src="https://www.kotakneo.com/uploads/band_de0780d257.png" alt="">
+			</div>
+		  	<div class="certificate-right">
+			  <h4>Get Certified by Kotak Stockshaala</h4>
+			<p>Take a short quiz after the session and get your certificate.</p>
+			</div>
+		  </div>
+		
+		
+		
+		
+		
+		
+      <!--
+      <div class="hero-featuring">
+        <img src="https://www.kotakneo.com/uploads/Frame_1707482991_dc2558ed6a.png" alt="Jyoti Budhia">
+        <span>Featuring <b>Jyoti Budhia</b></span>
+      </div>
+--> 
+    </div>
+    <div class="register-card is-zoom">
+      <h3>Register Now</h3>
+      <div class="zoom-form">
+        <iframe
+            src="https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw"
+            title="Register for the Options Trading Live Masterclass"
+            allow="clipboard-write"></iframe>
+      </div>
+      <p class="zoom-fallback">Form not loading? <a href="https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw" target="_blank" rel="noopener">Open the registration page in a new tab</a>.</p>
+    </div>
+	  
+	  
+  </div>
+</section>
+
+<!-- ============ WHAT YOU'LL LEARN ============ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <div> 
+        <!--        <p class="section-eyebrow">What's in it for you?</p>-->
+        <h2>What You'll Learn</h2>
+      </div>
+      <!--      <p>Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</p>--> 
+    </div>
+    <div class="learn-grid">
+      <div class="learn-card learn-card-1">
+        <div class="learn-icon">
+			<img src="https://www.kotakneo.com/uploads/Group_43f47333fd.svg"  alt="">
+		  
+		  </div>
+        <h4>Start From Zero</h4>
+        <p>Call, put, strike price, premium, expiry. Every options term explained simply.</p>
+      </div>
+      <div class="learn-card learn-card-2">
+        <div class="learn-icon">
+			<img src="https://www.kotakneo.com/uploads/Group_1_93b94871a6.svg" alt="">
+		  
+		  </div>
+        <h4>Read The Option Chain</h4>
+        <p>Learn what each column on the option chain means and what it tells you about the market.</p>
+      </div>
+      <div class="learn-card learn-card-3">
+        <div class="learn-icon">
+			<img src="https://www.kotakneo.com/uploads/stock_market_0695294a33.png" height="25px" alt="">
+		  
+		  </div>
+        <h4>Understand The Greeks</h4>
+        <p>Delta, theta, vega. Learn how price, time, and volatility each pull on your premium.</p>
+      </div>
+      <div class="learn-card learn-card-4">
+        <div class="learn-icon">
+			<img src="https://www.kotakneo.com/uploads/interface_alert_information_circle_information_frame_info_more_help_point_circle_Streamline_Core_dcfc344c5c.svg" alt="">
+		  </div>
+        <h4>Understand Your Risk</h4>
+        <p>Know exactly how much you can lose on a trade before you place it, and how to size your position.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSTRUCTOR ============ -->
+<section class="section" style="    background-image: url(https://www.kotakneo.com/uploads/Vector_12_1da7703d85.png);
+    background-size: contain;
+    background-repeat: no-repeat;">
+  <div class="section-inner">
+    <div class="instructor">
+      <div>
+        <p class="instructor-eyebrow">Your Instructor</p>
+        <h3>Jyoti Budhia</h3>
+        <p class="role">Options Trader and Trainer</p>
+        <p class="bio">With 40 years of experience in the Indian stock markets, Jyoti specialises in options trading, along with short-term and long-term investments. Her current trading approach includes blending quantitative data analysis with technical charts to navigate complex market conditions. This expertise allows her to capitalise on short-term and long-term price movements while managing risk effectively, making her a seasoned practitioner in technical analysis and derivatives trading.</p>
+      </div>
+      <div class="instructor-photo"> <img src="https://www.kotakneo.com/uploads/jyoti_93bf70a9f8.png" alt="Jyoti Budhia"> </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COURSES CAROUSEL ============ -->
+<section class="section" style="background: var(--card-pink-bg);">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <h2>Her courses on Kotak Stocksshaala</h2>
+      </div>
+    </div>
+    <!--    <h3 class="courses-title">Her courses on Kotak Stocksshaala</h3>-->
+    <div class="carousel" id="courseCarousel">
+      <div class="carousel-track" id="courseTrack">
+        <div class="carousel-slide"><img src="https://www.kotakneo.com/uploads/landing_page_screenshot_1_c11e65b7db.png" alt="Course 1"></div>
+        <div class="carousel-slide"><img src="https://www.kotakneo.com/uploads/landing_page_screenshot_2_6597be6857.png" alt="Course 2"></div>
+        <div class="carousel-slide"><img src="https://www.kotakneo.com/uploads/landing_page_screenshot_3_daab69b88e.png" alt="Course 3"></div>
+        <div class="carousel-slide"><img src="https://www.kotakneo.com/uploads/landing_page_screenshot_4_e673efd52b.png" alt="Course 4"></div>
+        <div class="carousel-slide"><img src="https://www.kotakneo.com/uploads/landing_page_screenshot_5_84189047ab.png" alt="Course 5"></div>
+      </div>
+      <div class="carousel-dots" id="courseDots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SESSION SCHEDULE ============ -->
+<section class="section" >
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <h2>Session Schedule</h2>
+      </div>
+    </div>
+    <div class="schedule-grid">
+      <div>
+        <div class="day-block open" data-day="1">
+          <div class="day-title">Day 1 <span>29th Aug'26</span> 
+            <!--            <span class="chevron">&#9660;</span>--> 
+          </div>
+          <div class="day-sessions">
+            <div class="session-item">
+              <p class="session-time">10:00 to 11:00 AM</p>
+              <ul>
+                <li>Welcome and what we'll cover</li>
+                <li>Options basics — calls, puts and why they exist</li>
+                <li>Strike price, premium and expiry explained</li>
+              </ul>
+            </div>
+            <div class="session-item">
+              <p class="session-time">11:00 to 11:15 AM</p>
+              <ul>
+                <li>Break</li>
+              </ul>
+            </div>
+            <div class="session-item">
+              <p class="session-time">11:15 to 12:00 PM</p>
+              <ul>
+                <li>Reading the option chain</li>
+                <li>Live Q&amp;A</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="schedule-days">
+        <div class="day-block open" data-day="1">
+          <div class="day-title">Day 2<span>30th Aug'26</span> 
+            <!--            <span class="chevron">&#9660;</span>--> 
+          </div>
+          <div class="day-sessions">
+            <div class="session-item">
+              <p class="session-time">10:00 to 11:00 AM</p>
+              <ul>
+                <li>Recap and questions from Day 1</li>
+                <li>The greeks — what actually moves your premium</li>
+                <li>How risk works — payoff, breakeven and loss</li>
+              </ul>
+            </div>
+            <div class="session-item">
+              <p class="session-time">11:00 to 11:15 AM</p>
+              <ul>
+                <li>Break</li>
+              </ul>
+            </div>
+            <div class="session-item">
+              <p class="session-time">11:15 to 12:00 PM</p>
+              <ul>
+                <li>Common mistakes new option traders make</li>
+                <li>Live Q&amp;A</li>
+                <li>Certification</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHO IS THIS FOR ============ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <div> 
+        <!--        <p class="section-eyebrow">Lorem ipsum</p>-->
+        <h2>Who is This For</h2>
+      </div>
+      <!--      <p>Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</p>--> 
+    </div>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <h4>Complete Beginners</h4>
+        <p>New to options and want to build a strong, clear foundation from the ground up</p>
+      </div>
+      <div class="audience-card">
+        <h4>Existing Options Traders</h4>
+        <p>Have traded options but want to understand the mechanics, strategies, and risks better</p>
+      </div>
+      <div class="audience-card">
+        <h4>Equity Traders</h4>
+        <p>Trade stocks and want to confidently expand into derivatives</p>
+      </div>
+      <div class="audience-card">
+        <h4>Clarity Seekers</h4>
+        <p>Want to learn options fundamentals in simple language, without unnecessary jargon</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <div> 
+        <!--        <p class="section-eyebrow">Lorem ipsum</p>-->
+        <h2>How it Works</h2>
+      </div>
+      <!--      <p>Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</p>--> 
+    </div>
+    <div class="steps-row">
+      <div class="step">
+        <div class="num">01 
+          <!--		  <img src="https://www.kotakneo.com/uploads/image_531_6616730ecf.png"  alt="">--> 
+        </div>
+        <div class="label">Fill The Form</div>
+      </div>
+      <div class="step">
+        <div class="num">02 
+          <!--			  <img src="https://www.kotakneo.com/uploads/image_532_9075d8e843.png"  alt="">--> 
+        </div>
+        <div class="label">Get Your Joining Link by Mail</div>
+      </div>
+      <div class="step">
+        <div class="num">03 
+          <!--			  <img src="https://www.kotakneo.com/uploads/image_532_1_8170795ab6.png"  alt="">--> 
+        </div>
+        <div class="label">Join live on Zoom</div>
+      </div>
+      <div class="step">
+        <div class="num">04 
+          <!--			  <img src="https://www.kotakneo.com/uploads/image_532_2_11ab4b5de6.png" alt="">--> 
+        </div>
+        <div class="label">Take Quiz, Get Certified</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section" style="background-image: url(https://www.kotakneo.com/uploads/Vector_12_1da7703d85.png);
+    background-size: cover;
+    background-repeat: no-repeat;">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <h2>Frequently Asked Questions</h2>
+      </div>
+    </div>
+    <div class="faq-layout"> 
+      <!--      <h2 class="faq-heading">Frequently Asked Questions</h2>-->
+      <div id="faqList">
+        <div class="faq-item open">
+          <div class="faq-question" onclick="toggleFaq(this.parentElement)"> <span>Is it really free?</span><span class="icon">&#8722;</span> </div>
+          <div class="faq-answer">
+            <p>Yes. No fees, no card details, nothing to pay.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this.parentElement)"> <span>Do I need a Kotak Securities account to attend?</span><span class="icon">&#43;</span> </div>
+          <div class="faq-answer">
+            <p>No. The session is open to everyone.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this.parentElement)"> <span>Will a recording be available?</span><span class="icon">&#43;</span> </div>
+          <div class="faq-answer">
+            <p>No. The session will not be recorded, and no replay will be shared. Please join live.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this.parentElement)"> <span>Do I need to know anything beforehand?</span><span class="icon">&#43;</span> </div>
+          <div class="faq-answer">
+            <p>Basic familiarity with the stock market helps, but we start from the beginning. If you know what a share is, you'll be able to follow.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this.parentElement)"> <span>How do I get the certificate?</span><span class="icon">&#43;</span> </div>
+          <div class="faq-answer">
+            <p>Attend the session and complete a short quiz afterwards. Your certificate will be generated and available to download.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this.parentElement)"> <span>Can I ask questions during the session?</span><span class="icon">&#43;</span> </div>
+          <div class="faq-answer">
+            <p>Yes. Both days end with a live Q&A, and you can post questions in the chat.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this.parentElement)"> <span>What if I miss Day 1?</span><span class="icon">&#43;</span> </div>
+          <div class="faq-answer">
+            <p>You can still join Day 2, but the two days build on each other. We'd recommend attending both.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOTTOM CTA ============ -->
+<section class="section" style="padding-top:0;">
+  <div class="section-inner">
+    <div class="cta-banner">
+      <div>
+        <h3>Learn Options the Right Way</h3>
+        <p>Master options trading LIVE with Jyoti Budhia — a trader with 40 years in the Indian markets.</p>
+        <div class="hero-meta cta-meta"> <span><img src="https://www.kotakneo.com/uploads/Group_d66ea6d07f_68df3617fc.png" height="18px" style="margin-right: 8px;" alt="">29<sup style="margin-right: 4px;">th</sup> - 30<sup style="margin-right: 4px;">th</sup> Aug'26
+          <div style="margin:0 15px;">|</div>
+          <img src="https://www.kotakneo.com/uploads/Group_1_1_81d0137040.png" height="18px" style="margin-right: 8px;" alt=""> 10 AM - 1 PM</span> 
+			
+			<span>Live on <img src="https://www.kotakneo.com/uploads/akar_icons_zoom_fill_c7f708c1a8_0ac166ab28.png" height="18px" style="margin-right: 8px;  margin-left:8px;" alt=""> Zoom</span> </div>
+        
+        <!--
+        <div class="cta-meta">
+          <span>&#128197; 29th &amp; 30th Aug'26</span>
+          <span>&#128337; 10 a.m. - 1 p.m.</span>
+        </div>
+--> 
+      </div>
+      <div class="cta-right"> 
+        <!--        <span class="cta-zoom">Live on &#128249; Zoom</span>-->
+        <button class="btn-cta-register" onclick="document.querySelector('.register-card').scrollIntoView({behavior:'smooth'})">Register Now</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DISCLAIMER ============ -->
+<!--
+<section class="section" style="padding-top:0;">
+  <div class="section-inner">
+    <div class="disclaimer"> <b>Disclaimer:</b> The articles are for informational purposes only and does not constitute financial advice. It is not produced by the desk of the Kotak Neo Research Team, nor is it a report published by the Kotak Neo Research Team. The information presented is compiled from several secondary sources available on the internet and may change over time. Investors should conduct their own research and consult with financial professionals before making any investment decisions. Read the full disclaimer <a href="#">Here.</a> </div>
+  </div>
+</section>
+-->
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-section">
+      <h4>Disclaimer</h4>
+      <p>Investments in securities market are subject to market risks, read all the related documents carefully before investing. Brokerage will not exceed SEBI prescribed limit. The securities are quoted as an example and not as a recommendation. SEBI Registration No-INZ000200137 Member Id NSE-08081; BSE-673; MSE-1024, MCX-56285, NCDEX-1262. <a href="https://www.kotakneo.com/disclaimer/">Read Disclaimer</a></p>
+    </div>
+    <div class="footer-section">
+      <h4>Registered Office</h4>
+      <p>27 BKC, C 27, G Block, Bandra Kurla Complex, Bandra (E), Mumbai 400051. <strong>Telephone No.:</strong> 022 43360000 Fax No.: 022 67132430</p>
+    </div>
+    <div class="footer-section">
+      <h4>Correspondence Address</h4>
+      <p>Infinity IT Park, Bldg. No 21, Opp. Film City Road, A K Vaidya Marg, Malad (East), Mumbai 400097. <strong>Telephone No.:</strong> 022-42856825</p>
+    </div>
+    
+    <!-- Collapsible Section -->
+    <div class="footer-accordion">
+      <button type="button" class="accordion-toggle" id="accordionBtn" aria-expanded="false"> <span>More Information</span> <span class="accordion-icon" id="accordionIcon">+</span> </button>
+      <div class="accordion-content" id="accordionPanel">
+        
+		  
+		  
+		  <div class="pb-4 text-[0.75rem]">
+
+                <p class="mb-3">
+                    Important announcement: From 2nd January 2023, we will charge Rs.100
+                    for every order liquidated by us, due to margin shortfall or debit recovery.
+                    <a href="/margin-requirement/" class="underline">
+                        Click here for details
+                    </a>.
+                </p>
+
+                <p class="mb-3">
+                    NOTE: Please note that
+                    <a href="https://nsdl.co.in/downloadables/pdf/2023-0169-Policy-_Email_ID_for_receiving_complaints_exclusively_for_surveillance_related_activities.pdf"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        NSDL
+                    </a>
+                    vide circular dated December 02, 2023 has provided an exclusive email id
+                    <a href="mailto:report-mktmanipulation@nsdl.com" class="underline">
+                        report-mktmanipulation@nsdl.com
+                    </a>
+                    to address clients complaints with respect to market manipulation/fraudulent
+                    activities in the market or against Depository Participants.
+                    <br><br>
+                    Please note that apart from the standard plans offered to all clients,
+                    KSL also offers customized brokerage plans depending on the business relationship
+                    with the clients. You may reach out to your relationship manager/branch,
+                    Authorised Person or customer service for any queries relating to the same.
+                    Brokerage will not exceed the rates specified by SEBI and the Exchanges.
+                </p>
+
+                <p class="mb-3">
+                    No need to issue cheques by investors while subscribing to IPO.
+                    Just write the bank account number and sign in the application form to authorise
+                    your bank to make payment in case of allotment. No worries for refund as the money
+                    remains in investor's account.
+                </p>
+
+                <p class="mb-3">
+                    Prevent Unauthorized Transactions in your demat account -->
+                    Update your Mobile Number with your Depository Participants.
+                    Receive alerts on your Registered Mobile for all debit and other important
+                    transactions in your demat account directly from NSDL on the same day.
+                    Issued in the interest of Investors.
+                </p>
+
+                <p class="mb-3">
+                    KYC is one time exercise while dealing in securities markets - once KYC is done
+                    through a SEBI registered intermediary (broker, DP, Mutual Fund etc.), you need
+                    not undergo the same process again when you approach another intermediary.
+                </p>
+
+                <p class="mb-3">
+                    Kindly note that relying on any such fraudulent communication received in any
+                    form or manner, which originates from any of the channels not belonging to KSL,
+                    shall be at your own risk and KSL shall not be liable for the same.
+                </p>
+
+                <p class="mb-3">
+                    In case of any queries, request you to kindly get in touch with Customer Service
+                    on 1800 209 9191.
+                </p>
+
+                <p class="mb-3">
+                    Creating investor awareness and safeguarding client’s data:
+                    Please note that certain fraudsters are collecting data of clients who are already
+                    into trading in Exchanges and send them bulk messages on the pretext of providing
+                    investment tips and luring them to invest with them in their bogus firms by
+                    promising huge profits.
+                </p>
+
+                <p class="mb-3">
+                    As a part of investor awareness and cautioning public at large,
+                    Exchanges are publishing and updating all issued press releases on its website.
+                </p>
+
+                <p class="mb-3">
+                    Clients are required to note that in case of Unsolicited Commercial Communication
+                    (“UCC”) and fraudulent activities using telecom resources in Securities Markets,
+                    clients can make the complaint as follows:
+                </p>
+
+                <ul class="my-4 list-disc pl-5">
+                    <li>
+                        In case of receiving spam or UCC, make DND complaint at respective TSP’s
+                        app/website, TRAI DND app, or call/SMS to 1909.
+                    </li>
+
+                    <li>
+                        In case of receiving suspected fraud communication, report to
+                        <a href="https://sancharsaathi.gov.in/sfc/Home/sfc-complaint.jsp"
+                           target="_blank"
+                           rel="nofollow"
+                           class="underline">
+                            Department of Telecommunications
+                        </a>.
+                    </li>
+
+                    <li>
+                        In case fraud has already happened, report the same to Cyber Crime
+                        helpline number 1930 or
+                        <a href="https://www.cybercrime.gov.in"
+                           target="_blank"
+                           rel="nofollow"
+                           class="underline">
+                            website
+                        </a>.
+                    </li>
+                </ul>
+
+                <p class="mb-3">
+                    Kotak securities Ltd. having composite licence no.CA0268 is a Corporate Agent
+                    of Kotak Mahindra Life Insurance Company Limited and Zurich Kotak General
+                    Insurance Company (India) Limited.
+                    We have taken reasonable measures to protect security and confidentiality
+                    of the Customer information.
+                </p>
+
+                <p class="mb-3">
+                    The Stock Exchange, Mumbai is not in any manner answerable, responsible or liable
+                    to any person or persons for any acts of omission or commission, errors, mistakes
+                    and/or violation, actual or perceived, by us or our partners, agents, associates etc.
+                </p>
+
+                <p class="mb-3">
+                    Please do not share your online trading password with anyone as this could weaken
+                    the security of your account and lead to unauthorized trades or losses.
+                </p>
+
+                <p class="mb-3">
+                    Note: With a view to providing visibility of client-wise collateral as per SEBI
+                    regulations, respective clearing corporations have provided a web portal facility
+                    to allow clients to view their disaggregated collateral placed with Member.
+                </p>
+
+                <p class="mb-3">
+                    NSDL and CDSL have mapped Unique Client Codes (UCC) to demat accounts based on PAN.
+                </p>
+
+                <p class="mb-3">
+                    Clients are required to keep all their account related information up-to-date
+                    including details like email id, PAN details, mobile number, address, bank details,
+                    demat details, income details etc.
+                </p>
+
+                <p class="mb-3">
+                    Please note that as per the regulatory guidelines & circulars issued from time to
+                    time, it is mandatory to validate your KYC details.
+                </p>
+
+                <p class="mb-3">
+                    Clients are required to ensure the following 6 KYC attributes are updated for
+                    their Demat and Trading account:
+                    Name, Address, PAN, Valid Mobile Number, Valid E-mail ID, and Income Range.
+                </p>
+
+                <p class="mb-3">
+                    Kindly refer Advisory for KYC updation
+                    <a href="https://www.kotakneo.com/pdf/advisory.pdf" class="underline">
+                        here
+                    </a>.
+                </p>
+
+                <p class="mb-3">
+                    In case PAN is not seeded with AADHAAR before 31st March, 2023 or any other date
+                    as notified by Government, it will not be considered as a valid PAN.
+                </p>
+
+                <p class="mb-3">
+                    Introduction of Legal Entity Identifier (LEI) for Large Value Transactions:
+                    LEI is a 20-digit number used to uniquely identify parties to financial
+                    transactions worldwide.
+                </p>
+
+                <p class="mb-3">
+                    Investors please note that as per the
+                    <a href="https://www.mcxindia.com/docs/default-source/circulars/english/2022/february/circular---085---2022.pdf"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        Exchange rules
+                    </a>,
+                    in the event of a delayed start due to unwarranted or unavoidable circumstances
+                    or market disruption, the Exchange shall cancel all type of pending orders.
+                </p>
+
+                <p class="mb-3">
+                    As per circulars issued by
+                    <a href="https://www.sebi.gov.in/legal/circulars/dec-2022/introduction-of-investor-risk-reduction-access-irra-platform-in-case-of-disruption-of-trading-services-provided-by-the-trading-member-tm-_66785.html"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        SEBI
+                    </a>,
+                    the Investor Risk Reduction Access (IRRA) is a platform jointly developed by
+                    Stock Exchanges which is a contingency service.
+                </p>
+
+                <p class="mb-3">
+                    As per SEBI circular dated
+                    <a href="https://www.sebi.gov.in/legal/circulars/jun-2023/trading-preferences-by-clients_72892.html"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        June 21, 2023
+                    </a>,
+                    subsequent circular dated August 01, 2023 and Exchange’s FAQs,
+                    clients are registered on all active Exchanges for all segments opted by them.
+                </p>
+
+                <p class="mb-3">
+                    Investor Awareness regarding the revised guidelines on margin collection:
+                </p>
+
+                <ol class="my-4 list-decimal pl-5">
+                    <li>Stock Brokers can accept securities as margin from clients only by way of pledge in the depository system.</li>
+                    <li>Update your mobile number & email Id with your stock broker/depository participant.</li>
+                    <li>Pay 20% upfront margin of the transaction value to trade in cash market segment.</li>
+                    <li>Investors may please refer to the Exchange's Frequently Asked Questions.</li>
+                    <li>Check your Securities /MF/ Bonds in the consolidated account statement issued by NSDL/CDSL every month.</li>
+                </ol>
+
+                <p class="mb-3">
+                    In order to enhance investor awareness, transparency and ease of access to
+                    information relating to securities holdings, the Depositories (CDSL/NSDL),
+                    in co-ordination with SEBI, have upgraded their respective investor applications.
+                </p>
+
+                <p class="mb-3">
+                    CDSL – MyEasi app<br>
+                    <a href="https://apps.apple.com/in/app/cdsl-myeasi-app/id6737304195"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        App Store
+                    </a><br>
+                    <a href="https://play.google.com/store/apps/details?id=com.cdsl.myeasi"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        Google Play
+                    </a>
+                </p>
+
+                <p class="mb-3">
+                    NSDL – Speede app<br>
+                    <a href="https://apps.apple.com/in/app/nsdl-speede-app/id922834763"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        App Store
+                    </a><br>
+                    <a href="https://play.google.com/store/apps/details?id=com.msf.NSDL.Android"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        Google Play
+                    </a>
+                </p>
+
+                <p class="mb-3">
+                    The above-mentioned applications of CDSL and NSDL have following features:
+                </p>
+
+                <ul class="my-4 list-disc pl-5">
+                    <li>Consolidated view of securities of client across both Depositories.</li>
+                    <li>Transaction and holding statements at one place.</li>
+                    <li>Monitoring of open positions and margin details.</li>
+                    <li>Option to exercise E-voting on company resolutions.</li>
+                    <li>Access to recommendations of proxy advisers.</li>
+                </ul>
+
+                <p class="mb-3">
+                    Any person/entity associating with KSL shall not directly or indirectly,
+                    provide any advice or recommendations in respect of securities without
+                    relevant permits, registration or license from SEBI.
+                </p>
+
+                <p class="mb-3">
+                    Caution: Clients are cautioned and advised to refrain from placing any order
+                    at unrealistic prices.
+                </p>
+
+                <p class="mb-3">
+                    Covid-19 impact to clients:
+                </p>
+
+                <ol class="my-4 list-decimal pl-5">
+                    <li>Clients can log into <a href="https://www.kotakneo.com" class="underline">www.kotakneo.com</a> to view statements.</li>
+                    <li>Kindly update your email id with us.</li>
+                    <li>Update your Bank account details for direct transfer.</li>
+                    <li>Investors are advised to exercise caution while taking investment decisions.</li>
+                </ol>
+
+                <p class="mb-3">
+                    Kotak Securities Limited is a distributor for Non-Broking Products/Services
+                    such as Mutual Funds, Insurance, Bonds, NCD’s, RBI Bonds, Corporate FD’s,
+                    PMS, AIF etc.
+                </p>
+
+                <p class="mb-3">
+                    Framework for Short Selling: All clients are required to be guided by the
+                    SEBI circular which informs that “Short selling” shall be defined as selling
+                    a stock which the seller does not own at the time of trade.
+                </p>
+
+                <p class="mb-3">
+                    Under Interoperability, Kotak Securities has selected NSE Clearing Limited (NCL)
+                    as its designated clearing corporation for Cash and equity derivatives segment
+                    transactions and Indian Clearing Corporation Limited (ICCL) as its designated
+                    clearing corporation for currency derivatives segment transactions.
+                </p>
+
+                <p class="mb-3">
+                    KSL provides research recommendations and services relating to Equities,
+                    Equity Derivatives & Commodity Derivatives through its website.
+                </p>
+
+                <p class="mb-3">
+                    Filing complaints on SCORES - Easy & Quick
+                    <a href="https://scores.sebi.gov.in/" class="underline">
+                        SCORES
+                    </a>
+                    |
+                    <a href="https://smartodr.in/login" class="underline">
+                        Smart ODR
+                    </a>
+                </p>
+
+                <p class="mb-3">
+                    <a href="https://play.google.com/store/apps/details?id=com.sebi&hl=en"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        SCORES Android Application
+                    </a>
+                </p>
+
+                <p class="mb-3">
+                    <a href="https://apps.apple.com/in/app/sebiscores/id6478849917"
+                       target="_blank"
+                       rel="nofollow"
+                       class="underline">
+                        SCORES IOS Application
+                    </a>
+                </p>
+
+                <p>
+                    CIN: U99999MH1994PLC134051.
+                    SEBI Registration No: INZ000200137
+                    (Member of NSE, BSE, MSE, MCX & NCDEX),
+                    Kotak Securities Limited: AMFI-registered Mutual Fund Distributor.
+                    AMFI ARN: 0164, Date of Registration: July 07, 2002,
+                    Current validity of AMFI ARN - July 23, 2027,
+                    PMS INP000000258, APMI APRN: APRN02879 and Research Analyst INH000000586.
+                </p>
+
+                <p>
+                    NSDL/CDSL: IN-DP-629-2021
+                </p>
+
+            </div>
+		  
+		  
+		  
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  // ---------- Theme toggle ----------
+  (function(){
+    var knob = document.getElementById('themeKnob');
+    function paintKnob(theme){
+      knob.innerHTML = theme === 'dark' ? '&#127769;' : '&#9728;';
+    }
+    paintKnob(document.documentElement.getAttribute('data-theme'));
+
+    document.getElementById('themeToggle').addEventListener('click', function(){
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      paintKnob(next);
+      try{ localStorage.setItem('theme', next); }catch(e){}
+    });
+  })();
+
+  // ---------- Day accordion (Session Schedule) ----------
+  function toggleDay(el){
+    var block = el.parentElement;
+    var wasOpen = block.classList.contains('open');
+    document.querySelectorAll('.day-block').forEach(function(b){ b.classList.remove('open'); });
+    if(!wasOpen){ block.classList.add('open'); }
+  }
+
+  // ---------- FAQ accordion ----------
+  function toggleFaq(item){
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(f){
+      f.classList.remove('open');
+      f.querySelector('.icon').innerHTML = '&#43;';
+    });
+    if(!wasOpen){
+      item.classList.add('open');
+      item.querySelector('.icon').innerHTML = '&#8722;';
+    }
+  }
+
+  // ---------- Courses carousel ----------
+  (function(){
+    var track = document.getElementById('courseTrack');
+    var dotsWrap = document.getElementById('courseDots');
+    var slides = track.children.length;
+
+    var AUTO_PLAY_DURATION = 3000; // Time in ms (e.g., 3 seconds)
+    var autoPlayTimer = null;
+
+    function slidesPerView(){
+      var w = window.innerWidth;
+      if(w <= 600) return 1;
+      if(w <= 960) return 2;
+      return 3;
+    }
+
+    var index = 0;
+
+    function totalPages(){
+      return Math.max(1, slides - slidesPerView() + 1);
+    }
+
+    function renderDots(){
+      dotsWrap.innerHTML = '';
+      var pages = totalPages();
+      for(var i=0;i<pages;i++){
+        var b = document.createElement('button');
+        if(i === index) b.classList.add('active');
+        b.addEventListener('click', function(idx){ 
+          return function(){ 
+            goTo(idx); 
+            resetAutoPlay();
+          }; 
+        }(i));
+        dotsWrap.appendChild(b);
+      }
+    }
+
+    function update(){
+      var spv = slidesPerView();
+      var slideWidth = track.children[0].getBoundingClientRect().width;
+      var gap = 20;
+      var offset = index * (slideWidth + gap);
+      track.style.transform = 'translateX(-' + offset + 'px)';
+      renderDots();
+    }
+
+    function goTo(i){
+      var maxPages = totalPages();
+      if (i >= maxPages) {
+        index = 0; // Loop back to start
+      } else if (i < 0) {
+        index = maxPages - 1;
+      } else {
+        index = i;
+      }
+      update();
+    }
+
+    function startAutoPlay(){
+      stopAutoPlay();
+      autoPlayTimer = setInterval(function(){
+        goTo(index + 1);
+      }, AUTO_PLAY_DURATION);
+    }
+
+    function stopAutoPlay(){
+      if(autoPlayTimer){
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+      }
+    }
+
+    function resetAutoPlay(){
+      stopAutoPlay();
+      startAutoPlay();
+    }
+
+    // Touch / Swipe
+    var startX = 0, deltaX = 0, dragging = false;
+    track.addEventListener('touchstart', function(e){ 
+      stopAutoPlay();
+      startX = e.touches[0].clientX; 
+      dragging = true; 
+    });
+    track.addEventListener('touchmove', function(e){ 
+      if(!dragging) return; 
+      deltaX = e.touches[0].clientX - startX; 
+    });
+    track.addEventListener('touchend', function(){
+      if(!dragging) return;
+      if(deltaX > 50) goTo(index - 1);
+      else if(deltaX < -50) goTo(index + 1);
+      dragging = false; 
+      deltaX = 0;
+      startAutoPlay();
+    });
+	  
+	  
+	  // footer accordian
+	  
+	  document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("accordionBtn");
+  const content = document.getElementById("accordionPanel");
+  const icon = document.getElementById("accordionIcon");
+
+  toggleBtn.addEventListener("click", () => {
+    const isOpen = content.classList.toggle("open");
+    
+    // Toggle aria state and indicator icon (+ / -)
+    toggleBtn.setAttribute("aria-expanded", isOpen);
+    icon.textContent = isOpen ? "—" : "+";
+  });
+});
+
+    // Pause auto-play on mouse hover
+    track.parentElement.addEventListener('mouseenter', stopAutoPlay);
+    track.parentElement.addEventListener('mouseleave', startAutoPlay);
+
+    window.addEventListener('resize', update);
+    
+    update();
+    startAutoPlay();
+})();
+</script>
+</body>
+</html>
