@@ -396,19 +396,32 @@ color:var(--text-light-grey);
    the privacy line is covered by a patch. Both still exist in the frame and
    still go to Zoom -- they are just not on screen.
 
-   Six numbers, all tunable. To measure them, set --zoom-crop-top to 0 and
-   --zoom-visible-h to 1400px, load the page, and read the offsets off the
-   Zoom form as it actually renders at your card width.
+   --zoom-page-h is the one that bites. It is the iframe element's height, and
+   so it is also Zoom's viewport height. Zoom's cookie banner is pinned to the
+   bottom of that viewport, and its footer follows the content. Set this near
+   Zoom's real page height and both land inside the window -- you get legal
+   links and a cookie notice where the form should be. Keep it far larger than
+   the page so they are pushed well below the crop.
+
+   The other five are pixel offsets into Zoom's layout. Nothing here can read
+   them, because the frame is cross-origin, so they cannot be derived -- only
+   measured. Open webinar/crop-tuner.html, drag until the frame shows what you
+   want at your card width, and paste in the numbers it prints. The .zoom-tune
+   class below does the same job by hand: it drops the crop and hides the patch
+   so the whole Zoom page is visible.
+
+   The values below are estimates, not measurements. Treat them as a starting
+   position and expect to move them.
 */
 .register-card.is-zoom {
     padding: 18px;
 }
 .zoom-form {
-    --zoom-crop-top: 430px;    /* height of the title / Description / Date & Time block */
-    --zoom-visible-h: 490px;   /* how much to show: heading, fields, button */
-    --zoom-page-h: 1400px;     /* taller than Zoom's whole page, so it never scrolls itself */
-    --zoom-mask-top: 350px;    /* top of the privacy line, measured from the crop */
-    --zoom-mask-h: 72px;       /* its height -- it wraps to more lines when narrow */
+    --zoom-crop-top: 260px;    /* height of the title / Description / Date & Time block */
+    --zoom-visible-h: 470px;   /* how much to show: heading, fields, button */
+    --zoom-page-h: 2000px;     /* MUST stay well above Zoom's own page height -- see note */
+    --zoom-mask-top: 340px;    /* top of the privacy line, measured from the crop */
+    --zoom-mask-h: 60px;       /* its height -- it wraps to more rows when narrow */
     --zoom-mask-bg: #ffffff;   /* whatever colour sits behind it */
     position: relative;
     height: var(--zoom-visible-h);
@@ -1107,10 +1120,10 @@ html[data-theme="dark"] .cta-banner {
    block gets shorter. STARTING POINTS -- measure these with .zoom-tune at this
    width before going live, they are not the desktop numbers. */
 .zoom-form {
-    --zoom-crop-top: 300px;
+    --zoom-crop-top: 200px;
     --zoom-visible-h: 430px;
     --zoom-mask-top: 300px;
-    --zoom-mask-h: 48px;
+    --zoom-mask-h: 44px;
 }
 .wrap, .topnav {
     padding-left: 24px;
@@ -1163,10 +1176,10 @@ html[data-theme="dark"] .cta-banner {
    the privacy line runs to more rows. STARTING POINTS -- measure with
    .zoom-tune at this width before going live. */
 .zoom-form {
-    --zoom-crop-top: 460px;
-    --zoom-visible-h: 520px;
-    --zoom-mask-top: 360px;
-    --zoom-mask-h: 90px;
+    --zoom-crop-top: 300px;
+    --zoom-visible-h: 500px;
+    --zoom-mask-top: 350px;
+    --zoom-mask-h: 80px;
 }
 	.hero-meta{display: block;}
 	.hero-meta span{font-size:12px; width: fit-content;}

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zoom embed crop tuner</title>
+<style>
+  :root { --bg:#f6f7f9; --fg:#1a1a1a; --mut:#666; --line:#dcdfe4; --accent:#e2001a; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--fg); }
+  header { padding:18px 22px; background:#fff; border-bottom:1px solid var(--line); }
+  h1 { margin:0 0 4px; font-size:17px; }
+  header p { margin:0; color:var(--mut); font-size:13px; }
+  .layout { display:grid; grid-template-columns:340px 1fr; gap:22px; padding:22px; align-items:start; }
+  @media (max-width:900px){ .layout{ grid-template-columns:1fr; } }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; }
+  .row { margin-bottom:14px; }
+  .row label { display:flex; justify-content:space-between; font-weight:600; font-size:12px; margin-bottom:5px; }
+  .row label span { color:var(--accent); font-variant-numeric:tabular-nums; }
+  .row input[type=range] { width:100%; }
+  .row small { color:var(--mut); font-size:11px; display:block; margin-top:3px; }
+  .toggles { display:flex; gap:14px; flex-wrap:wrap; margin:4px 0 16px; font-size:12px; }
+  .toggles label { display:flex; align-items:center; gap:6px; font-weight:600; }
+  pre { background:#0f1115; color:#e6edf3; padding:14px; border-radius:10px; overflow-x:auto; font-size:12px; line-height:1.55; margin:0; }
+  .copy { margin-top:10px; background:var(--accent); color:#fff; border:0; border-radius:20px; padding:9px 18px; font-weight:700; font-size:13px; cursor:pointer; }
+  .stage { display:flex; justify-content:center; }
+
+  /* --- the exact production rules, driven by the controls --- */
+  .zoom-form {
+    --zoom-crop-top: 260px;
+    --zoom-visible-h: 470px;
+    --zoom-page-h: 2000px;
+    --zoom-mask-top: 340px;
+    --zoom-mask-h: 60px;
+    --zoom-mask-bg: #ffffff;
+    position: relative;
+    height: var(--zoom-visible-h);
+    overflow: hidden;
+    outline: 1px solid var(--line);
+    outline-offset: -1px;
+    border-radius: 14px;
+    background: #fff;
+  }
+  .zoom-form iframe {
+    position: absolute; top: calc(var(--zoom-crop-top) * -1); left: 0;
+    width: 100%; height: var(--zoom-page-h);
+    border: 0; background: #fff; color-scheme: light;
+  }
+  .zoom-mask {
+    position: absolute; left: 0; right: 0;
+    top: var(--zoom-mask-top); height: var(--zoom-mask-h);
+    background: var(--zoom-mask-bg); pointer-events: none;
+  }
+  .card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:18px; box-shadow:0 20px 45px rgba(0,0,0,.08); }
+  .card h3 { margin:0 0 18px; font-size:18px; color:#00005a; }
+  /* guides */
+  .guide .zoom-mask { background:rgba(226,0,26,.35); outline:1px dashed var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Zoom embed crop tuner</h1>
+  <p>Drag until the frame shows exactly the registration form. Then copy the CSS at the bottom into the page. Run this over http(s), not <code>file://</code>.</p>
+</header>
+
+<div class="layout">
+  <div class="panel">
+    <div class="row">
+      <label>Card width <span id="vW">434px</span></label>
+      <input type="range" id="w" min="280" max="900" value="434">
+      <small>Match your card. ~434px in the hero column, full width below 960px.</small>
+    </div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+    <div class="row">
+      <label>--zoom-crop-top <span id="vCrop">260px</span></label>
+      <input type="range" id="crop" min="0" max="900" value="260">
+      <small>Raise until the topic / Description / Date &amp; Time block is gone and "Webinar Registration" sits flush at the top.</small>
+    </div>
+    <div class="row">
+      <label>--zoom-visible-h <span id="vVis">470px</span></label>
+      <input type="range" id="vis" min="200" max="1100" value="470">
+      <small>Lower edge. Stop just under the Register button.</small>
+    </div>
+    <div class="row">
+      <label>--zoom-mask-top <span id="vMt">340px</span></label>
+      <input type="range" id="mt" min="0" max="900" value="340">
+      <small>Top of the privacy line, measured from the crop.</small>
+    </div>
+    <div class="row">
+      <label>--zoom-mask-h <span id="vMh">60px</span></label>
+      <input type="range" id="mh" min="0" max="220" value="60">
+      <small>Its height. Tick "show mask" to place it, then untick.</small>
+    </div>
+    <div class="row">
+      <label>--zoom-page-h <span id="vPage">2000px</span></label>
+      <input type="range" id="page" min="800" max="3000" step="50" value="2000">
+      <small>Keep this well above Zoom's own page height. It pushes the cookie banner and footer far below the window.</small>
+    </div>
+    <div class="toggles">
+      <label><input type="checkbox" id="showMask" checked> show mask</label>
+      <label><input type="checkbox" id="noCrop"> disable crop</label>
+    </div>
+    <pre id="out"></pre>
+    <button class="copy" id="copy">Copy CSS</button>
+  </div>
+
+  <div class="stage">
+    <div class="card" id="card" style="width:434px">
+      <h3>Register Now</h3>
+      <div class="zoom-form guide" id="zf">
+        <iframe id="fr"
+          src="https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw"
+          title="Zoom registration" allow="clipboard-write" scrolling="no"></iframe>
+        <div class="zoom-mask" id="mask"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var zf = document.getElementById('zf'), card = document.getElementById('card'),
+      mask = document.getElementById('mask'), out = document.getElementById('out');
+
+  var ctl = {
+    w:    { el: document.getElementById('w'),    lab: document.getElementById('vW') },
+    crop: { el: document.getElementById('crop'), lab: document.getElementById('vCrop'), varName: '--zoom-crop-top' },
+    vis:  { el: document.getElementById('vis'),  lab: document.getElementById('vVis'),  varName: '--zoom-visible-h' },
+    mt:   { el: document.getElementById('mt'),   lab: document.getElementById('vMt'),   varName: '--zoom-mask-top' },
+    mh:   { el: document.getElementById('mh'),   lab: document.getElementById('vMh'),   varName: '--zoom-mask-h' },
+    page: { el: document.getElementById('page'), lab: document.getElementById('vPage'), varName: '--zoom-page-h' }
+  };
+
+  function render() {
+    card.style.width = ctl.w.el.value + 'px';
+    ctl.w.lab.textContent = ctl.w.el.value + 'px';
+
+    ['crop', 'vis', 'mt', 'mh', 'page'].forEach(function (k) {
+      var v = ctl[k].el.value + 'px';
+      ctl[k].lab.textContent = v;
+      zf.style.setProperty(ctl[k].varName, v);
+    });
+
+    if (document.getElementById('noCrop').checked) {
+      zf.style.setProperty('--zoom-crop-top', '0px');
+      zf.style.setProperty('--zoom-visible-h', ctl.page.el.value + 'px');
+    }
+    var show = document.getElementById('showMask').checked;
+    mask.style.display = show ? '' : 'none';
+    zf.classList.toggle('guide', show);
+
+    out.textContent =
+      '.zoom-form {\n' +
+      '    --zoom-crop-top: '  + ctl.crop.el.value + 'px;\n' +
+      '    --zoom-visible-h: ' + ctl.vis.el.value  + 'px;\n' +
+      '    --zoom-page-h: '    + ctl.page.el.value + 'px;\n' +
+      '    --zoom-mask-top: '  + ctl.mt.el.value   + 'px;\n' +
+      '    --zoom-mask-h: '    + ctl.mh.el.value   + 'px;\n' +
+      '    --zoom-mask-bg: #ffffff;\n' +
+      '}';
+  }
+
+  Object.keys(ctl).forEach(function (k) { ctl[k].el.addEventListener('input', render); });
+  document.getElementById('showMask').addEventListener('change', render);
+  document.getElementById('noCrop').addEventListener('change', render);
+
+  document.getElementById('copy').addEventListener('click', function () {
+    var b = this;
+    navigator.clipboard.writeText(out.textContent).then(function () {
+      b.textContent = 'Copied';
+      setTimeout(function () { b.textContent = 'Copy CSS'; }, 1200);
+    }).catch(function () { b.textContent = 'Select and copy manually'; });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
