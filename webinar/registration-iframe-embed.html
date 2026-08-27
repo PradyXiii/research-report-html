@@ -1,0 +1,121 @@
+<!-- ==========================================================================
+     Zoom registration embed — drop-in for Option_Trading_Live_Masterclass_1.html
+
+     PART 1  CSS   -> paste into the page's existing <style>, after .btn-register
+     PART 2  CSS   -> two lines into the existing @media blocks
+     PART 3  HTML  -> replaces lines 1232-1255 (the dummy .register-card form
+                      plus the commented-out .zoom-form placeholder)
+
+     Nothing else in the page changes.
+     ========================================================================== -->
+
+
+<!-- ============ PART 1 — add to <style>, after the .btn-register rule ============ -->
+<style>
+/* ============ ZOOM REGISTRATION EMBED ============ */
+.register-card.is-zoom {
+    padding: 18px;
+}
+.zoom-form {
+    --zoom-frame-h: 720px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #ffffff;
+}
+.zoom-form iframe {
+    display: block;
+    width: 100%;
+    height: var(--zoom-frame-h);
+    border: 0;
+    background: #ffffff;
+    color-scheme: light;
+}
+.zoom-fallback {
+    margin: 12px 2px 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-grey);
+}
+.zoom-fallback a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: underline;
+}
+</style>
+
+
+<!-- ============ PART 2 — add to the page's EXISTING media queries ============ -->
+<style>
+@media (max-width:960px) {
+    /* card is full-width here, so Zoom lays out wider and shorter */
+    .zoom-form { --zoom-frame-h: 680px; }
+}
+@media (max-width:600px) {
+    .register-card.is-zoom { padding: 12px; }
+    .zoom-form { --zoom-frame-h: 640px; }
+}
+</style>
+
+
+<!-- ============ PART 3 — replaces lines 1232-1255 ============ -->
+<div class="register-card is-zoom">
+  <h3>Register Now</h3>
+  <div class="zoom-form">
+    <iframe
+        src="https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw"
+        title="Register for the Options Trading Live Masterclass"
+        allow="clipboard-write"></iframe>
+  </div>
+  <p class="zoom-fallback">Form not loading? <a href="https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw" target="_blank" rel="noopener">Open the registration page in a new tab</a>.</p>
+</div>
+
+
+<!-- ==========================================================================
+     NOTES
+
+     Why it goes INSIDE .register-card, not next to it
+       The placeholder .zoom-form sat as a sibling of .register-card inside
+       .hero-inner, which is `grid-template-columns: 1.3fr 0.9fr`. Uncommented
+       as-is it becomes a third grid item and drops to row 2 / column 1, under
+       the headline. Putting the iframe inside the card keeps the grid at two
+       items and keeps the card's border, radius and shadow around the form.
+
+     Why the dummy form goes
+       Its handler is `onsubmit="event.preventDefault();"` — it collects nothing
+       and posts nowhere. Left in, the card shows two "Register Now" forms and
+       only one of them works.
+
+     The scroll target still works
+       The bottom CTA at line 1572 calls
+       `document.querySelector('.register-card').scrollIntoView(...)`.
+       The wrapper above keeps the `register-card` class, so that still resolves.
+
+     scrolling="no" was dropped on purpose
+       Zoom's registration page is taller than any fixed height and varies with
+       the webinar description. `scrolling="no"` clips whatever overflows and
+       there is no way to reach it. Default (auto) scrolls inside the frame.
+
+     --zoom-frame-h
+       One number, three places. Set it to whatever makes the Submit button sit
+       just inside the frame on your content — the scrollbar covers the rest.
+
+     Framing is allowed — verified, not assumed
+       curl -sSI https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw
+       returns no X-Frame-Options, and the Content-Security-Policy carries no
+       frame-ancestors directive. Nothing blocks the embed.
+
+     The one real risk: third-party cookies
+       Zoom sets its session cookies (cred, _zm_ssid, _zm_page_auth) with no
+       SameSite attribute, so browsers treat them as SameSite=Lax. In a
+       cross-site iframe those are restricted — Safari blocks them outright,
+       Chrome under tracking protection does too. The form still renders; the
+       failure, when it comes, is on submit. That is what the fallback link is
+       for, and why it should stay visible rather than being hidden behind an
+       error state.
+
+     Optional — give the form more room on desktop
+       The card is ~380px of usable width, which puts Zoom into its mobile
+       layout. If it feels cramped, widen the hero column (line 270):
+           .hero-inner { grid-template-columns: 1.3fr 0.9fr; }  ->  1fr 1fr;
+     ========================================================================== -->

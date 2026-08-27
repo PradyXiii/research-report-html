@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zoom embed crop tuner</title>
+<style>
+  :root { --bg:#f6f7f9; --fg:#1a1a1a; --mut:#666; --line:#dcdfe4; --accent:#e2001a; --warn:#b25000; --warnbg:#fff4e5; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--fg); }
+  header { padding:16px 22px; background:#fff; border-bottom:1px solid var(--line); }
+  h1 { margin:0 0 4px; font-size:17px; }
+  header p { margin:0; color:var(--mut); font-size:13px; max-width:80ch; }
+  header b { color:var(--fg); }
+  .layout { display:grid; grid-template-columns:360px 1fr; gap:22px; padding:22px; align-items:start; }
+  @media (max-width:980px){ .layout{ grid-template-columns:1fr; } }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; }
+
+  .bps { display:flex; gap:6px; margin-bottom:16px; }
+  .bps button { flex:1; border:1px solid var(--line); background:#fff; border-radius:8px; padding:8px 4px; font:inherit; font-size:12px; font-weight:600; cursor:pointer; line-height:1.25; }
+  .bps button b { display:block; font-size:11px; font-weight:400; color:var(--mut); }
+  .bps button[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .bps button[aria-pressed="true"] b { color:rgba(255,255,255,.8); }
+
+  .row { margin-bottom:13px; }
+  .row label { display:flex; justify-content:space-between; font-weight:600; font-size:12px; margin-bottom:5px; }
+  .row label span { color:var(--accent); font-variant-numeric:tabular-nums; }
+  .row input[type=range] { width:100%; }
+  .row small { color:var(--mut); font-size:11px; display:block; margin-top:3px; }
+
+  .warn { display:none; background:var(--warnbg); border:1px solid #f0c68a; color:var(--warn);
+          border-radius:8px; padding:9px 11px; font-size:12px; margin:6px 0 14px; }
+  .warn.on { display:block; }
+
+  .toggles { display:flex; gap:14px; flex-wrap:wrap; margin:6px 0 14px; font-size:12px; }
+  .toggles label { display:flex; align-items:center; gap:6px; font-weight:600; }
+  .btn { background:var(--accent); color:#fff; border:0; border-radius:20px; padding:9px 18px; font-weight:700; font-size:13px; cursor:pointer; }
+  .btn.ghost { background:#fff; color:var(--fg); border:1px solid var(--line); }
+  pre { background:#0f1115; color:#e6edf3; padding:14px; border-radius:10px; overflow-x:auto; font-size:11.5px; line-height:1.5; margin:0 0 10px; }
+  .stage { display:flex; justify-content:center; }
+  .done { font-size:11px; color:var(--mut); margin-top:8px; }
+  .done i { font-style:normal; color:var(--accent); font-weight:700; }
+
+  /* --- the exact production rules, driven by the controls --- */
+  .zoom-form {
+    --zoom-crop-top: 587px;
+    --zoom-visible-h: 319px;
+    --zoom-page-h: 3000px;
+    --zoom-mask-top: 200px;
+    --zoom-mask-h: 60px;
+    --zoom-mask-bg: #ffffff;
+    position: relative;
+    height: var(--zoom-visible-h);
+    overflow: hidden;
+    outline: 1px solid var(--line);
+    outline-offset: -1px;
+    border-radius: 14px;
+    background: #fff;
+  }
+  .zoom-form iframe {
+    position: absolute; top: calc(var(--zoom-crop-top) * -1); left: 0;
+    width: 100%; height: var(--zoom-page-h);
+    border: 0; background: #fff; color-scheme: light;
+  }
+  .zoom-mask {
+    position: absolute; left: 0; right: 0;
+    top: var(--zoom-mask-top); height: var(--zoom-mask-h);
+    background: var(--zoom-mask-bg); pointer-events: none;
+  }
+  .card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:18px; box-shadow:0 20px 45px rgba(0,0,0,.08); }
+  .card h3 { margin:0 0 18px; font-size:18px; color:#00005a; }
+  .guide .zoom-mask { background:rgba(226,0,26,.35); outline:1px dashed var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Zoom embed crop tuner</h1>
+  <p>Tune each of the three breakpoints, then copy the whole CSS block out at the end.
+  <b>Open this in a private window.</b> Once you have registered once, Zoom serves a short
+  "already registered" page instead of the form, and offsets measured against that one are
+  wrong for everybody else. Serve over http(s), not <code>file://</code>.</p>
+</header>
+
+<div class="layout">
+  <div class="panel">
+    <div class="bps" id="bps">
+      <button data-bp="desktop" data-w="434" aria-pressed="true">Desktop<b>card 434px</b></button>
+      <button data-bp="tablet"  data-w="812" aria-pressed="false">Tablet<b>&le;960 · 812px</b></button>
+      <button data-bp="mobile"  data-w="330" aria-pressed="false">Mobile<b>&le;600 · 330px</b></button>
+    </div>
+
+    <div class="row">
+      <label>--zoom-crop-top <span id="vCrop"></span></label>
+      <input type="range" id="crop" min="0" max="1600" value="587">
+      <small>Raise until Zoom's topic / Description / Date &amp; Time block is gone and "Webinar Registration" sits flush at the top.</small>
+    </div>
+    <div class="row">
+      <label>--zoom-visible-h <span id="vVis"></span></label>
+      <input type="range" id="vis" min="150" max="1200" value="319">
+      <small>Lower edge. Stop just under the Register button.</small>
+    </div>
+    <div class="row">
+      <label>--zoom-mask-top <span id="vMt"></span></label>
+      <input type="range" id="mt" min="0" max="1200" value="200">
+      <small>Top of the privacy line, measured down from the crop.</small>
+    </div>
+    <div class="row">
+      <label>--zoom-mask-h <span id="vMh"></span></label>
+      <input type="range" id="mh" min="0" max="300" value="60">
+      <small>Its height. Keep "show mask" on while placing it.</small>
+    </div>
+
+    <div class="warn" id="warn"></div>
+
+    <div class="row">
+      <label>--zoom-page-h (shared) <span id="vPage"></span></label>
+      <input type="range" id="page" min="800" max="4000" step="50" value="3000">
+      <small>Well above Zoom's page height, so its cookie banner and footer stay far below the window.</small>
+    </div>
+
+    <div class="toggles">
+      <label><input type="checkbox" id="showMask" checked> show mask</label>
+      <label><input type="checkbox" id="noCrop"> disable crop</label>
+      <button class="btn ghost" id="reload" type="button">Reload frame</button>
+    </div>
+
+    <pre id="out"></pre>
+    <button class="btn" id="copy">Copy all three breakpoints</button>
+    <div class="done" id="done"></div>
+  </div>
+
+  <div class="stage">
+    <div class="card" id="card" style="width:434px">
+      <h3>Register Now</h3>
+      <div class="zoom-form guide" id="zf">
+        <iframe id="fr"
+          src="https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw"
+          title="Zoom registration" allow="clipboard-write" scrolling="no"></iframe>
+        <div class="zoom-mask" id="mask"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SRC = 'https://zoom.us/webinar/register/WN__HkL4D8sT7mpqa2tIYJkaw';
+  var zf = document.getElementById('zf'), card = document.getElementById('card'),
+      mask = document.getElementById('mask'), out = document.getElementById('out'),
+      warn = document.getElementById('warn'), fr = document.getElementById('fr'),
+      done = document.getElementById('done');
+
+  var el = {
+    crop: document.getElementById('crop'), vis: document.getElementById('vis'),
+    mt:   document.getElementById('mt'),   mh:  document.getElementById('mh'),
+    page: document.getElementById('page')
+  };
+  var lab = {
+    crop: document.getElementById('vCrop'), vis: document.getElementById('vVis'),
+    mt:   document.getElementById('vMt'),   mh:  document.getElementById('vMh'),
+    page: document.getElementById('vPage')
+  };
+
+  // per-breakpoint state. desktop seeded with the measured values.
+  var store = {
+    desktop: { crop: 587, vis: 319, mt: 200, mh: 60, w: 434, touched: true },
+    tablet:  { crop: 587, vis: 319, mt: 200, mh: 60, w: 812, touched: false },
+    mobile:  { crop: 587, vis: 319, mt: 200, mh: 60, w: 330, touched: false }
+  };
+  var pageH = 3000;
+  var bp = 'desktop';
+
+  function loadBp() {
+    var s = store[bp];
+    el.crop.value = s.crop; el.vis.value = s.vis; el.mt.value = s.mt; el.mh.value = s.mh;
+    el.page.value = pageH;
+    card.style.width = s.w + 'px';
+  }
+
+  function saveBp() {
+    var s = store[bp];
+    s.crop = +el.crop.value; s.vis = +el.vis.value;
+    s.mt = +el.mt.value; s.mh = +el.mh.value;
+    pageH = +el.page.value;
+    s.touched = true;
+  }
+
+  function block(s, indent) {
+    var p = indent || '';
+    return p + '.zoom-form {\n' +
+      p + '    --zoom-crop-top: '  + s.crop + 'px;\n' +
+      p + '    --zoom-visible-h: ' + s.vis  + 'px;\n' +
+      (indent ? '' : p + '    --zoom-page-h: ' + pageH + 'px;\n') +
+      p + '    --zoom-mask-top: '  + s.mt   + 'px;\n' +
+      p + '    --zoom-mask-h: '    + s.mh   + 'px;\n' +
+      (indent ? '' : p + '    --zoom-mask-bg: #ffffff;\n') +
+      p + '}';
+  }
+
+  function render() {
+    saveBp();
+    var s = store[bp];
+
+    ['crop', 'vis', 'mt', 'mh', 'page'].forEach(function (k) {
+      lab[k].textContent = el[k].value + 'px';
+    });
+
+    zf.style.setProperty('--zoom-crop-top',  s.crop + 'px');
+    zf.style.setProperty('--zoom-visible-h', s.vis  + 'px');
+    zf.style.setProperty('--zoom-mask-top',  s.mt   + 'px');
+    zf.style.setProperty('--zoom-mask-h',    s.mh   + 'px');
+    zf.style.setProperty('--zoom-page-h',    pageH  + 'px');
+
+    if (document.getElementById('noCrop').checked) {
+      zf.style.setProperty('--zoom-crop-top', '0px');
+      zf.style.setProperty('--zoom-visible-h', pageH + 'px');
+    }
+    var show = document.getElementById('showMask').checked;
+    mask.style.display = show ? '' : 'none';
+    zf.classList.toggle('guide', show);
+
+    // the mistake that cost a round: a mask positioned outside the window
+    // is clipped away and paints nothing, silently.
+    var msgs = [];
+    if (s.mt >= s.vis) {
+      msgs.push('<b>Mask is outside the window.</b> --zoom-mask-top (' + s.mt +
+                ') is at or past --zoom-visible-h (' + s.vis +
+                '), so overflow:hidden clips it and it paints nothing. The privacy line will still show.');
+    } else if (s.mt + s.mh > s.vis) {
+      msgs.push('Mask runs past the bottom edge (' + (s.mt + s.mh) + ' &gt; ' + s.vis +
+                '). Harmless, but it may be covering the Register button.');
+    }
+    if (s.crop + s.vis > pageH) {
+      msgs.push('Window extends past --zoom-page-h. Raise the page height.');
+    }
+    warn.innerHTML = msgs.join('<br><br>');
+    warn.className = msgs.length ? 'warn on' : 'warn';
+
+    out.textContent =
+      '/* base -- applies at every width */\n' +
+      block(store.desktop) + '\n\n' +
+      '/* paste inside the page\'s existing @media (max-width:960px) */\n' +
+      '@media (max-width:960px) {\n' + block(store.tablet, '    ') + '\n}\n\n' +
+      '/* paste inside the page\'s existing @media (max-width:600px) */\n' +
+      '@media (max-width:600px) {\n' + block(store.mobile, '    ') + '\n}';
+
+    var left = ['desktop', 'tablet', 'mobile'].filter(function (k) { return !store[k].touched; });
+    done.innerHTML = left.length
+      ? 'Still to tune: <i>' + left.join(', ') + '</i>'
+      : 'All three tuned.';
+  }
+
+  document.getElementById('bps').addEventListener('click', function (e) {
+    var btn = e.target.closest('button'); if (!btn) return;
+    saveBp();
+    bp = btn.dataset.bp;
+    [].forEach.call(this.querySelectorAll('button'), function (b) {
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+    loadBp();
+    render();
+  });
+
+  Object.keys(el).forEach(function (k) { el[k].addEventListener('input', render); });
+  document.getElementById('showMask').addEventListener('change', render);
+  document.getElementById('noCrop').addEventListener('change', render);
+
+  document.getElementById('reload').addEventListener('click', function () {
+    fr.src = SRC + (SRC.indexOf('?') > -1 ? '&' : '?') + '_r=' + (+new Date());
+  });
+
+  document.getElementById('copy').addEventListener('click', function () {
+    var b = this;
+    navigator.clipboard.writeText(out.textContent).then(function () {
+      b.textContent = 'Copied';
+      setTimeout(function () { b.textContent = 'Copy all three breakpoints'; }, 1200);
+    }).catch(function () { b.textContent = 'Select and copy manually'; });
+  });
+
+  loadBp();
+  render();
+})();
+</script>
+</body>
+</html>
