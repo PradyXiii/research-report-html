@@ -737,7 +737,6 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     els.err.textContent = opts.error || '';
   }
 
-  function hideStatus() { els.status.hidden = true; }
   function showStatus() { els.status.hidden = false; }
 
   /* ---------------------------------------------------------- params */
@@ -830,6 +829,10 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 
   // The certificate background is a CSS background-image, so it is not in
   // document.images. Decode it explicitly or html2canvas can race it.
+  // Resolves with the artwork's natural size, which the capture needs to size
+  // the page so no bare strip is left beside it.
+  var bgAspect = null;   // width / height of the frame artwork
+
   function backgroundReady() {
     if (!els.cert) return Promise.resolve();
     var bg = window.getComputedStyle(els.cert).backgroundImage || '';
@@ -837,10 +840,16 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     if (!m || !m[1]) return Promise.resolve();
     return new Promise(function (res) {
       var probe = new Image();
-      probe.onload = res;
+      function done() {
+        if (probe.naturalWidth && probe.naturalHeight) {
+          bgAspect = probe.naturalWidth / probe.naturalHeight;
+        }
+        res();
+      }
+      probe.onload = done;
       probe.onerror = res;
       probe.src = m[1];
-      if (probe.complete) res();
+      if (probe.complete) done();
     });
   }
 
@@ -864,6 +873,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     var priorTransform = node.style.transform;
     var priorOrigin = node.style.transformOrigin;
     var priorWidth = node.style.width;
+    var priorHeight = node.style.height;
+    var priorBgSize = node.style.backgroundSize;
     var priorWrapH = els.wrap ? els.wrap.style.height : '';
 
     // The certificate is a table declared at width="850". On a narrow screen the
@@ -886,8 +897,27 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
       node.style.transform = priorTransform;
       node.style.transformOrigin = priorOrigin;
       node.style.width = priorWidth;
+      node.style.height = priorHeight;
+      node.style.backgroundSize = priorBgSize;
       if (els.wrap) els.wrap.style.height = priorWrapH;
       scaleCertToViewport();
+    }
+
+    // The frame is painted with background-size:contain, which fits the artwork
+    // inside the box and leaves the remainder bare. The box is proportionally
+    // wider than the artwork (0.7302 vs 0.7030), so contain fit by height and
+    // left a 32px white strip down the right edge. Give the box the artwork's
+    // own aspect and contain fills it exactly, with no distortion. If the
+    // content is taller than that, stretch the frame instead of leaving a strip.
+    if (bgAspect) {
+      var frameH = Math.round(CAPTURE_W / bgAspect);
+      if (node.offsetHeight <= frameH) {
+        node.style.height = frameH + 'px';
+      } else {
+        node.style.backgroundSize = '100% 100%';
+      }
+    } else {
+      node.style.backgroundSize = '100% 100%';
     }
 
     return nextFrame().then(function () {
@@ -910,15 +940,28 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         throw new Error('capture produced an empty canvas');
       }
       var cw = canvas.width, ch = canvas.height;
+
+      // Page size, in points, not raw pixels. Passing the pixel count as the
+      // format produced a 2267x3104pt page - 31 x 43 inches - so every viewer
+      // opened it zoomed far out and 100% was unusable. Pin the width to A4
+      // (595.28pt = 210mm) and take the height from the capture's own aspect:
+      // a normal-sized page at 100%, printable on A4, and no white band because
+      // the page matches the image rather than being letterboxed into it.
+      var A4_W = 595.28;
+      var pageW = A4_W;
+      var pageH = +(A4_W * (ch / cw)).toFixed(2);
+
       var pdf = new window.jspdf.jsPDF({
-        orientation: cw >= ch ? 'landscape' : 'portrait',
-        unit: 'px',
-        format: [cw, ch],
+        orientation: pageW >= pageH ? 'landscape' : 'portrait',
+        unit: 'pt',
+        format: [pageW, pageH],
         compress: true
       });
-      // Draw to the page jsPDF actually created, so the image can never be
-      // cropped if it normalised the format.
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0,
+
+      // JPEG, not PNG: the ornamental frame is a photographic gradient that PNG
+      // stored losslessly at ~1.8MB. At q=0.92 and 2x scale the text stays
+      // crisp and the file drops by roughly an order of magnitude.
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0,
                    pdf.internal.pageSize.getWidth(),
                    pdf.internal.pageSize.getHeight(), undefined, 'FAST');
       return pdf;
@@ -968,22 +1011,11 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 
   els.btn.addEventListener('click', function () { run(false); });
 
+  // Always download, with or without ?f_n. Opening the file must land on the
+  // downloaded state and nothing else.
   window.addEventListener('load', function () {
     scaleCertToViewport();
-    if (rawName) {
-      // Came from Zoho with a name: download without being asked.
-      run(true);
-    } else {
-      // Hit directly with no name. Downloading here would produce a
-      // certificate made out to the placeholder, so ask instead.
-      hideStatus();
-      setStatus('Certificate preview',
-                'No recipient name was supplied, so this is the template. '
-                + 'Add <strong>?f_n=Name&amp;sc=81</strong> to the URL, or download the template below.',
-                { button: 'Download anyway' });
-      showStatus();
-      els.spin.hidden = true;
-    }
+    run(true);
   });
 })();
 
