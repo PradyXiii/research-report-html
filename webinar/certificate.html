@@ -176,7 +176,7 @@
                                             <tr>
                                                 <td style="padding-bottom: 30px;">
                                                     <p style="margin: 0; font-size: 20px; color: #333; line-height: 1.4; font-weight: 400;">
-                                                        On completing the <strong style="font-weight: 800;" contenteditable="true">Options Buying Live Masterclass</strong> on <br> Kotak Stockshaala.
+                                                        On completing the <strong style="font-weight: 800;" contenteditable="true">Options Buying Live Masterclass</strong> by <br> Kotak Stockshaala.
                                                     </p>
                                                 </td>
                                             </tr>
@@ -185,7 +185,7 @@
                                             <tr>
                                                 <td style="padding-bottom: 50px;">
                                                     <p style="margin: 0; font-size: 18px; color: #333; line-height: 1.5; max-width: 650px; font-weight: 400;">
-                                                        This milestone reflects the time, focus, and consistency you brought to learning the concepts, and your willingness to see the course through to completion.
+                                                        This certificate reflects the time and focus you brought to learning the concepts of options buying and your successful completion of the programme.
                                                     </p>
                                                 </td>
                                             </tr>
@@ -234,14 +234,7 @@
                                                     <table width="100%" cellspacing="0" cellpadding="0" border="0" style="padding-top: 9px;">
                                                         <tbody>
 															<tr>
-                                                            <td width="50%" align="left">
-<!--
-                                                                <div style="font-size: 13px; color: #333; font-weight: 700; letter-spacing: -0.01em;">
-                                                                    Certificate Number: <span id="cert-number" style="font-weight: 400;" contenteditable="true">CERT-52312</span>
-                                                                </div>
--->
-                                                            </td>
-                                                            <td width="50%" align="right">
+                                                            <td width="100%" align="center">
                                                                 <div style="font-size: 13px; color: #333; font-weight: 700; letter-spacing: -0.01em;">
                                                                     Issued on: <span id="cert-date" style="font-weight: 400;" contenteditable="true">31-December-2025</span>
                                                                 </div>
@@ -749,9 +742,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   function normaliseScore(v) {
     var n = v.replace(/[^0-9.]/g, '');
     if (!n || isNaN(parseFloat(n))) return null;
-    var f = parseFloat(n);
-    // trim a trailing ".0" so 81.0 reads as 81
-    return (f % 1 === 0 ? String(Math.round(f)) : String(f)) + '%';
+    // Always a whole number. Zoho can hand over 81.25 and the certificate must
+    // never print a decimal, so round rather than trimming a trailing zero.
+    return String(Math.round(parseFloat(n))) + '%';
   }
 
   function today() {
